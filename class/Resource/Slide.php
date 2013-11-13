@@ -21,6 +21,7 @@ class Slide extends \Resource {
         $this->title = new \Variable\TextOnly(null, 'title');
         $this->filepath = new \Variable\File(null, 'filepath');
         $this->caption = new \Variable\String(null, 'caption');
+        $this->caption->allowEmpty(true);
         $this->caption->setInputType('textarea');
     }
 

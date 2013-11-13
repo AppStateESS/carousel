@@ -14,6 +14,16 @@ class SlideFactory {
         \ResourceFactory::saveResource($slide);
     }
 
+    public static function loadById($id)
+    {
+        $slide = new Resource\Slide;
+        if ($id) {
+            return \ResourceFactory::loadById($slide, $id);
+        } else {
+            return $slide;
+        }
+    }
+
 }
 
 ?>

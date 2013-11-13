@@ -9,6 +9,8 @@ namespace carousel\Controller;
  */
 class Admin extends \Http\Controller {
 
+    private $slide;
+
     public function get(\Request $request)
     {
         $data = array();
@@ -131,8 +133,10 @@ class Admin extends \Http\Controller {
 
         $slide = new \carousel\Resource\Slide;
         $form = $slide->pullForm();
+        $form->setEnctype(\Form::enctype_multipart);
         $form->appendCSS('bootstrap');
         $form->requiredScript();
+        $form->addHidden('command', 'save_slide');
         $form->setId('slide-form');
         $form->getSingleInput('title')->setRequired(true);
         $form->getSingleInput('filepath')->setLabel('Image');
@@ -147,17 +151,50 @@ class Admin extends \Http\Controller {
 
     public function post(\Request $request)
     {
-
+        if (!$request->isVar('command')) {
+            throw new Http\MethodNotAllowedException;
+        }
+        switch ($request->getVar('command')) {
+            case 'save_slide':
+                $this->saveSlide($request);
+                break;
+        }
+        $response = new \Http\SeeOtherResponse(\Server::getCurrentUrl(false));
+        return $response;
     }
 
-    private function saveSlide()
+    private function saveSlide(\Request $request)
     {
-        $slide = new Resource\Slide;
-        $slide->setTitle('Durham park');
-        $slide->setFilepath('images/carousel/Durham_pano-02.png');
-        $slide->setCaption('This is Durham Park');
+        $this->loadSlide($request);
 
-        SlideFactory::save($slide);
+        if ($request->isUploadedFile('filepath')) {
+            $file = $request->getUploadedFileArray('filepath');
+            $file_name = randomString(12) . '.' . str_replace('image/', '',
+                            $file['type']);
+
+            \PHPWS_File::fileCopy($file['tmp_name'], 'images/carousel/',
+                    $file_name, false, true);
+            \PHPWS_File::makeThumbnail($file_name, 'images/carousel/',
+                    'images/carousel/', 200);
+            $this->slide->setFilepath('images/carousel/' . $file_name);
+        } elseif (!$this->slide->getId()) {
+            throw new \Exception('No image uploaded for new slide.');
+        }
+
+        $this->slide->setTitle($request->getVar('title'));
+        $this->slide->setCaption($request->getVar('caption'));
+
+        \carousel\SlideFactory::save($this->slide);
+    }
+
+    private function loadSlide(\Request $request)
+    {
+        if ($request->isVar('id')) {
+            $id = $request->getVar('id');
+            $this->slide = \carousel\SlideFactory::loadById($id);
+        } else {
+            $this->slide = new \carousel\Resource\Slide;
+        }
     }
 
     private function loadMenu($active)
