@@ -23,7 +23,6 @@ class Admin extends \Http\Controller {
         if (empty($cmd)) {
             $cmd = 'groups';
         }
-
         $this->loadMenu($cmd);
 
         switch ($cmd) {
@@ -33,6 +32,9 @@ class Admin extends \Http\Controller {
 
             case 'slides':
                 $template = $this->listSlides($request);
+                break;
+            case 'settings':
+                $template = $this->settings($request);
                 break;
         }
         $template->add('menu', $this->menu->get());
@@ -51,6 +53,9 @@ class Admin extends \Http\Controller {
             switch ($request->getVar('command')) {
                 case 'list_groups':
                     $data = $this->listGroupsJSON();
+                    break;
+                case 'list_slides':
+                    $data = $this->listSlidesJSON();
                     break;
             }
         } else {
@@ -77,6 +82,36 @@ class Admin extends \Http\Controller {
         return $pager->getJson();
     }
 
+    private function listSlidesJSON()
+    {
+        $db = \Database::newDB();
+        $sg = $db->addTable('caro_slide');
+        $sg_title = $sg->getField('title');
+        $pager = new \DatabasePager($db);
+        $pager->setHeaders(array('title'));
+        $tbl_headers['title'] = $sg_title;
+        $pager->setTableHeaders($tbl_headers);
+        $pager->setId('slide-list');
+        $pager->setRowIdColumn('id');
+        $pager->setCallback(array('\carousel\Controller\Admin', 'pagerRow'));
+        return $pager->getJson();
+    }
+
+    private function settings()
+    {
+        $tpl = array();
+        $template = new \Template($tpl);
+        $template->setModuleTemplate('carousel', 'Admin/Settings.html');
+        return $template;
+    }
+
+    public static function pagerRow($row)
+    {
+        extract($row);
+        $row['filepath'] = "<img src='$filepath' style='width:200px' />";
+        return $row;
+    }
+
     private function listGroups(\Request $request)
     {
         \Pager::prepare();
@@ -89,7 +124,22 @@ class Admin extends \Http\Controller {
 
     private function listSlides(\Request $request)
     {
-        $tpl = array();
+        javascript('jquery_ui');
+        \Pager::prepare();
+        \Layout::addJSHeader("<script type='text/javascript' src='" .
+                PHPWS_SOURCE_HTTP . "mod/carousel/javascript/slide_list.js'></script>");
+
+        $slide = new \carousel\Resource\Slide;
+        $form = $slide->pullForm();
+        $form->appendCSS('bootstrap');
+        $form->requiredScript();
+        $form->setId('slide-form');
+        $form->getSingleInput('title')->setRequired(true);
+        $form->getSingleInput('filepath')->setLabel('Image');
+        $form->addSubmit('submit', 'Save slide');
+        $tpl = $form->getInputStringArray();
+        $tpl['min_width'] = \Settings::get('carousel', 'min_width');
+        $tpl['min_height'] = \Settings::get('carousel', 'min_height');
         $template = new \Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/ListSlides.html');
         return $template;

@@ -21,6 +21,7 @@ class Slide extends \Resource {
         $this->title = new \Variable\TextOnly(null, 'title');
         $this->filepath = new \Variable\File(null, 'filepath');
         $this->caption = new \Variable\String(null, 'caption');
+        $this->caption->setInputType('textarea');
     }
 
     public function setTitle($title)
@@ -35,9 +36,24 @@ class Slide extends \Resource {
 
     public function setCaption($caption)
     {
+        $caption = strip_tags($caption, '<p><a><strong><b><i><em><ul><li>');
         $this->caption->set($caption);
     }
 
+    public function getTitle()
+    {
+        return $this->title->get();
+    }
+
+    public function getFilepath()
+    {
+        return $this->filepath->get();
+    }
+
+    public function getCaption()
+    {
+        return $this->filepath->get();
+    }
 }
 
 ?>

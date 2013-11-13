@@ -34,14 +34,15 @@ class Module extends \Module implements \SettingDefaults {
 
     public function getSettingDefaults()
     {
-
+        $s['min_width'] = '1000';
+        $s['min_height'] = 100;
+        return $s;
     }
 
     private function getSlides()
     {
         $db = \Database::newDB();
         $t1 = $db->addTable('caro_slide');
-        $t1->addOrderBy($t1->getField('queue'));
         $db->select();
 
 

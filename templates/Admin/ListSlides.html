@@ -1,1 +1,49 @@
-Listing templates
+<?=$menu?>
+<div class="pager-listing" id="slide-list" data-rpp="10" data-pager-url="carousel/admin/?command=list_slides">
+    <div class="row">
+        <div class="col-lg-3">
+            <button class="btn btn-primary" style="margin:10px;" id="new-slide">Create slide</button>
+        </div>
+        <div class="col-lg-4 col-lg-push-5 pager-search" style=""></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-striped">
+                <thead class="pager-head">
+                    <tr>
+                        <th class="pager-header" style="width:225px"></th>
+                        <th class="pager-header title"></th>
+                        <th class="pager-header">Caption</th>
+                    </tr>
+                </thead>
+                <tbody class="pager-body">
+                    <tr class="pager-row" data-row-id="" style="cursor:pointer">
+                        <td class="pager-column filepath"></td>
+                        <td class="pager-column title"></td>
+                        <td class="pager-column caption"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="page-list" style="text-align:center"></div>
+</div>
+
+
+<div id="slide-update">
+    <?php echo $form_start ?>
+    <?php echo $title_group ?>
+    <div class="filepath-group form-group">
+        <?= $filepath_label ?>
+        <a href="#" data-toggle="tooltip" title="JPG/JPEG or PNG files only. Must be larger than <?=$min_width, 'x', $min_height?>px."><i class="fa fa-question-circle" id="file-note"></i></a>
+        <?=$filepath?>
+    </div>
+    <?php echo $caption_group ?>
+    <div class="text-center"><?php echo $submit?></div>
+    <?php echo $form_end?>
+    <div class="text-center" style="margin-top : 10px; border-top : 1px solid #eee; padding : 6px;" id="delete-slide">
+        <button class="btn btn-danger" id="delete-button">
+            <span class="confirm">Delete slide</span>
+        </button>
+    </div>
+</div>
