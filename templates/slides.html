@@ -1,0 +1,38 @@
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <?php
+        $count = count($images);
+        for($i = 0; $i<$count; $i++) {
+        $class = $i ? null : " class='active'";
+        echo "<li data-target='#carousel-example-generic' data-slide-to='$i'$class></li>";
+        }
+        ?>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <?php
+        $active=true;
+        foreach ($images as $k=>$i){
+        ?>
+        <div class="item <?= $active ? 'active':null;?>">
+            <img src="<?=$i?>" alt="None">
+            <div class="carousel-caption">
+                Alumni pic
+            </div>
+        </div>
+        <?php
+        $active = false;
+        } // end foreach
+        ?>
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+</div>
