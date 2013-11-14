@@ -5,7 +5,7 @@
         $count = count($slides);
         for($i = 0; $i<$count; $i++) {
         $class = $i ? null : " class='active'";
-        echo "<li data-target='#carousel-steer' data-slide-to='$i'$class></li>";
+        echo "<li data-target='#carousel-slides' data-slide-to='$i'$class></li>";
         }
         ?>
     </ol>
@@ -31,10 +31,10 @@
     </div>
 
     <!-- Controls -->
-    <a class="left carousel-control" href="#carousel-steer" data-slide="prev">
+    <a class="left carousel-control" href="#carousel-slides" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left"></span>
     </a>
-    <a class="right carousel-control" href="#carousel-steer" data-slide="next">
+    <a class="right carousel-control" href="#carousel-slides" data-slide="next">
         <span class="glyphicon glyphicon-chevron-right"></span>
     </a>
 </div>
