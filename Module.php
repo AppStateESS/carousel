@@ -28,7 +28,10 @@ class Module extends \Module implements \SettingDefaults {
     public function runTime(\Request $request)
     {
         if (!$request->isVar('module')) {
-            \Layout::add($this->display(), 'carousel', 'slides');
+            $display = $this->display();
+            if (!empty($display)) {
+                \Layout::add($display, 'carousel', 'slides');
+            }
         }
     }
 
@@ -43,19 +46,29 @@ class Module extends \Module implements \SettingDefaults {
     {
         $db = \Database::newDB();
         $t1 = $db->addTable('caro_slide');
-        $db->select();
+        $result = $db->select();
 
+        if (empty($result)) {
+            return null;
+        }
 
-        $tpl[1] = 'http://localhost/responsive/asu_responsive/img/carousel/Durham_pano-02.png';
-        $tpl[2] = 'http://localhost/responsive/asu_responsive/img/carousel/Fall_Panorama1.png';
-        $tpl[3] = 'http://localhost/responsive/asu_responsive/img/carousel/YosefPano1.png';
+        foreach ($result as $slide) {
+            $tpl[$slide['id']]['src'] = $slide['filepath'];
+            $tpl[$slide['id']]['title'] = $slide['title'];
+            $tpl[$slide['id']]['caption'] = $slide['caption'];
+        }
         return $tpl;
-
     }
 
     private function display()
     {
-        $tpl['images'] = $this->getSlides();
+        $slides = $this->getSlides();
+        if (empty($slides)) {
+            return null;
+        }
+
+        $tpl['slides'] = $slides;
+
         $template = new \Template($tpl);
 
         $template->setModuleTemplate('carousel', 'slides.html');

@@ -56,14 +56,36 @@ class Admin extends \Http\Controller {
                 case 'list_groups':
                     $data = $this->listGroupsJSON();
                     break;
+
                 case 'list_slides':
                     $data = $this->listSlidesJSON();
+                    break;
+
+                case 'edit_slide':
+                    $data = $this->editSlide($request);
+                    break;
+
+                case 'delete_slide':
+                    $data = $this->deleteSlide($request);
                     break;
             }
         } else {
             throw new \Exception('JSON command not found');
         }
         return parent::getJsonView($data, $request);
+    }
+
+    private function deleteSlide(\Request $request)
+    {
+        $this->loadSlide($request);
+        \carousel\SlideFactory::delete($this->slide);
+    }
+
+    private function editSlide(\Request $request)
+    {
+        $this->loadSlide($request);
+        $vars = $this->slide->getStringVars();
+        return $vars;
     }
 
     private function listGroupsJSON()
@@ -110,7 +132,9 @@ class Admin extends \Http\Controller {
     public static function pagerRow($row)
     {
         extract($row);
-        $row['filepath'] = "<img src='$filepath' style='width:200px' />";
+        $thumbnail = preg_replace('/(.*)\.(png|jpeg|jpg)$/i', '\\1_tn.\\2',
+                $filepath);
+        $row['filepath'] = "<img src='$thumbnail' style='width:200px' />";
         return $row;
     }
 
@@ -138,6 +162,7 @@ class Admin extends \Http\Controller {
         $form->requiredScript();
         $form->addHidden('command', 'save_slide');
         $form->setId('slide-form');
+        $form->getSingleInput('id')->setName('slide_id');
         $form->getSingleInput('title')->setRequired(true);
         $form->getSingleInput('filepath')->setLabel('Image');
         $form->addSubmit('submit', 'Save slide');
@@ -168,6 +193,8 @@ class Admin extends \Http\Controller {
         $this->loadSlide($request);
 
         if ($request->isUploadedFile('filepath')) {
+            \carousel\SlideFactory::deleteImages($this->slide);
+
             $file = $request->getUploadedFileArray('filepath');
             $file_name = randomString(12) . '.' . str_replace('image/', '',
                             $file['type']);
@@ -189,8 +216,8 @@ class Admin extends \Http\Controller {
 
     private function loadSlide(\Request $request)
     {
-        if ($request->isVar('id')) {
-            $id = $request->getVar('id');
+        if ($request->isVar('slide_id')) {
+            $id = $request->getVar('slide_id');
             $this->slide = \carousel\SlideFactory::loadById($id);
         } else {
             $this->slide = new \carousel\Resource\Slide;
