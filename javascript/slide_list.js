@@ -12,8 +12,9 @@ $(window).load(function() {
                 command: 'move_slide',
                 move_id: moved_row_id,
                 next_id: next_row_id
+            }).done(function() {
+                Pagers.loadPagers();
             });
-            Pagers.loadPagers();
         }
     });
     $("#sortable").disableSelection();
