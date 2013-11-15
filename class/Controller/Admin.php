@@ -23,15 +23,11 @@ class Admin extends \Http\Controller {
     {
         $cmd = $request->shiftCommand();
         if (empty($cmd)) {
-            $cmd = 'groups';
+            $cmd = 'slides';
         }
         $this->loadMenu($cmd);
 
         switch ($cmd) {
-            case 'groups':
-                $template = $this->listGroups($request);
-                break;
-
             case 'slides':
                 $template = $this->listSlides($request);
                 break;
@@ -68,11 +64,79 @@ class Admin extends \Http\Controller {
                 case 'delete_slide':
                     $data = $this->deleteSlide($request);
                     break;
+
+                case 'deactivate':
+                    $data = $this->deactivate($request);
+                    break;
+
+                case 'activate':
+                    $data = $this->activate($request);
+                    break;
+
+                case 'move_slide':
+                    $data = $this->moveSlide($request);
+                    break;
             }
         } else {
             throw new \Exception('JSON command not found');
         }
         return parent::getJsonView($data, $request);
+    }
+
+    private function moveSlide(\Request $request)
+    {
+        $move_id = $request->getVar('move_id');
+        $next_id = $request->getVar('next_id');
+
+        $move_slide = \carousel\SlideFactory::getById($move_id);
+        $move_slide_queue = $move_slide->getQueue();
+
+        if ($next_id) {
+            $next_slide = \carousel\SlideFactory::getById($next_id);
+            $next_slide_queue = $next_slide->getQueue();
+        } else {
+            $next_slide = null;
+            $next_slide_queue = null;
+        }
+
+
+        $db = \Database::newDB();
+        if ($next_slide) {
+            if ($move_slide_queue > $next_slide_queue) {
+                $query = "UPDATE caro_slide SET caro_slide.queue=caro_slide.queue+1 WHERE (caro_slide.queue >= $next_slide_queue AND caro_slide.queue < $move_slide_queue)";
+                $db->exec($query);
+                $move_slide->setQueue($next_slide_queue);
+            } else {
+                $query = "UPDATE caro_slide SET caro_slide.queue=caro_slide.queue-1 WHERE (caro_slide.queue < $next_slide_queue AND caro_slide.queue > $move_slide_queue)";
+                $db->exec($query);
+                $move_slide->setQueue($next_slide_queue - 1);
+            }
+        } else {
+            $t1 = $db->addTable('caro_slide');
+            $t1->addField('id', 'count')->showCount();
+            $result = $db->selectOneRow();
+            $count = $result['count'];
+
+            $db = \Database::newDB();
+            $query = "UPDATE caro_slide SET caro_slide.queue=caro_slide.queue-1 WHERE (caro_slide.queue <= $count AND caro_slide.queue > $move_slide_queue)";
+            $db->exec($query);
+            $move_slide->setQueue($count);
+        }
+        \carousel\SlideFactory::save($move_slide);
+    }
+
+    private function deactivate(\Request $request)
+    {
+        $this->loadSlide($request);
+        $this->slide->setActive(false);
+        \carousel\SlideFactory::save($this->slide);
+    }
+
+    private function activate(\Request $request)
+    {
+        $this->loadSlide($request);
+        $this->slide->setActive(true);
+        \carousel\SlideFactory::save($this->slide);
     }
 
     private function deleteSlide(\Request $request)
@@ -88,32 +152,17 @@ class Admin extends \Http\Controller {
         return $vars;
     }
 
-    private function listGroupsJSON()
-    {
-        $db = \Database::newDB();
-        $sg = $db->addTable('caro_slidegroup');
-        $sg_title = $sg->addField('title');
-        $sg_begin = $sg->addField('begin_display');
-        $sg_end = $sg->addField('end_display');
-        $pager = new \DatabasePager($db);
-        $pager->setHeaders(array('title', 'begin_display', 'end_display'));
-        $tbl_headers['title'] = $sg_title;
-        $tbl_headers['begin_display'] = $sg_begin;
-        $tbl_headers['end_display'] = $sg_end;
-        $pager->setTableHeaders($tbl_headers);
-        $pager->setId('group-list');
-        $pager->setRowIdColumn('id');
-        return $pager->getJson();
-    }
-
     private function listSlidesJSON()
     {
         $db = \Database::newDB();
         $sg = $db->addTable('caro_slide');
+        $sg->addOrderBy($sg->getField('queue'));
         $sg_title = $sg->getField('title');
+        $sg_queue = $sg->getField('queue');
         $pager = new \DatabasePager($db);
-        $pager->setHeaders(array('title'));
+        $pager->setHeaders(array('title', 'queue'));
         $tbl_headers['title'] = $sg_title;
+        $tbl_headers['queue'] = $sg_queue;
         $pager->setTableHeaders($tbl_headers);
         $pager->setId('slide-list');
         $pager->setRowIdColumn('id');
@@ -135,17 +184,9 @@ class Admin extends \Http\Controller {
         $thumbnail = preg_replace('/(.*)\.(png|jpeg|jpg)$/i', '\\1_tn.\\2',
                 $filepath);
         $row['filepath'] = "<img src='$thumbnail' style='width:200px' />";
+        $checked = $row['active'] ? 'checked="checked"' : null;
+        $row['active-slide'] = "<input type='checkbox' value='1' $checked data-slide-id='$id' class='active-checkbox' />";
         return $row;
-    }
-
-    private function listGroups(\Request $request)
-    {
-        \Pager::prepare();
-
-        $tpl = array();
-        $template = new \Template($tpl);
-        $template->setModuleTemplate('carousel', 'Admin/ListGroups.html');
-        return $template;
     }
 
     private function listSlides(\Request $request)
@@ -154,6 +195,8 @@ class Admin extends \Http\Controller {
         \Pager::prepare();
         \Layout::addJSHeader("<script type='text/javascript' src='" .
                 PHPWS_SOURCE_HTTP . "mod/carousel/javascript/slide_list.js'></script>");
+
+        \Layout::addStyle('carousel', 'Admin/style.css');
 
         $slide = new \carousel\Resource\Slide;
         $form = $slide->pullForm();
@@ -208,6 +251,9 @@ class Admin extends \Http\Controller {
             throw new \Exception('No image uploaded for new slide.');
         }
 
+        if (!$this->slide->isSaved()) {
+            $this->slide->setActive(true);
+        }
         $this->slide->setTitle($request->getVar('title'));
         $this->slide->setCaption($request->getVar('caption'));
 
@@ -218,7 +264,7 @@ class Admin extends \Http\Controller {
     {
         if ($request->isVar('slide_id')) {
             $id = $request->getVar('slide_id');
-            $this->slide = \carousel\SlideFactory::loadById($id);
+            $this->slide = \carousel\SlideFactory::getById($id);
         } else {
             $this->slide = new \carousel\Resource\Slide;
         }

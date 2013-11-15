@@ -44,9 +44,7 @@ class Module extends \Module implements \SettingDefaults {
 
     private function getSlides()
     {
-        $db = \Database::newDB();
-        $t1 = $db->addTable('caro_slide');
-        $result = $db->select();
+        $result = \carousel\SlideFactory::getSlides(true);
 
         if (empty($result)) {
             return null;
@@ -68,7 +66,6 @@ class Module extends \Module implements \SettingDefaults {
         }
 
         $tpl['slides'] = $slides;
-
         $template = new \Template($tpl);
 
         $template->setModuleTemplate('carousel', 'slides.html');

@@ -23,8 +23,8 @@ class Menu {
             case 'slides':
                 $template->add('slides_active', 1);
                 break;
-            case 'groups':
-                $template->add('groups_active', 1);
+            case 'settings':
+                $template->add('settings_active', 1);
                 break;
         }
         $template->setModuleTemplate('carousel', 'Admin/Menu.html');
