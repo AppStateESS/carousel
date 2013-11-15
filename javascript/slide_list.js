@@ -1,23 +1,6 @@
 var carousel = new carousel;
 $(window).load(function() {
     carousel.init();
-    $('#sortable').sortable({
-        placeholder: 'ui-state-highlight',
-        update: function(event, ui) {
-            var moved_row = ui.item;
-            var next_row = ui.item.next('tr.pager-row');
-            var moved_row_id = moved_row.data('rowId');
-            var next_row_id = next_row.data('rowId');
-            $.get('carousel/admin/', {
-                command: 'move_slide',
-                move_id: moved_row_id,
-                next_id: next_row_id
-            }).done(function() {
-                Pagers.loadPagers();
-            });
-        }
-    });
-    $("#sortable").disableSelection();
 });
 
 
@@ -31,6 +14,30 @@ function carousel() {
         this.initDialog();
         this.initCreateButton();
         this.initEditClick();
+        this.initSort();
+    };
+
+    this.initSort = function()
+    {
+        _ = this;
+        $('#sortable').sortable({
+            placeholder: 'ui-state-highlight',
+            update: function(event, ui) {
+                var moved_row = ui.item;
+                var next_row = ui.item.next('tr.pager-row');
+                var moved_row_id = moved_row.data('rowId');
+                var next_row_id = next_row.data('rowId');
+                $.get('carousel/admin/', {
+                    command: 'move_slide',
+                    move_id: moved_row_id,
+                    next_id: next_row_id
+                }, 'json').always(function() {
+                    Pagers.loadPagers();
+                    _.init();
+                });
+            }
+        });
+        $("#sortable").disableSelection();
     };
 
     this.initDialog = function()
