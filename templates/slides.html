@@ -17,7 +17,7 @@
         foreach ($slides as $id=>$s){
         ?>
         <div class="item <?= $active ? 'active':null;?>">
-            <img src="<?=$s['src']?>" alt="<?=$s['title']?>" />
+            <img class="carousel-slide-image" data-url="<?=$s['url']?>" src="<?=$s['src']?>" alt="<?=$s['title']?>" />
             <?php if (!empty($s['caption'])): ?>
             <div class="carousel-caption">
                <?=$s['caption']?>

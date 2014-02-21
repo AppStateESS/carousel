@@ -26,6 +26,8 @@ class Slide extends \Resource {
         $this->caption->setInputType('textarea');
         $this->queue = new \Variable\Integer(0, 'queue');
         $this->active = new \Variable\Bool(0, 'active');
+        $this->url = new \Variable\Url(null, 'url');
+        $this->url->setInputType('textarea');
     }
 
     public function setTitle($title)
@@ -40,10 +42,20 @@ class Slide extends \Resource {
 
     public function setCaption($caption)
     {
-        $caption = strip_tags($caption, '<p><a><strong><b><i><em><ul><li>');
+        $caption = strip_tags($caption, '<p><em><strong><b><i><em><ul><li>');
         $this->caption->set($caption);
     }
 
+    public function setUrl($url)
+    {
+        $this->url->set($url);
+    }
+    
+    public function getUrl()
+    {
+        return $this->url->get();
+    }
+    
     public function setQueue($queue)
     {
         $this->queue->set($queue);

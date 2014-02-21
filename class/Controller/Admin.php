@@ -256,6 +256,7 @@ class Admin extends \Http\Controller {
         }
         $this->slide->setTitle($request->getVar('title'));
         $this->slide->setCaption($request->getVar('caption'));
+        $this->slide->setUrl($request->getVar('url'));
 
         \carousel\SlideFactory::save($this->slide);
     }

@@ -54,6 +54,7 @@ function carousel() {
         $('#new-slide').click(function() {
             $('#title').val('');
             $('#caption').val('');
+            $('#url').val('');
             $('#slide-update').dialog({title: 'Create new slide'});
             $('#slide-update').dialog('open');
         });
@@ -76,6 +77,7 @@ function carousel() {
                 }, function(data) {
                     $('#title').val(data.title);
                     $('#caption').val(data.caption);
+                    $('#url').val(data.url);
                 }, 'json');
             }
 

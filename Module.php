@@ -54,12 +54,16 @@ class Module extends \Module implements \SettingDefaults {
             $tpl[$slide['id']]['src'] = $slide['filepath'];
             $tpl[$slide['id']]['title'] = $slide['title'];
             $tpl[$slide['id']]['caption'] = $slide['caption'];
+            $tpl[$slide['id']]['url'] = $slide['url'];
         }
         return $tpl;
     }
 
     private function display()
     {
+        javascript('jquery');
+        $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
+        \Layout::addJSHeader($script, 'url-onclick');
         $slides = $this->getSlides();
         if (empty($slides)) {
             return null;
