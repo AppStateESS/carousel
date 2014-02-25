@@ -37,8 +37,9 @@ class Module extends \Module implements \SettingDefaults {
 
     public function getSettingDefaults()
     {
-        $s['min_width'] = '1000';
+        $s['min_width'] = 1000;
         $s['min_height'] = 100;
+        $s['display_mobile'] = false;
         return $s;
     }
 
@@ -54,16 +55,12 @@ class Module extends \Module implements \SettingDefaults {
             $tpl[$slide['id']]['src'] = $slide['filepath'];
             $tpl[$slide['id']]['title'] = $slide['title'];
             $tpl[$slide['id']]['caption'] = $slide['caption'];
-            $tpl[$slide['id']]['url'] = $slide['url'];
         }
         return $tpl;
     }
 
     private function display()
     {
-        javascript('jquery');
-        $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
-        \Layout::addJSHeader($script, 'url-onclick');
         $slides = $this->getSlides();
         if (empty($slides)) {
             return null;
@@ -71,7 +68,8 @@ class Module extends \Module implements \SettingDefaults {
 
         $tpl['slides'] = $slides;
         $template = new \Template($tpl);
-
+        \Layout::addJSHeader("<script type='text/javascript' src='" .
+        PHPWS_SOURCE_HTTP . "javascript/responsive_img/responsive-img.min.js'></script>", 81);
         $template->setModuleTemplate('carousel', 'slides.html');
         return $template->get();
     }
