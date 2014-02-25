@@ -1,4 +1,4 @@
-<div id="carousel-slides" class="carousel slide" data-ride="carousel">
+<div id="carousel-slides" class="carousel slide hidden-xs" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
         <?php
@@ -17,7 +17,8 @@
         foreach ($slides as $id=>$s){
         ?>
         <div class="item <?= $active ? 'active':null;?>">
-            <img class="carousel-slide-image" data-url="<?=$s['url']?>" src="<?=$s['src']?>" alt="<?=$s['title']?>" />
+            <img data-src=">768:<?=$s['src']?>" alt="<?=$s['title']?>" style="display:none;" onload="this.style.display='inline';this.style.opacity='1';" />
+            <noscript><img src="<?=$s['src']?>" alt="<?=$s['title']?>" /></noscript>
             <?php if (!empty($s['caption'])): ?>
             <div class="carousel-caption">
                <?=$s['caption']?>
