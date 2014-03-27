@@ -1,8 +1,17 @@
 var carousel = new carousel;
 $(window).load(function() {
-    carousel.init();
+    loadCarousel();
+
+    Pagers.options({
+        onRefresh : loadCarousel
+    });
+
 });
 
+function loadCarousel()
+{
+    carousel.init();
+}
 
 function carousel() {
 
