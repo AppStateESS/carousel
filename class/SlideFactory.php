@@ -28,12 +28,16 @@ class SlideFactory {
         \ResourceFactory::saveResource($slide);
     }
 
-    public static function getSlides($active = null)
+    public static function getSlides($active = null, $id = null)
     {
         $db = \Database::newDB();
         $t1 = $db->addTable('caro_slide');
         if (isset($active)) {
             $t1->addFieldConditional('active', (int) (bool) $active);
+        }
+
+        if ($id) {
+            $t1->addFieldConditional('id', (int) $id);
         }
         $t1->addOrderBy($t1->getField('queue'));
         return $db->select();

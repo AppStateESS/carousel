@@ -45,7 +45,6 @@ class Module extends \Module implements \SettingDefaults {
 
     private function checkKey($key_id)
     {
-
         javascript('jquery');
         \Layout::addJSHeader('<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP
                 . 'mod/carousel/javascript/add_slide.js"></script>');
@@ -64,16 +63,19 @@ class Module extends \Module implements \SettingDefaults {
 
     private function showKeySlide($row)
     {
-        $db = \Database::newDB();
-        $t = $db->addTable('caro_slide');
-        $t->addFieldConditional('id', $row);
-        $row = $db->selectOneRow();
-        if (empty($row)) {
-            return;
+        javascript('jquery');
+        $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
+        \Layout::addJSHeader($script, 'url-onclick');
+        $slides = $this->getSlides($row);
+        if (empty($slides)) {
+            return null;
         }
-        extract($row);
-        $template = new \Template($row);
-        $template->setModuleTemplate('carousel', 'single_slide.html');
+
+        $tpl['slides'] = $slides;
+        $tpl['controls'] = false;
+        $template = new \Template($tpl);
+
+        $template->setModuleTemplate('carousel', 'slides.html');
         \Layout::add($template->get(), 'carousel', 'slides');
     }
 
@@ -111,19 +113,16 @@ class Module extends \Module implements \SettingDefaults {
         return $s;
     }
 
-    private function getSlides()
+    private function getSlides($id = null)
     {
-        $result = \carousel\SlideFactory::getSlides(true);
+        $result = \carousel\SlideFactory::getSlides(true, $id);
 
         if (empty($result)) {
             return null;
         }
 
         foreach ($result as $slide) {
-            $tpl[$slide['id']]['src'] = $slide['filepath'];
-            $tpl[$slide['id']]['title'] = $slide['title'];
-            $tpl[$slide['id']]['caption'] = $slide['caption'];
-            $tpl[$slide['id']]['url'] = $slide['url'];
+            $tpl[$slide['id']] = $slide;
         }
         return $tpl;
     }
@@ -139,6 +138,7 @@ class Module extends \Module implements \SettingDefaults {
         }
 
         $tpl['slides'] = $slides;
+        $tpl['controls'] = true;
         $template = new \Template($tpl);
 
         $template->setModuleTemplate('carousel', 'slides.html');
