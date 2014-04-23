@@ -76,11 +76,62 @@ class Admin extends \Http\Controller {
                 case 'move_slide':
                     $data = $this->moveSlide($request);
                     break;
+
+                case 'addSlideToPage':
+                    $data = $this->addSlideToPage($request);
+                    break;
+
+                case 'removeSlideFromPage':
+                    $data = $this->removeSlideFromPage($request);
+                    break;
             }
         } else {
             throw new \Exception('JSON command not found');
         }
         return parent::getJsonView($data, $request);
+    }
+
+    private function removeSlideFromPage(\Request $request)
+    {
+        if ($request->isVar('key_id')) {
+            $key_id = $request->getVar('key_id');
+            $this->dropSlide($key_id);
+            $data['success'] = 1;
+        } else {
+            $data['success'] = 0;
+        }
+        return $data;
+    }
+
+    private function addSlideToPage(\Request $request)
+    {
+        if ($request->isVar('slide_id') && $request->isVar('key_id')) {
+            $key_id = $request->getVar('key_id');
+            $slide_id = $request->getVar('slide_id');
+            $this->dropSlide($key_id);
+            $this->pushSlide($key_id, $slide_id);
+            $data['success'] = 1;
+        } else {
+            $data['success'] = 0;
+        }
+        return $data;
+    }
+
+    private function dropSlide($key_id)
+    {
+        $db = \Database::newDB();
+        $t = $db->addTable('caro_keyed_slide');
+        $t->addFieldConditional('key_id', $key_id);
+        $db->delete();
+    }
+
+    private function pushSlide($key_id, $slide_id)
+    {
+        $db = \Database::newDB();
+        $t = $db->addTable('caro_keyed_slide');
+        $t->addValue('key_id', $key_id);
+        $t->addValue('slide_id', $slide_id);
+        $db->insert();
     }
 
     private function moveSlide(\Request $request)

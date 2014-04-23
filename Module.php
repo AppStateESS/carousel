@@ -35,6 +35,75 @@ class Module extends \Module implements \SettingDefaults {
         }
     }
 
+    public function afterRun(\Request $request, \Response &$response)
+    {
+        $key = \Key::getCurrent();
+        if ($key && !$key->isDummy()) {
+            $this->checkKey($key->id);
+        }
+    }
+
+    private function checkKey($key_id)
+    {
+
+        javascript('jquery');
+        \Layout::addJSHeader('<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP
+                . 'mod/carousel/javascript/add_slide.js"></script>');
+        $db = \Database::newDB();
+        $t = $db->addTable('caro_keyed_slide');
+        $t->addField('slide_id');
+        $t->addFieldConditional('key_id', $key_id);
+        $result = $db->selectColumn();
+        if (\Current_User::allow('carousel')) {
+            $this->miniAdmin($result, $key_id);
+        }
+        if (!empty($result)) {
+            $this->showKeySlide($result);
+        }
+    }
+
+    private function showKeySlide($row)
+    {
+        $db = \Database::newDB();
+        $t = $db->addTable('caro_slide');
+        $t->addFieldConditional('id', $row);
+        $row = $db->selectOneRow();
+        if (empty($row)) {
+            return;
+        }
+        extract($row);
+        $template = new \Template($row);
+        $template->setModuleTemplate('carousel', 'single_slide.html');
+        \Layout::add($template->get(), 'carousel', 'slides');
+    }
+
+    private function miniAdmin($result, $key_id)
+    {
+        if (empty($result)) {
+            $db = \Database::newDB();
+            $t2 = $db->addTable('caro_slide');
+            $t2->addOrderBy('title');
+            $t2->addField('title');
+            $t2->addField('id');
+            $slides = $db->select();
+            if (empty($slides)) {
+                return;
+            }
+
+            $opt[] = '<option id="0" style="">' . t('Add slide to this page') . '</option>';
+            foreach ($slides as $s) {
+                $opt[] = '<option value="' . $s['id'] . '">' . substr($s['title'],
+                                0, 15) . '</option>';
+            }
+
+            $select = '<select data-key-id="' . $key_id . '" id="add-slide" style="font-size:12px" class="form-control">'
+                    . implode("\n", $opt) . '</select>';
+        } else {
+            $select = '<a href="javascript:void(0)" id="remove-slide" data-key-id="' . $key_id . '">' . t('Remove slide from page') . '</a>';
+        }
+        \MiniAdmin::add('carousel', $select);
+    }
+
     public function getSettingDefaults()
     {
         $s['min_width'] = '1000';
