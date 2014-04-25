@@ -30,6 +30,7 @@ function carousel_update(&$content, $version)
             $content[] = '<pre>1.2.0
 --------------------
 + Can now associate a slide to a page.
++ Can control iterations of slides
 </pre>';
     } // end of switch
 
