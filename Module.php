@@ -110,6 +110,7 @@ class Module extends \Module implements \SettingDefaults {
     {
         $s['min_width'] = '1000';
         $s['min_height'] = 100;
+        $s['iteration'] = 0;
         return $s;
     }
 
@@ -130,12 +131,22 @@ class Module extends \Module implements \SettingDefaults {
     private function display()
     {
         javascript('jquery');
-        $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
-        \Layout::addJSHeader($script, 'url-onclick');
+
         $slides = $this->getSlides();
         if (empty($slides)) {
             return null;
         }
+
+        $iteration = \Settings::get('carousel', 'iteration');
+
+        if ($iteration) {
+            $count_to = $iteration * count($slides);
+            $script = '<script type="text/javascript">var iteration = ' . $count_to . ';</script>';
+            \Layout::addJSHeader($script, 'iteration');
+        }
+
+        $script2 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
+        \Layout::addJSHeader($script2, 'url-onclick');
 
         $tpl['slides'] = $slides;
         $tpl['controls'] = true;

@@ -26,7 +26,6 @@ class Admin extends \Http\Controller {
             $cmd = 'slides';
         }
         $this->loadMenu($cmd);
-
         switch ($cmd) {
             case 'slides':
                 $template = $this->listSlides($request);
@@ -223,7 +222,21 @@ class Admin extends \Http\Controller {
 
     private function settings()
     {
-        $tpl = array();
+        $form = new \Form;
+        $form->setAction('carousel/admin/settings');
+        $form->addHidden('command', 'save_settings');
+        $iteration = array(0=>'Forever', 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 10=>10);
+        $form->addSelect('iteration', $iteration, 'Iterations')->setSelection(\Settings::get('carousel', 'iteration'));
+        $form->addSubmit('save', 'Save settings');
+        $form->appendCSS('bootstrap');
+
+        $tpl = $form->getInputStringArray();
+
+        if (isset($_SESSION['carousel_message'])) {
+            $tpl['message'] = $_SESSION['carousel_message'];
+            unset($_SESSION['carousel_message']);
+        }
+
         $template = new \Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/Settings.html');
         return $template;
@@ -277,9 +290,19 @@ class Admin extends \Http\Controller {
             case 'save_slide':
                 $this->saveSlide($request);
                 break;
+
+            case 'save_settings':
+                $this->saveSettings($request);
+                $_SESSION['carousel_message'] = 'Settings saved';
+                break;
         }
         $response = new \Http\SeeOtherResponse(\Server::getCurrentUrl(false));
         return $response;
+    }
+
+    private function saveSettings(\Request $request)
+    {
+        \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
     }
 
     private function saveSlide(\Request $request)

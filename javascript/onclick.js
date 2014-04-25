@@ -8,4 +8,15 @@ $(window).load(function() {
             $(this).css('cursor', '');
         }
     });
+
+    var slide_count = 0;
+    if (typeof iteration !== 'undefined') {
+        $('#carousel-slides').on('slid.bs.carousel', function() {
+            slide_count++;
+            if (slide_count >= iteration) {
+                console.log('pause');
+                $('.carousel').carousel('pause');
+            }
+        });
+    }
 });
