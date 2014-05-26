@@ -14,7 +14,6 @@ $(window).load(function() {
         $('#carousel-slides').on('slid.bs.carousel', function() {
             slide_count++;
             if (slide_count >= iteration) {
-                console.log('pause');
                 $('.carousel').carousel('pause');
             }
         });

@@ -1,14 +1,14 @@
-<div id="carousel-slides" class="carousel slide" data-ride="carousel">
+<div id="carousel-slides" class="carousel slide hidden-xs" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
         <?php
-            $count = count($slides);
-            if ($count > 1) {
-                for($i = 0; $i<$count; $i++) {
-                    $class = $i ? null : " class='active'";
-                    echo "<li data-target='#carousel-slides' data-slide-to='$i'$class></li>";
-                }
-            }
+        $count = count($slides);
+        if ($count > 1) {
+        for($i = 0; $i<$count; $i++) {
+        $class = $i ? null : " class='active'";
+        echo "<li data-target='#carousel-slides' data-slide-to='$i'$class></li>";
+        }
+        }
         ?>
     </ol>
 
@@ -19,7 +19,9 @@
         foreach ($slides as $id=>$s){
         ?>
         <div class="item <?= $active ? 'active':null;?>">
-            <img class="carousel-slide-image" src="<?=$s['filepath']?>" alt="<?=$s['title']?>" />
+            <img class="carousel-slide-image"  data-src=">768:<?=$s['filepath']?>" alt="<?=$s['title']?>"
+                 style="display:none;" onload="this.style.display = 'inline'; this.style.opacity = '1';" />
+            <noscript><img src="<?=$s['filepath']?>" alt="<?=$s['title']?>" /></noscript>
             <?php if (!empty($s['caption'])): ?>
             <div class="carousel-caption">
                 <?=$s['caption']?>

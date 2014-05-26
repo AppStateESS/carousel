@@ -108,9 +108,10 @@ class Module extends \Module implements \SettingDefaults {
 
     public function getSettingDefaults()
     {
-        $s['min_width'] = '1000';
+        $s['min_width'] = 1000;
         $s['min_height'] = 100;
         $s['iteration'] = 0;
+        $s['display_mobile'] = false;
         return $s;
     }
 
@@ -131,6 +132,11 @@ class Module extends \Module implements \SettingDefaults {
     private function display()
     {
         javascript('jquery');
+
+        \Layout::addJSHeader("<script type='text/javascript' src='" .
+                PHPWS_SOURCE_HTTP . "javascript/responsive_img/responsive-img.min.js'></script>",
+                81);
+
 
         $slides = $this->getSlides();
         if (empty($slides)) {
