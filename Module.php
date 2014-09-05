@@ -35,7 +35,7 @@ class Module extends \Module implements \SettingDefaults {
         }
     }
 
-    public function afterRun(\Request $request, \Response &$response)
+    public function afterRun(\Request $request, \Response $response)
     {
         $key = \Key::getCurrent();
         if ($key && !$key->isDummy()) {
@@ -111,6 +111,7 @@ class Module extends \Module implements \SettingDefaults {
         $s['min_width'] = 1000;
         $s['min_height'] = 100;
         $s['iteration'] = 0;
+        $s['time_interval'] = 5;
         $s['display_mobile'] = false;
         return $s;
     }
@@ -144,10 +145,13 @@ class Module extends \Module implements \SettingDefaults {
         }
 
         $iteration = \Settings::get('carousel', 'iteration');
+        $time_interval = \Settings::get('carousel', 'time_interval');
+
+        $time_interval = $time_interval * 1000;
 
         if ($iteration) {
             $count_to = $iteration * count($slides);
-            $script = '<script type="text/javascript">var iteration = ' . $count_to . ';</script>';
+            $script = '<script type="text/javascript">var slide_interval = ' . $time_interval . '; var iteration = ' . $count_to . ';</script>';
             \Layout::addJSHeader($script, 'iteration');
         }
 

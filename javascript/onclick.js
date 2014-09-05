@@ -18,4 +18,7 @@ $(window).load(function() {
             }
         });
     }
+    $('.carousel').carousel(
+            {interval: slide_interval}
+    );
 });

@@ -20,7 +20,8 @@
         ?>
         <div class="item <?= $active ? 'active':null;?>">
             <img class="carousel-slide-image"  data-src=">768:<?=$s['filepath']?>" alt="<?=$s['title']?>"
-                 style="display:none;" onload="this.style.display = 'inline'; this.style.opacity = '1';" data-url="<?=$s['url']?>" />
+                 style="display:none;" onload="this.style.display = 'inline';
+                         this.style.opacity = '1';" data-url="<?=$s['url']?>" />
             <noscript><img src="<?=$s['filepath']?>" alt="<?=$s['title']?>" /></noscript>
             <?php if (!empty($s['caption'])): ?>
             <div class="carousel-caption">

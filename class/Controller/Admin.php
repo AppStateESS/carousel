@@ -225,8 +225,12 @@ class Admin extends \Http\Controller {
         $form = new \Form;
         $form->setAction('carousel/admin/settings');
         $form->addHidden('command', 'save_settings');
-        $iteration = array(0=>'Forever', 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 10=>10);
-        $form->addSelect('iteration', $iteration, 'Iterations')->setSelection(\Settings::get('carousel', 'iteration'));
+        $iteration = array(0 => 'Forever', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 10 => 10);
+        $form->addSelect('iteration', $iteration, 'Iterations')->setSelection(\Settings::get('carousel',
+                        'iteration'));
+        $interval = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 15 => 15, 20 => 20);
+        $form->addSelect('time_interval', $interval, 'Slide time interval')->setSelection(\Settings::get('carousel',
+                        'time_interval'));
         $form->addSubmit('save', 'Save settings');
         $form->appendCSS('bootstrap');
 
@@ -303,6 +307,7 @@ class Admin extends \Http\Controller {
     private function saveSettings(\Request $request)
     {
         \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
+        \Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
     }
 
     private function saveSlide(\Request $request)
