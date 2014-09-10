@@ -149,9 +149,12 @@ class Module extends \Module implements \SettingDefaults {
 
         $time_interval = $time_interval * 1000;
 
+        $script = '<script type="text/javascript">var slide_interval = ' . $time_interval . ';</script>';
+        \Layout::addJSHeader($script, 'c_interval');
+
         if ($iteration) {
             $count_to = $iteration * count($slides);
-            $script = '<script type="text/javascript">var slide_interval = ' . $time_interval . '; var iteration = ' . $count_to . ';</script>';
+            $script = '<script type="text/javascript">var iteration = ' . $count_to . ';</script>';
             \Layout::addJSHeader($script, 'iteration');
         }
 
