@@ -1,47 +1,43 @@
-<div id="carousel-slides" class="carousel slide hidden-xs" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <?php
+<div id="carousel-slides" class="carousel slide">
+ <!-- Indicators -->
+ <ol class="carousel-indicators">
+  <?php
         $count = count($slides);
-        if ($count > 1) {
         for($i = 0; $i<$count; $i++) {
         $class = $i ? null : " class='active'";
         echo "<li data-target='#carousel-slides' data-slide-to='$i'$class></li>";
         }
-        }
-        ?>
-    </ol>
-
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-        <?php
+?>
+ </ol>
+ 
+ <!-- Wrapper for slides -->
+ <div class="carousel-inner">
+<?php
         $active=true;
         foreach ($slides as $id=>$s){
         ?>
         <div class="item <?= $active ? 'active':null;?>">
-            <img class="carousel-slide-image"  data-src=">768:<?=$s['filepath']?>" alt="<?=$s['title']?>"
-                 style="display:none;" onload="this.style.display = 'inline';
-                         this.style.opacity = '1';" data-url="<?=$s['url']?>" />
-            <noscript><img src="<?=$s['filepath']?>" alt="<?=$s['title']?>" /></noscript>
+            <img src="<?=$s['src']?>" alt="<?=$s['title']?>" />
+            
             <?php if (!empty($s['caption'])): ?>
             <div class="carousel-caption">
-                <?=$s['caption']?>
+               <h3><?=$s['title']?></h3>
+               <?=$s['caption']?>
             </div>
             <?php endif; ?>
         </div>
         <?php
         $active = false;
         } // end foreach
-        ?>
-    </div>
-
-    <!-- Controls -->
-    <?php if ($controls): ?>
-    <a class="left carousel-control" href="#carousel-slides" data-slide="prev">
+?>
+  </div> 
+  
+  <!-- Controls -->
+     <a class="left carousel-control" href="#carousel-slides" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left"></span>
     </a>
     <a class="right carousel-control" href="#carousel-slides" data-slide="next">
         <span class="glyphicon glyphicon-chevron-right"></span>
     </a>
-    <?php endif; ?>
 </div>
+		
