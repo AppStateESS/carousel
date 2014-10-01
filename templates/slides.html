@@ -25,7 +25,9 @@
             <noscript><img src="<?=$s['filepath']?>" alt="<?=$s['title']?>" /></noscript>
             <?php if (!empty($s['caption'])): ?>
             <div class="carousel-caption">
-                <?=$s['caption']?>
+            <h3><?=$s['title']?></h3>
+                <?=$s['caption']?> <?php if (!empty($s['url'])): ?><a href="<?=$s['url']?>">Read More</a>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
         </div>
