@@ -1,4 +1,62 @@
-<div id="carousel-slides" class="carousel slide hidden-xs" data-ride="carousel">
+<style>
+    .carousel-indicators {
+        bottom: 0px;
+        opacity: 0.6;
+    }
+
+    .carousel-caption {
+        background-color: inherit;
+        text-shadow:none;
+        padding : 0px;
+        width : 90%;
+        left : 5%;
+    }
+
+    .carousel-caption.top {
+        top : 5%;
+    }
+    .carousel-caption.bottom {
+        bottom : 13%;
+    }
+
+    .carousel-caption .carousel-container {
+        width : 40%;
+    }
+
+    .carousel-container.right {
+        float:right;
+    }
+
+    .carousel-container.center {
+        margin : 0 auto;
+    }
+
+    .carousel-caption div.title {
+        background-color: rgba(0,0,0, 0.7);
+        text-align : left;
+        padding : 4px 8px;
+    }
+
+    .carousel-caption div.title h3 {
+        color : #ffcc00;
+        margin : 0px;
+    }
+    .carousel-caption div.title h3 a {
+        color : #ffcc00;
+    }
+    .carousel-caption div.title h3 a:hover {
+        text-decoration:none;
+    }
+
+    .carousel-caption div.content {
+        text-align : left;
+        background-color: rgba(255, 255, 255, 0.7);
+        color : black;
+        padding : 4px 8px;
+    }
+
+</style>
+<div id="carousel-slides" class="carousel slide hidden-xs <?=$fade?>" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
         <?php
@@ -16,7 +74,34 @@
     <div class="carousel-inner">
         <?php
         $active=true;
-        foreach ($slides as $id=>$s){
+        foreach ($slides as $id=>$s) {
+        switch($s['caption_zone']){
+        case 0:
+        $vertical = 'bottom';
+        $horizontal = 'center';
+        break;
+        case 1:
+        $vertical = 'top';
+        $horizontal = 'left';
+        break;
+        case 2:
+        $horizontal = 'right';
+        $vertical = 'top';
+        break;
+        case 3:
+        $horizontal = 'left';
+        $vertical = 'bottom';
+        break;
+        case 4:
+        $horizontal = 'right';
+        $vertical = 'bottom';
+        break;
+        }
+        if (!empty($s['url']) && !empty($s['title'])) {
+        $caption_title = '<a href="'.$s['url'].'">'.$s['title'].'</a>';
+        } else {
+        $caption_title = $s['title'];
+        }
         ?>
         <div class="item <?= $active ? 'active':null;?>">
             <img class="carousel-slide-image"  data-src=">768:<?=$s['filepath']?>" alt="<?=$s['title']?>"
@@ -24,10 +109,15 @@
                          this.style.opacity = '1';" data-url="<?=$s['url']?>" />
             <noscript><img src="<?=$s['filepath']?>" alt="<?=$s['title']?>" /></noscript>
             <?php if (!empty($s['caption'])): ?>
-            <div class="carousel-caption">
-            <h3><?=$s['title']?></h3>
-                <?=$s['caption']?> <?php if (!empty($s['url'])): ?><a href="<?=$s['url']?>">Read More</a>
-                <?php endif; ?>
+            <div class="carousel-caption <?=$vertical?>">
+                <div class="carousel-container <?=$horizontal?>">
+                    <div class="title">
+                        <h3><?=$caption_title?></h3>
+                    </div>
+                    <div class="content">
+                        <?=$s['caption']?>
+                    </div>
+                </div>
             </div>
             <?php endif; ?>
         </div>

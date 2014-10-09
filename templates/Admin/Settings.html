@@ -1,3 +1,11 @@
+<style>
+    .radio-label {
+        display:inline;
+    }
+    .radio-label:after {
+        content:"\a"; white-space:pre;
+    }
+</style>
 <?=$menu?>
 <h1>Carousel settings</h1>
 <?=$form_start?>
@@ -8,5 +16,10 @@
 <?php endif; ?>
 <div style="width:300px"><?=$iteration_group?></div>
 <div style="width:300px"><?=$time_interval_group?></div>
+<div style="width:300px">
+    <fieldset><legend>Transition type</legend>
+    <?=$transition_group?>
+    </fieldset>
+</div>
 <?=$save?>
 <?=$form_end?>

@@ -13,6 +13,16 @@ class Slide extends \Resource {
     protected $filepath;
     protected $caption;
     protected $queue;
+    protected $url;
+    /**
+     * 0 = Center
+     * 1 = Top left
+     * 2 = Top right
+     * 3 = Bottom left
+     * 4 = Bottom right
+     * @var integer
+     */
+    protected $caption_zone;
 
     protected $table = 'caro_slide';
 
@@ -27,7 +37,9 @@ class Slide extends \Resource {
         $this->queue = new \Variable\Integer(0, 'queue');
         $this->active = new \Variable\Bool(0, 'active');
         $this->url = new \Variable\Url(null, 'url');
+        $this->url->allowEmpty(1);
         $this->url->setInputType('textarea');
+        $this->caption_zone = new \Variable\Integer(0, 'caption_zone');
     }
 
     public function setTitle($title)
@@ -50,12 +62,17 @@ class Slide extends \Resource {
     {
         $this->url->set($url);
     }
-    
+
+    public function setCaptionZone($zone)
+    {
+        $this->caption_zone->set($zone);
+    }
+
     public function getUrl()
     {
         return $this->url->get();
     }
-    
+
     public function setQueue($queue)
     {
         $this->queue->set($queue);
@@ -70,7 +87,7 @@ class Slide extends \Resource {
     {
         return $this->title->get();
     }
-    
+
     public function getQueue()
     {
         return $this->queue->get();

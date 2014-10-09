@@ -28,7 +28,7 @@ class Module extends \Module implements \SettingDefaults {
     public function runTime(\Request $request)
     {
         if (!$request->isVar('module')) {
-            $display = $this->display();
+            $display = \carousel\SlideFactory::display();
             if (!empty($display)) {
                 \Layout::add($display, 'carousel', 'slides');
             }
@@ -57,26 +57,8 @@ class Module extends \Module implements \SettingDefaults {
             $this->miniAdmin($result, $key_id);
         }
         if (!empty($result)) {
-            $this->showKeySlide($result);
+            \carousel\SlideFactory::showKeySlide($result);
         }
-    }
-
-    private function showKeySlide($row)
-    {
-        javascript('jquery');
-        $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
-        \Layout::addJSHeader($script, 'url-onclick');
-        $slides = $this->getSlides($row);
-        if (empty($slides)) {
-            return null;
-        }
-
-        $tpl['slides'] = $slides;
-        $tpl['controls'] = false;
-        $template = new \Template($tpl);
-
-        $template->setModuleTemplate('carousel', 'slides.html');
-        \Layout::add($template->get(), 'carousel', 'slides');
     }
 
     private function miniAdmin($result, $key_id)
@@ -113,60 +95,9 @@ class Module extends \Module implements \SettingDefaults {
         $s['iteration'] = 0;
         $s['time_interval'] = 5;
         $s['display_mobile'] = false;
+        // transition 0 slide, 1 fade
+        $s['transition'] = 0;
         return $s;
-    }
-
-    private function getSlides($id = null)
-    {
-        $result = \carousel\SlideFactory::getSlides(true, $id);
-
-        if (empty($result)) {
-            return null;
-        }
-
-        foreach ($result as $slide) {
-            $tpl[$slide['id']] = $slide;
-        }
-        return $tpl;
-    }
-
-    private function display()
-    {
-        javascript('jquery');
-
-        \Layout::addJSHeader("<script type='text/javascript' src='" .
-                PHPWS_SOURCE_HTTP . "javascript/responsive_img/responsive-img.min.js'></script>",
-                81);
-
-
-        $slides = $this->getSlides();
-        if (empty($slides)) {
-            return null;
-        }
-
-        $iteration = \Settings::get('carousel', 'iteration');
-        $time_interval = \Settings::get('carousel', 'time_interval');
-
-        $time_interval = $time_interval * 1000;
-
-        $script = '<script type="text/javascript">var slide_interval = ' . $time_interval . ';</script>';
-        \Layout::addJSHeader($script, 'c_interval');
-
-        if ($iteration) {
-            $count_to = $iteration * count($slides);
-            $script = '<script type="text/javascript">var iteration = ' . $count_to . ';</script>';
-            \Layout::addJSHeader($script, 'iteration');
-        }
-
-        $script2 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
-        \Layout::addJSHeader($script2, 'url-onclick');
-
-        $tpl['slides'] = $slides;
-        $tpl['controls'] = true;
-        $template = new \Template($tpl);
-
-        $template->setModuleTemplate('carousel', 'slides.html');
-        return $template->get();
     }
 
 }

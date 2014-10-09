@@ -28,7 +28,7 @@ class SlideFactory {
         \ResourceFactory::saveResource($slide);
     }
 
-    public static function getSlides($active = null, $id = null)
+    public static function getSlidesFromDB($active = null, $id = null)
     {
         $db = \Database::newDB();
         $t1 = $db->addTable('caro_slide');
@@ -41,6 +41,85 @@ class SlideFactory {
         }
         $t1->addOrderBy($t1->getField('queue'));
         return $db->select();
+    }
+
+    public static function showKeySlide($row)
+    {
+        javascript('jquery');
+        $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
+        \Layout::addJSHeader($script, 'url-onclick');
+        $slides = $this->getSlidesFromDB($row);
+        if (empty($slides)) {
+            return null;
+        }
+
+        $tpl['slides'] = $slides;
+        $tpl['controls'] = false;
+        $template = new \Template($tpl);
+
+        $template->setModuleTemplate('carousel', 'slides.html');
+        \Layout::add($template->get(), 'carousel', 'slides');
+    }
+
+    public static function display()
+    {
+        javascript('jquery');
+
+        \Layout::addJSHeader("<script type='text/javascript' src='" .
+                PHPWS_SOURCE_HTTP . "javascript/responsive_img/responsive-img.min.js'></script>",
+                81);
+
+
+        $slides = self::getSlidesFromDB();
+        if (empty($slides)) {
+            return null;
+        }
+
+        $iteration = \Settings::get('carousel', 'iteration');
+        $time_interval = \Settings::get('carousel', 'time_interval');
+
+        $time_interval = $time_interval * 1000;
+
+        $script = '<script type="text/javascript">var slide_interval = ' . $time_interval . ';</script>';
+        \Layout::addJSHeader($script, 'c_interval');
+
+        if ($iteration) {
+            $count_to = $iteration * count($slides);
+            $script = '<script type="text/javascript">var iteration = ' . $count_to . ';</script>';
+            \Layout::addJSHeader($script, 'iteration');
+        }
+
+        $script2 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
+        \Layout::addJSHeader($script2, 'url-onclick');
+
+
+        if (\Settings::get('carousel', 'transition')) {
+            $tpl['fade'] = 'carousel-fade';
+            \Layout::addStyle('carousel', 'fade.css');
+        } else {
+            $tpl['fade'] = null;
+        }
+
+        $tpl['slides'] = $slides;
+        $tpl['controls'] = true;
+        $template = new \Template($tpl);
+
+        $template->setModuleTemplate('carousel', 'slides.html');
+        return $template->get();
+    }
+
+    private function getSlides($id = null)
+    {
+        $result = \carousel\SlideFactory::getSlides(true, $id);
+
+        if (empty($result)) {
+            return null;
+        }
+
+        foreach ($result as $slide) {
+            $tpl[$slide['id']] = $slide;
+        }
+        return $tpl;
     }
 
     public static function getById($id)

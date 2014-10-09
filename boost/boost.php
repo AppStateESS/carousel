@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/lgpl-3.0.html
  */
 $proper_name = 'Carousel for Bootstrap';
-$version = '1.2.0';
+$version = '1.3.0';
 $import_sql = false;
 $image_dir = true;
 ?>

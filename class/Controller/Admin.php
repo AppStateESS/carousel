@@ -231,6 +231,20 @@ class Admin extends \Http\Controller {
         $interval = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 15 => 15, 20 => 20);
         $form->addSelect('time_interval', $interval, 'Slide time interval')->setSelection(\Settings::get('carousel',
                         'time_interval'));
+        $slide = $form->addRadio('transition', 0, 'Slide');
+        $fade = $form->addRadio('transition', 1, 'Fade');
+
+        switch (\Settings::get('carousel', 'transition')) {
+            case 0:
+                $slide->setSelection(1);
+                break;
+
+            case 1:
+                $fade->setSelection(1);
+                break;
+        }
+
+
         $form->addSubmit('save', 'Save settings');
         $form->appendCSS('bootstrap');
 
@@ -261,9 +275,7 @@ class Admin extends \Http\Controller {
     {
         javascript('jquery_ui');
         \Pager::prepare();
-        \Layout::addJSHeader("<script type='text/javascript' src='" .
-                PHPWS_SOURCE_HTTP . "mod/carousel/javascript/slide_list.js'></script>");
-
+        \Layout::includeJavascript('mod/carousel/javascript/slide_list.js');
         \Layout::addStyle('carousel', 'Admin/style.css');
 
         $slide = new \carousel\Resource\Slide;
@@ -276,13 +288,28 @@ class Admin extends \Http\Controller {
         $form->getSingleInput('id')->setName('slide_id');
         $form->getSingleInput('title')->setRequired(true);
         $form->getSingleInput('filepath')->setLabel('Image');
+        $caption_zone[0] = 'Center';
+        $caption_zone[1] = 'Top left';
+        $caption_zone[2] = 'Top right';
+        $caption_zone[3] = 'Bottom left';
+        $caption_zone[4] = 'Bottom right';
+
+        $caption_zone = $form->addSelect('caption_zone', $caption_zone);
+        $form->removeInput('caption_zone');
+        $form->plugInput($caption_zone);
+
         $form->addSubmit('submit', 'Save slide');
         $tpl = $form->getInputStringArray();
         $tpl['min_width'] = \Settings::get('carousel', 'min_width');
         $tpl['min_height'] = \Settings::get('carousel', 'min_height');
         $template = new \Template($tpl);
-        $template->setModuleTemplate('carousel', 'Admin/ListSlides.html');
-        return $template;
+        $template->setModuleTemplate('carousel', 'Admin/SlideForm.html');
+        $modal = new \Modal('slide-update', $template->render(), 'Create new slide');
+        $modal->addButton('<button class="btn btn-success save-slide">Save slide</button>');
+
+        $pager_template = new \Template(array('modal'=>$modal->__toString()));
+        $pager_template->setModuleTemplate('carousel', 'Admin/ListSlides.html');
+        return $pager_template;
     }
 
     public function post(\Request $request)
@@ -308,6 +335,7 @@ class Admin extends \Http\Controller {
     {
         \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
         \Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
+        \Settings::set('carousel', 'transition', $request->getVar('transition'));
     }
 
     private function saveSlide(\Request $request)
@@ -336,6 +364,7 @@ class Admin extends \Http\Controller {
         $this->slide->setTitle($request->getVar('title'));
         $this->slide->setCaption($request->getVar('caption'));
         $this->slide->setUrl($request->getVar('url'));
+        $this->slide->setCaptionZone($request->getVar('caption_zone'));
 
         \carousel\SlideFactory::save($this->slide);
     }

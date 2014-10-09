@@ -32,6 +32,16 @@ function carousel_update(&$content, $version)
 + Can now associate a slide to a page.
 + Can control iterations of slides
 </pre>';
+        case version_compare($version, '1.3.0', '<'):
+            $db = \Database::newDB();
+            $tbl = $db->addTable('caro_slide');
+            $dt = new \Database\Datatype\Integer($tbl, 'caption_zone');
+            $dt->setDefault(0);
+            $dt->add();
+            $content[] = '<pre>1.3.0
+--------------------
++ Slide location added
+</pre>';
     } // end of switch
 
     return true;
