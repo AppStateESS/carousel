@@ -275,7 +275,7 @@ class Admin extends \Http\Controller {
     {
         javascript('jquery_ui');
         \Pager::prepare();
-        \Layout::includeJavascript('mod/carousel/javascript/slide_list.js');
+        \Layout::includeJavascript(PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/slide_list.js');
         \Layout::addStyle('carousel', 'Admin/style.css');
 
         $slide = new \carousel\Resource\Slide;
