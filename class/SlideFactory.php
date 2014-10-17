@@ -48,11 +48,12 @@ class SlideFactory {
         javascript('jquery');
         $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
         \Layout::addJSHeader($script, 'url-onclick');
-        $slides = self::getSlidesFromDB($row);
+        $slides = self::getSlidesFromDB(null, $row);
         if (empty($slides)) {
             return null;
         }
 
+        $tpl['fade'] = null;
         $tpl['slides'] = $slides;
         $tpl['controls'] = false;
         $template = new \Template($tpl);
@@ -70,7 +71,7 @@ class SlideFactory {
                 81);
 
 
-        $slides = self::getSlidesFromDB();
+        $slides = self::getSlidesFromDB(true);
         if (empty($slides)) {
             return null;
         }
