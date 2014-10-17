@@ -48,7 +48,7 @@ class SlideFactory {
         javascript('jquery');
         $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
         \Layout::addJSHeader($script, 'url-onclick');
-        $slides = $this->getSlidesFromDB($row);
+        $slides = self::getSlidesFromDB($row);
         if (empty($slides)) {
             return null;
         }
