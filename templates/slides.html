@@ -1,75 +1,6 @@
-<style>
-    .carousel-indicators {
-        bottom: 0px;
-        opacity: 0.6;
-    }
-
-    .carousel-caption {
-        background-color: inherit;
-        text-shadow:none;
-        padding : 0px;
-        width : 90%;
-        left : 5%;
-    }
-
-    .carousel-caption.top {
-        top : 5%;
-    }
-    .carousel-caption.bottom {
-        bottom : 13%;
-    }
-
-    .carousel-caption .carousel-container {
-        width : 40%;
-    }
-
-    .carousel-container.right {
-        float:right;
-    }
-
-    .carousel-container.center {
-        margin : 0 auto;
-    }
-
-    .carousel-caption div.title {
-        background-color: rgba(0,0,0, 0.7);
-        text-align : left;
-        padding : 4px 8px;
-    }
-
-    .carousel-caption div.title h3 {
-        color : #ffcc00;
-        margin : 0px;
-    }
-    .carousel-caption div.title h3 a {
-        color : #ffcc00;
-    }
-    .carousel-caption div.title h3 a:hover {
-        text-decoration:none;
-    }
-
-    .carousel-caption div.content {
-        text-align : left;
-        background-color: rgba(255, 255, 255, 0.7);
-        color : black;
-        padding : 4px 8px;
-    }
-
-</style>
 <div id="carousel-slides" class="carousel slide hidden-xs <?=$fade?>" data-ride="carousel">
     <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <?php
-        $count = count($slides);
-        if ($count > 1) {
-        for($i = 0; $i<$count; $i++) {
-        $class = $i ? null : " class='active'";
-        echo "<li data-target='#carousel-slides' data-slide-to='$i'$class></li>";
-        }
-        }
-        ?>
-    </ol>
-
+    <?=$indicators?>
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         <?php
@@ -103,7 +34,7 @@
         $caption_title = $s['title'];
         }
         ?>
-        <div class="item <?= $active ? 'active':null;?>">
+        <div class="item <?= $active ? 'active':null;?>" data-slide-number='<?=$id?>'>
             <img class="carousel-slide-image"  data-src=">768:<?=$s['filepath']?>" alt="<?=$s['title']?>"
                  style="display:none;" onload="this.style.display = 'inline';
                          this.style.opacity = '1';" data-url="<?=$s['url']?>" />
@@ -123,7 +54,7 @@
         </div>
         <?php
         $active = false;
-        } // end foreach
+        } // end slide foreach
         ?>
     </div>
 

@@ -1,0 +1,5 @@
+<ul class="carousel-indicators">
+    <?php foreach ($rows as $row): extract($row);?>
+    <li data-target='#carousel-slides' data-slide-to='<?=$count?>' class='<?=$class?>'></li>
+    <?php endforeach; ?>
+</ul>

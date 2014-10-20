@@ -234,6 +234,7 @@ class Admin extends \Http\Controller {
         $slide = $form->addRadio('transition', 0, 'Slide');
         $fade = $form->addRadio('transition', 1, 'Fade');
 
+
         switch (\Settings::get('carousel', 'transition')) {
             case 0:
                 $slide->setSelection(1);
@@ -244,6 +245,17 @@ class Admin extends \Http\Controller {
                 break;
         }
 
+        $bullet = $form->addRadio('indicator', 0, 'Bullets');
+        $thumbnail = $form->addRadio('indicator', 1, 'Thumbnails');
+        switch (\Settings::get('carousel', 'indicator')) {
+            case 0:
+                $bullet->setSelection(1);
+                break;
+
+            case 1:
+                $thumbnail->setSelection(1);
+                break;
+        }
 
         $form->addSubmit('save', 'Save settings');
         $form->appendCSS('bootstrap');
@@ -336,6 +348,7 @@ class Admin extends \Http\Controller {
         \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
         \Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
         \Settings::set('carousel', 'transition', $request->getVar('transition'));
+        \Settings::set('carousel', 'indicator', $request->getVar('indicator'));
     }
 
     private function saveSlide(\Request $request)

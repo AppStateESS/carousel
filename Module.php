@@ -97,6 +97,7 @@ class Module extends \Module implements \SettingDefaults {
         $s['display_mobile'] = false;
         // transition 0 slide, 1 fade
         $s['transition'] = 0;
+        $s['indicator'] = 0;
         return $s;
     }
 

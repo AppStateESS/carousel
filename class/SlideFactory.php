@@ -65,6 +65,7 @@ class SlideFactory {
     public static function display()
     {
         javascript('jquery');
+        \Layout::addStyle('carousel');
 
         \Layout::addJSHeader("<script type='text/javascript' src='" .
                 PHPWS_SOURCE_HTTP . "javascript/responsive_img/responsive-img.min.js'></script>",
@@ -101,11 +102,56 @@ class SlideFactory {
             $tpl['fade'] = null;
         }
 
+        foreach ($slides as $k => $s) {
+            $slides[$k]['tn'] = preg_replace('/(.*)\.(png|jpeg|jpg)$/i',
+                    '\\1_tn.\\2', $s['filepath']);
+        }
+
+        if (\Settings::get('carousel', 'indicator')) {
+            $tpl['indicators'] = self::thumbnailIndicator($slides);
+        } else {
+            $tpl['indicators'] = self::bulletIndicator($slides);
+        }
+
         $tpl['slides'] = $slides;
         $tpl['controls'] = true;
         $template = new \Template($tpl);
 
         $template->setModuleTemplate('carousel', 'slides.html');
+        return $template->get();
+    }
+
+    private static function bulletIndicator($slides)
+    {
+        $count = count($slides);
+        if (empty($count)) {
+            return null;
+        }
+        for ($i = 0; $i < $count; $i++) {
+            $tpl['rows'][] = array('class' => null, 'count' => $i);
+        }
+        $tpl['rows'][0]['class'] = 'active';
+        $template = new \Template($tpl);
+        $template->setModuleTemplate('carousel', 'bullet.html');
+        return $template->get();
+    }
+
+    private static function thumbnailIndicator($slides)
+    {
+        $i = 0;
+        foreach ($slides as $s) {
+            $tpl['rows'][$i] = $s;
+            $tpl['rows'][$i]['count'] = $i;;
+            if (!$i) {
+                $tpl['rows'][$i]['selected'] = 'selected';
+            } else {
+                $tpl['rows'][$i]['selected'] = null;
+            }
+            $i++;
+        }
+
+        $template = new \Template($tpl);
+        $template->setModuleTemplate('carousel', 'thumbnail.html');
         return $template->get();
     }
 
