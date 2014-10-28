@@ -7,7 +7,6 @@ $(window).load(function(){
             key_id : key_id,
             slide_id : slide_id
         }, function(data){
-            //console.log(data);
         }, 'json').always(function(){
             window.location.reload();
         });
@@ -19,7 +18,6 @@ $(window).load(function(){
             command: 'removeSlideFromPage',
             key_id : key_id
         }, function(data){
-            //console.log(data);
         }, 'json').always(function(){
             window.location.reload();
         });

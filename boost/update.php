@@ -40,7 +40,12 @@ function carousel_update(&$content, $version)
             $dt->add();
             $content[] = '<pre>1.3.0
 --------------------
-+ Slide location added
++ Slide caption location added
+</pre>';
+        case version_compare($version, '1.3.1', '<'):
+            $content[] = '<pre>1.3.1
+--------------------
++ Fixed single slide setting.
 </pre>';
     } // end of switch
 

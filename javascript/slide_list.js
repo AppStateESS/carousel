@@ -135,7 +135,6 @@ function carousel() {
                     'command': 'delete_slide',
                     'slide_id': $('#resource-id').val()
                 }, function (data) {
-                    //console.log(data);
                     window.location.reload();
                 });
             });

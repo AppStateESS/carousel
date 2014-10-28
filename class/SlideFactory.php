@@ -46,19 +46,17 @@ class SlideFactory {
     public static function showKeySlide($row)
     {
         javascript('jquery');
-        $script = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
-        \Layout::addJSHeader($script, 'url-onclick');
+        \Layout::addStyle('carousel');
         $slides = self::getSlidesFromDB(null, $row);
         if (empty($slides)) {
             return null;
         }
 
-        $tpl['fade'] = null;
-        $tpl['slides'] = $slides;
+        $tpl['slide'] = array_pop($slides);
         $tpl['controls'] = false;
         $template = new \Template($tpl);
 
-        $template->setModuleTemplate('carousel', 'slides.html');
+        $template->setModuleTemplate('carousel', 'single_slide.html');
         \Layout::add($template->get(), 'carousel', 'slides');
     }
 
@@ -93,6 +91,8 @@ class SlideFactory {
 
         $script2 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
         \Layout::addJSHeader($script2, 'url-onclick');
+        $script3 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/slide_navigation.js"></script>';
+        \Layout::addJSHeader($script3, 'url-nav');
 
 
         if (\Settings::get('carousel', 'transition')) {
@@ -141,7 +141,7 @@ class SlideFactory {
         $i = 0;
         foreach ($slides as $s) {
             $tpl['rows'][$i] = $s;
-            $tpl['rows'][$i]['count'] = $i;;
+            $tpl['rows'][$i]['count'] = $i;
             if (!$i) {
                 $tpl['rows'][$i]['selected'] = 'selected';
             } else {
