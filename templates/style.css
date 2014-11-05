@@ -61,5 +61,3 @@ border-radius: 15px;}
 
 #slider-thumbs {border:1px solid black; height: 60px; padding : 5px 6px 6px 5px; background-color : rgba(0, 0, 0, .70);z-index: 15;bottom:-15px;left:3%; position:absolute;-moz-border-radius: 15px;
 border-radius: 15px;}
-
-#carousel-slides {margin-bottom:2em;}
