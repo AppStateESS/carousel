@@ -36,12 +36,17 @@ class Admin extends \Http\Controller {
         }
         $template->add('menu', $this->menu->get());
 
+
+
         if (!empty(\Session::getInstance()->caro_message)) {
             $ses = \Session::getInstance();
             $template->add('message', $ses->caro_message);
             unset($ses->caro_message);
         }
-        return $template;
+
+        $panel = $template->get();
+        $view = new \View\HtmlView(\PHPWS_ControlPanel::display($panel));
+        return $view;
     }
 
     protected function getJsonView($data, \Request $request)
@@ -316,11 +321,13 @@ class Admin extends \Http\Controller {
         $tpl['min_height'] = \Settings::get('carousel', 'min_height');
         $template = new \Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/SlideForm.html');
-        $modal = new \Modal('slide-update', $template->render(), 'Create new slide');
+        $modal = new \Modal('slide-update', $template->render(),
+                'Create new slide');
         $modal->addButton('<button class="btn btn-success save-slide">Save slide</button>');
 
-        $pager_template = new \Template(array('modal'=>$modal->__toString()));
+        $pager_template = new \Template(array('modal' => $modal->__toString()));
         $pager_template->setModuleTemplate('carousel', 'Admin/ListSlides.html');
+
         return $pager_template;
     }
 
@@ -346,7 +353,8 @@ class Admin extends \Http\Controller {
     private function saveSettings(\Request $request)
     {
         \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
-        \Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
+        \Settings::set('carousel', 'time_interval',
+                $request->getVar('time_interval'));
         \Settings::set('carousel', 'transition', $request->getVar('transition'));
         \Settings::set('carousel', 'indicator', $request->getVar('indicator'));
     }
