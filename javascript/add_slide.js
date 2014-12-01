@@ -11,6 +11,9 @@ $(window).load(function(){
             window.location.reload();
         });
     });
+    $('#add-slide').click(function(e){
+        e.stopPropagation();
+    });
 
     $('#remove-slide').click(function(){
         var key_id = $(this).data('keyId');
