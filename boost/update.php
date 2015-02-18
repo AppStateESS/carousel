@@ -47,6 +47,16 @@ function carousel_update(&$content, $version)
 --------------------
 + Fixed single slide setting.
 </pre>';
+
+        case version_compare($version, '1.4.0', '<'):
+            $db = \Database::newDB();
+            $t = $db->addTable('caro_slide');
+            $dt = new \Database\Datatype\Smallint($t, 'show_title');
+            $dt->add();
+            $content[] = '<pre>1.4.0
+--------------------
++ Slide title can now be hidden by unchecking "Show Title." Caption will still display.
+</pre>';
     } // end of switch
 
     return true;

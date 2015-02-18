@@ -42,9 +42,11 @@
             <?php if (!empty($s['caption'])): ?>
             <div class="carousel-caption <?=$vertical?>">
                 <div class="carousel-container <?=$horizontal?>">
+                    <?php if ($s['show_title']): ?>
                     <div class="title">
                         <h3><?=$caption_title?></h3>
                     </div>
+                    <?php endif;?>
                     <div class="content">
                         <?=$s['caption']?>
                     </div>

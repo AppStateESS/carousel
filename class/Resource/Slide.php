@@ -10,6 +10,7 @@ namespace carousel\Resource;
 class Slide extends \Resource {
 
     protected $title;
+    protected $show_title;
     protected $filepath;
     protected $caption;
     protected $queue;
@@ -30,6 +31,7 @@ class Slide extends \Resource {
     {
         parent::__construct();
         $this->title = new \Variable\TextOnly(null, 'title');
+        $this->show_title = new \Variable\Bool(1, 'show_title');
         $this->filepath = new \Variable\File(null, 'filepath');
         $this->caption = new \Variable\String(null, 'caption');
         $this->caption->allowEmpty(true);
@@ -45,6 +47,11 @@ class Slide extends \Resource {
     public function setTitle($title)
     {
         $this->title->set($title);
+    }
+    
+    public function setShowTitle($show_title)
+    {
+        $this->show_title->set($show_title);
     }
 
     public function setFilepath($filepath)
@@ -86,6 +93,11 @@ class Slide extends \Resource {
     public function getTitle()
     {
         return $this->title->get();
+    }
+    
+    public function getShowTitle()
+    {
+        return $this->show_title->get();
     }
 
     public function getQueue()

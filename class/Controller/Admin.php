@@ -7,8 +7,8 @@ namespace carousel\Controller;
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/lgpl-3.0.html
  */
-class Admin extends \Http\Controller {
-
+class Admin extends \Http\Controller
+{
     private $slide;
 
     public function get(\Request $request)
@@ -231,11 +231,9 @@ class Admin extends \Http\Controller {
         $form->setAction('carousel/admin/settings');
         $form->addHidden('command', 'save_settings');
         $iteration = array(0 => 'Forever', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 10 => 10);
-        $form->addSelect('iteration', $iteration, 'Iterations')->setSelection(\Settings::get('carousel',
-                        'iteration'));
+        $form->addSelect('iteration', $iteration, 'Iterations')->setSelection(\Settings::get('carousel', 'iteration'));
         $interval = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 15 => 15, 20 => 20);
-        $form->addSelect('time_interval', $interval, 'Slide time interval')->setSelection(\Settings::get('carousel',
-                        'time_interval'));
+        $form->addSelect('time_interval', $interval, 'Slide time interval')->setSelection(\Settings::get('carousel', 'time_interval'));
         $slide = $form->addRadio('transition', 0, 'Slide');
         $fade = $form->addRadio('transition', 1, 'Fade');
 
@@ -280,8 +278,7 @@ class Admin extends \Http\Controller {
     public static function pagerRow($row)
     {
         extract($row);
-        $thumbnail = preg_replace('/(.*)\.(png|jpeg|jpg)$/i', '\\1_tn.\\2',
-                $filepath);
+        $thumbnail = preg_replace('/(.*)\.(png|jpeg|jpg)$/i', '\\1_tn.\\2', $filepath);
         $row['filepath'] = "<img src='$thumbnail' style='width:200px' />";
         $checked = $row['active'] ? 'checked="checked"' : null;
         $row['active-slide'] = "<input type='checkbox' value='1' $checked data-slide-id='$id' class='active-checkbox' />";
@@ -321,8 +318,7 @@ class Admin extends \Http\Controller {
         $tpl['min_height'] = \Settings::get('carousel', 'min_height');
         $template = new \Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/SlideForm.html');
-        $modal = new \Modal('slide-update', $template->render(),
-                'Create new slide');
+        $modal = new \Modal('slide-update', $template->render(), 'Create new slide');
         $modal->addButton('<button class="btn btn-success save-slide">Save slide</button>');
 
         $pager_template = new \Template(array('modal' => $modal->__toString()));
@@ -353,8 +349,7 @@ class Admin extends \Http\Controller {
     private function saveSettings(\Request $request)
     {
         \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
-        \Settings::set('carousel', 'time_interval',
-                $request->getVar('time_interval'));
+        \Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
         \Settings::set('carousel', 'transition', $request->getVar('transition'));
         \Settings::set('carousel', 'indicator', $request->getVar('indicator'));
     }
@@ -367,13 +362,10 @@ class Admin extends \Http\Controller {
             \carousel\SlideFactory::deleteImages($this->slide);
 
             $file = $request->getUploadedFileArray('filepath');
-            $file_name = randomString(12) . '.' . str_replace('image/', '',
-                            $file['type']);
+            $file_name = randomString(12) . '.' . str_replace('image/', '', $file['type']);
 
-            \PHPWS_File::fileCopy($file['tmp_name'], 'images/carousel/',
-                    $file_name, false, true);
-            \PHPWS_File::makeThumbnail($file_name, 'images/carousel/',
-                    'images/carousel/', 200);
+            \PHPWS_File::fileCopy($file['tmp_name'], 'images/carousel/', $file_name, false, true);
+            \PHPWS_File::makeThumbnail($file_name, 'images/carousel/', 'images/carousel/', 200);
             $this->slide->setFilepath('images/carousel/' . $file_name);
         } elseif (!$this->slide->getId()) {
             throw new \Exception('No image uploaded for new slide.');
@@ -386,7 +378,11 @@ class Admin extends \Http\Controller {
         $this->slide->setCaption($request->getVar('caption'));
         $this->slide->setUrl($request->getVar('url'));
         $this->slide->setCaptionZone($request->getVar('caption_zone'));
-
+        if ($request->isVar('show_title')) {
+            $this->slide->setShowTitle(1);
+        } else {
+            $this->slide->setShowTitle(0);
+        }
         \carousel\SlideFactory::save($this->slide);
     }
 

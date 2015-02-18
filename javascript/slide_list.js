@@ -100,6 +100,11 @@ function carousel() {
                     $('#caption').val(data.caption);
                     $('#url').val(data.url);
                     $('#caption-zone-2').val(data.caption_zone);
+                    if (data.show_title == 1) {
+                        $('#show_title').prop('checked', true);
+                    } else {
+                        $('#show_title').prop('checked', false);
+                    }
                 }, 'json');
             }
 
