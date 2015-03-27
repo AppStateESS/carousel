@@ -14,6 +14,7 @@ function loadCarousel()
 }
 
 function carousel() {
+    var _ = this;
 
     this.init = function ()
     {
@@ -43,7 +44,6 @@ function carousel() {
 
     this.initSort = function ()
     {
-        _ = this;
         $('#sortable').sortable({
             placeholder: 'ui-state-highlight',
             update: function (event, ui) {
@@ -83,7 +83,6 @@ function carousel() {
 
     this.initEditClick = function ()
     {
-        _ = this;
         $('.pager-row').click(function (e) {
             if (!$(e.target).is('input.active-checkbox')) {
                 _.initDeleteClick();
