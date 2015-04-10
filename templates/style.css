@@ -61,3 +61,7 @@ border-radius: 15px;}
 
 #slider-thumbs {border:1px solid black; height: 60px; padding : 5px 6px 6px 5px; background-color : rgba(0, 0, 0, .70);z-index: 15;bottom:-15px;left:3%; position:absolute;-moz-border-radius: 15px;
 border-radius: 15px;}
+
+/* hides arrow until mouse over */
+.carousel .carousel-control, .carousel .carousel-indicators { opacity:0; transition:opacity 1s linear;}
+.carousel:hover .carousel-control,  .carousel:hover .carousel-indicators  { opacity:1;}
