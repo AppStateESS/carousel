@@ -154,7 +154,6 @@ class Admin extends \Http\Controller
             $next_slide_queue = null;
         }
 
-
         $db = \Database::newDB();
         if ($next_slide) {
             if ($move_slide_queue > $next_slide_queue) {
