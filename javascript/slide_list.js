@@ -1,11 +1,9 @@
 var carousel = new carousel;
 $(window).load(function () {
-    loadCarousel();
-
     Pagers.options({
+        callback: loadCarousel,
         onRefresh: loadCarousel
     });
-
 });
 
 function loadCarousel()
@@ -61,7 +59,6 @@ function carousel() {
                 });
             }
         });
-        $("#sortable").disableSelection();
     };
 
     this.initCreateButton = function ()
@@ -106,7 +103,6 @@ function carousel() {
                     }
                 }, 'json');
             }
-
         });
         $('.active-checkbox').click(function () {
             if ($(this).is(':checked')) {
