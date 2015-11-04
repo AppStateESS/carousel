@@ -11,4 +11,4 @@ $link[] = array('label' => 'Carousel',
     'image' => 'carousel.gif',
     'tab' => 'content'
 );
-?>
+
