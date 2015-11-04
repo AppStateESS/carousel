@@ -24,6 +24,7 @@ class Slide extends \Resource {
      * @var integer
      */
     protected $caption_zone;
+    protected $active;
 
     protected $table = 'caro_slide';
 
