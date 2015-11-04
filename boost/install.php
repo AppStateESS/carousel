@@ -30,5 +30,3 @@ function carousel_install(&$content)
     $content[] = 'Tables created';
     return true;
 }
-
-?>
