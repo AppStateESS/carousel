@@ -39,7 +39,7 @@ class Slide extends \Resource {
         $this->caption->setInputType('textarea');
         $this->queue = new \Variable\Integer(0, 'queue');
         $this->active = new \Variable\Bool(0, 'active');
-        $this->url = new \Variable\Url(null, 'url');
+        $this->url = new \Variable\String(null, 'url');
         $this->url->allowEmpty(1);
         $this->url->setInputType('textarea');
         $this->caption_zone = new \Variable\Integer(0, 'caption_zone');
