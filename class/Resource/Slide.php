@@ -62,7 +62,9 @@ class Slide extends \Resource {
 
     public function setCaption($caption)
     {
-        $caption = strip_tags($caption, '<p><em><strong><b><i><em><ul><li>');
+        if (!\Current_User::isDeity()) {
+            $caption = strip_tags($caption, '<p><em><strong><b><i><em><ul><li>');
+        }
         $this->caption->set($caption);
     }
 

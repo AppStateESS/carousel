@@ -6,25 +6,25 @@
         content:"\a"; white-space:pre;
     }
 </style>
-<?=$menu?>
+<?php echo $menu?>
 <h1>Carousel settings</h1>
-<?=$form_start?>
+<?php echo $form_start?>
 <?php if(isset($message)):?>
 <div class="alert alert-success alert-dismissable"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <?=$message?>
+    <?php echo $message?>
 </div>
 <?php endif; ?>
-<div style="width:300px"><?=$iteration_group?></div>
-<div style="width:300px"><?=$time_interval_group?></div>
+<div style="width:300px"><?php echo $iteration_group?></div>
+<div style="width:300px"><?php echo $time_interval_group?></div>
 <div style="width:300px">
     <fieldset><legend>Transition type</legend>
-    <?=$transition_group?>
+    <?php echo $transition_group?>
     </fieldset>
 </div>
 <div style="width:300px">
     <fieldset><legend>Indicator type</legend>
-    <?=$indicator_group?>
+    <?php echo $indicator_group?>
     </fieldset>
 </div>
-<?=$save?>
-<?=$form_end?>
+<?php echo $save?>
+<?php echo $form_end?>

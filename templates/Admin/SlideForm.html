@@ -1,11 +1,14 @@
 <?php echo $form_start ?>
 <div class="filepath-group form-group">
-    <?= $filepath_label ?>
-    <a href="#" data-toggle="tooltip" title="JPG/JPEG or PNG files only. Must be larger than <?=$min_width, 'x', $min_height?>px."><i class="fa fa-question-circle" id="file-note"></i></a>
-    <?=$filepath?>
+    <?php echo $filepath_label ?>
+    <a href="#" data-toggle="tooltip" title="JPG/JPEG or PNG files only. Must be larger than <?php echo $min_width, 'x', $min_height?>px."><i class="fa fa-question-circle" id="file-note"></i></a>
+    <?php echo $filepath?>
 </div>
-<?php echo $title_group ?>
 <?php echo $show_title_group ?>
+<?php echo $title_group ?>
+<?php if (\Current_User::isDeity()): ?>
+<label><input type="checkbox" name="allowHtml" id="allowHtml" /> Use HTML caption</label>
+<?php endif; ?>
 <?php echo $caption_group ?>
 <?php echo $url_group ?>
 <?php echo $caption_zone_group ?>

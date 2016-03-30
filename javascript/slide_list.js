@@ -23,6 +23,7 @@ function carousel() {
         this.initEditClick();
         this.initSort();
         this.initFormUpdate();
+        this.initHTMLCheck();
     };
 
     this.initFormUpdate = function ()
@@ -36,6 +37,19 @@ function carousel() {
                 new_title = new_title.replace(/_/, ' ');
                 new_title = new_title.charAt(0).toUpperCase() + new_title.slice(1);
                 $('#title').val(new_title);
+            }
+        });
+    };
+    
+    this.initHTMLCheck = function()
+    {
+        $('#allowHtml').change(function(e){
+            if (e.target.checked) {
+                CKEDITOR.replace('caption');   
+            } else {
+                var data = CKEDITOR.instances['caption'].getData();
+                CKEDITOR.instances['caption'].destroy(true);
+                $('#caption').val(data);
             }
         });
     };

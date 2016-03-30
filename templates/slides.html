@@ -1,6 +1,6 @@
-<div id="carousel-slides" class="carousel slide hidden-xs <?=$fade?>" data-ride="carousel">
+<div id="carousel-slides" class="carousel slide hidden-xs <?php echo $fade?>" data-ride="carousel">
     <!-- Indicators -->
-    <?=$indicators?>
+    <?php echo $indicators?>
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         <?php
@@ -34,21 +34,21 @@
         $caption_title = $s['title'];
         }
         ?>
-        <div class="item <?= $active ? 'active':null;?>" data-slide-number='<?=$id?>'>
-            <img class="carousel-slide-image"  data-src=">768:<?=$s['filepath']?>" alt="<?=$s['title']?>"
+        <div class="item <?php echo $active ? 'active':null;?>" data-slide-number='<?php echo $id?>'>
+            <img class="carousel-slide-image"  data-src=">768:<?php echo $s['filepath']?>" alt="<?php echo $s['title']?>"
                  style="display:none;" onload="this.style.display = 'inline';
-                         this.style.opacity = '1';" data-url="<?=$s['url']?>" />
-            <noscript><img src="<?=$s['filepath']?>" alt="<?=$s['title']?>" /></noscript>
+                         this.style.opacity = '1';" data-url="<?php echo $s['url']?>" />
+            <noscript><img src="<?php echo $s['filepath']?>" alt="<?php echo $s['title']?>" /></noscript>
             <?php if (!empty($s['caption'])): ?>
-            <div class="carousel-caption <?=$vertical?>">
-                <div class="carousel-container <?=$horizontal?>">
+            <div class="carousel-caption <?php echo $vertical?>">
+                <div class="carousel-container <?php echo $horizontal?>">
                     <?php if ($s['show_title']): ?>
                     <div class="title">
-                        <h3><?=$caption_title?></h3>
+                        <h3><?php echo $caption_title?></h3>
                     </div>
                     <?php endif;?>
                     <div class="content">
-                        <?=$s['caption']?>
+                        <?php echo $s['caption']?>
                     </div>
                 </div>
             </div>

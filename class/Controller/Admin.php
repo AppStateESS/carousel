@@ -287,6 +287,7 @@ class Admin extends \Http\Controller
     private function listSlides(\Request $request)
     {
         javascript('jquery_ui');
+        javascript('ckeditor');
         \Pager::prepare();
         \Layout::includeJavascript('mod/carousel/javascript/slide_list.js');
         \Layout::addStyle('carousel', 'Admin/style.css');
@@ -317,7 +318,9 @@ class Admin extends \Http\Controller
         $tpl['min_height'] = \Settings::get('carousel', 'min_height');
         $template = new \Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/SlideForm.html');
+        
         $modal = new \Modal('slide-update', $template->render(), 'Create new slide');
+        $modal->sizeLarge();
         $modal->addButton('<button class="btn btn-success save-slide">Save slide</button>');
 
         $pager_template = new \Template(array('modal' => $modal->__toString()));

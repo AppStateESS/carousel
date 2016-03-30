@@ -31,18 +31,18 @@
         }
         ?>
         <div class="item active">
-            <img class="carousel-slide-image"  data-src=">768:<?=$slide['filepath']?>" alt="<?=$slide['title']?>"
+            <img class="carousel-slide-image"  data-src=">768:<?php echo $slide['filepath']?>" alt="<?php echo $slide['title']?>"
                  style="display:none;" onload="this.style.display = 'inline';
-                         this.style.opacity = '1';" data-url="<?=$slide['url']?>" />
-            <noscript><img src="<?=$slide['filepath']?>" alt="<?=$slide['title']?>" /></noscript>
+                         this.style.opacity = '1';" data-url="<?php echo $slide['url']?>" />
+            <noscript><img src="<?php echo $slide['filepath']?>" alt="<?php echo $slide['title']?>" /></noscript>
             <?php if (!empty($slide['caption'])): ?>
-            <div class="carousel-caption <?=$vertical?>">
-                <div class="carousel-container <?=$horizontal?>">
+            <div class="carousel-caption <?php echo $vertical?>">
+                <div class="carousel-container <?php echo $horizontal?>">
                     <div class="title">
-                        <h3><?=$caption_title?></h3>
+                        <h3><?php echo $caption_title?></h3>
                     </div>
                     <div class="content">
-                        <?=$slide['caption']?>
+                        <?php echo $slide['caption']?>
                     </div>
                 </div>
             </div>
