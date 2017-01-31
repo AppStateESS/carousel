@@ -7,7 +7,7 @@ namespace carousel\Resource;
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/lgpl-3.0.html
  */
-class Slide extends \Resource {
+class Slide extends \phpws2\Resource {
 
     protected $title;
     protected $show_title;
@@ -31,18 +31,18 @@ class Slide extends \Resource {
     public function __construct()
     {
         parent::__construct();
-        $this->title = new \Variable\TextOnly(null, 'title');
-        $this->show_title = new \Variable\Bool(1, 'show_title');
-        $this->filepath = new \Variable\File(null, 'filepath');
-        $this->caption = new \Variable\String(null, 'caption');
+        $this->title = new \phpws2\Variable\TextOnly(null, 'title');
+        $this->show_title = new \phpws2\Variable\Boolean(1, 'show_title');
+        $this->filepath = new \phpws2\Variable\File(null, 'filepath');
+        $this->caption = new \phpws2\Variable\CanopyString(null, 'caption');
         $this->caption->allowEmpty(true);
         $this->caption->setInputType('textarea');
-        $this->queue = new \Variable\Integer(0, 'queue');
-        $this->active = new \Variable\Bool(0, 'active');
-        $this->url = new \Variable\String(null, 'url');
+        $this->queue = new \phpws2\Variable\Integer(0, 'queue');
+        $this->active = new \phpws2\Variable\Boolean(0, 'active');
+        $this->url = new \phpws2\Variable\CanopyString(null, 'url');
         $this->url->allowEmpty(1);
         $this->url->setInputType('textarea');
-        $this->caption_zone = new \Variable\Integer(0, 'caption_zone');
+        $this->caption_zone = new \phpws2\Variable\Integer(0, 'caption_zone');
     }
 
     public function setTitle($title)
