@@ -33,7 +33,7 @@ class Slide extends \phpws2\Resource {
         parent::__construct();
         $this->title = new \phpws2\Variable\TextOnly(null, 'title');
         $this->show_title = new \phpws2\Variable\BooleanVar(1, 'show_title');
-        $this->filepath = new \phpws2\Variable\File(null, 'filepath');
+        $this->filepath = new \phpws2\Variable\FileVar(null, 'filepath');
         $this->caption = new \phpws2\Variable\StringVar(null, 'caption');
         $this->caption->allowEmpty(true);
         $this->caption->setInputType('textarea');
