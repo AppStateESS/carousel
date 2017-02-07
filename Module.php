@@ -38,7 +38,7 @@ class Module extends \Canopy\Module implements \Canopy\SettingDefaults
 
     public function afterRun(\Canopy\Request $request, \Canopy\Response $response)
     {
-        $key = \Key::getCurrent();
+        $key = \Canopy\Key::getCurrent();
         if ($key && !$key->isDummy()) {
             $this->checkKey($key->id);
         }
