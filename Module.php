@@ -7,7 +7,7 @@ namespace carousel;
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/lgpl-3.0.html
  */
-class Module extends \Module implements \SettingDefaults
+class Module extends \Canopy\Module implements \Canopy\SettingDefaults
 {
 
     public function __construct()
@@ -36,7 +36,7 @@ class Module extends \Module implements \SettingDefaults
         }
     }
 
-    public function afterRun(\Canopy\Request $request, \Response $response)
+    public function afterRun(\Canopy\Request $request, \Canopy\Response $response)
     {
         $key = \Key::getCurrent();
         if ($key && !$key->isDummy()) {
