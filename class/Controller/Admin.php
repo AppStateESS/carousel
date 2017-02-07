@@ -11,7 +11,7 @@ class Admin extends \Http\Controller
 {
     private $slide;
 
-    public function get(\Request $request)
+    public function get(\Canopy\Request $request)
     {
         $data = array();
         $view = $this->getView($data, $request);
@@ -19,7 +19,7 @@ class Admin extends \Http\Controller
         return $response;
     }
 
-    public function getHtmlView($data, \Request $request)
+    public function getHtmlView($data, \Canopy\Request $request)
     {
         $cmd = $request->shiftCommand();
         if (empty($cmd)) {
@@ -49,7 +49,7 @@ class Admin extends \Http\Controller
         return $view;
     }
 
-    protected function getJsonView($data, \Request $request)
+    protected function getJsonView($data, \Canopy\Request $request)
     {
         if ($request->isVar('command')) {
             switch ($request->getVar('command')) {
@@ -95,7 +95,7 @@ class Admin extends \Http\Controller
         return parent::getJsonView($data, $request);
     }
 
-    private function removeSlideFromPage(\Request $request)
+    private function removeSlideFromPage(\Canopy\Request $request)
     {
         if ($request->isVar('key_id')) {
             $key_id = $request->getVar('key_id');
@@ -107,7 +107,7 @@ class Admin extends \Http\Controller
         return $data;
     }
 
-    private function addSlideToPage(\Request $request)
+    private function addSlideToPage(\Canopy\Request $request)
     {
         if ($request->isVar('slide_id') && $request->isVar('key_id')) {
             $key_id = $request->getVar('key_id');
@@ -138,7 +138,7 @@ class Admin extends \Http\Controller
         $db->insert();
     }
 
-    private function moveSlide(\Request $request)
+    private function moveSlide(\Canopy\Request $request)
     {
         $move_id = $request->getVar('move_id');
         $next_id = $request->getVar('next_id');
@@ -179,27 +179,27 @@ class Admin extends \Http\Controller
         \carousel\SlideFactory::save($move_slide);
     }
 
-    private function deactivate(\Request $request)
+    private function deactivate(\Canopy\Request $request)
     {
         $this->loadSlide($request);
         $this->slide->setActive(false);
         \carousel\SlideFactory::save($this->slide);
     }
 
-    private function activate(\Request $request)
+    private function activate(\Canopy\Request $request)
     {
         $this->loadSlide($request);
         $this->slide->setActive(true);
         \carousel\SlideFactory::save($this->slide);
     }
 
-    private function deleteSlide(\Request $request)
+    private function deleteSlide(\Canopy\Request $request)
     {
         $this->loadSlide($request);
         \carousel\SlideFactory::delete($this->slide);
     }
 
-    private function editSlide(\Request $request)
+    private function editSlide(\Canopy\Request $request)
     {
         $this->loadSlide($request);
         $vars = $this->slide->getStringVars();
@@ -284,7 +284,7 @@ class Admin extends \Http\Controller
         return $row;
     }
 
-    private function listSlides(\Request $request)
+    private function listSlides(\Canopy\Request $request)
     {
         javascript('jquery_ui');
         javascript('ckeditor');
@@ -329,10 +329,10 @@ class Admin extends \Http\Controller
         return $pager_template;
     }
 
-    public function post(\Request $request)
+    public function post(\Canopy\Request $request)
     {
         if (!$request->isVar('command')) {
-            throw new Http\MethodNotAllowedException;
+            throw new \phpws2\Http\MethodNotAllowedException;
         }
         switch ($request->getVar('command')) {
             case 'save_slide':
@@ -348,7 +348,7 @@ class Admin extends \Http\Controller
         return $response;
     }
 
-    private function saveSettings(\Request $request)
+    private function saveSettings(\Canopy\Request $request)
     {
         \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
         \Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
@@ -356,7 +356,7 @@ class Admin extends \Http\Controller
         \Settings::set('carousel', 'indicator', $request->getVar('indicator'));
     }
 
-    private function saveSlide(\Request $request)
+    private function saveSlide(\Canopy\Request $request)
     {
         $this->loadSlide($request);
 
@@ -388,7 +388,7 @@ class Admin extends \Http\Controller
         \carousel\SlideFactory::save($this->slide);
     }
 
-    private function loadSlide(\Request $request)
+    private function loadSlide(\Canopy\Request $request)
     {
         if ($request->isVar('slide_id')) {
             $id = $request->getVar('slide_id');

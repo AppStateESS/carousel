@@ -34,12 +34,12 @@ class Slide extends \phpws2\Resource {
         $this->title = new \phpws2\Variable\TextOnly(null, 'title');
         $this->show_title = new \phpws2\Variable\Boolean(1, 'show_title');
         $this->filepath = new \phpws2\Variable\File(null, 'filepath');
-        $this->caption = new \phpws2\Variable\CanopyString(null, 'caption');
+        $this->caption = new \phpws2\Variable\StringType(null, 'caption');
         $this->caption->allowEmpty(true);
         $this->caption->setInputType('textarea');
         $this->queue = new \phpws2\Variable\Integer(0, 'queue');
         $this->active = new \phpws2\Variable\Boolean(0, 'active');
-        $this->url = new \phpws2\Variable\CanopyString(null, 'url');
+        $this->url = new \phpws2\Variable\StringType(null, 'url');
         $this->url->allowEmpty(1);
         $this->url->setInputType('textarea');
         $this->caption_zone = new \phpws2\Variable\Integer(0, 'caption_zone');

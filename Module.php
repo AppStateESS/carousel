@@ -17,7 +17,7 @@ class Module extends \Module implements \SettingDefaults
         $this->setProperName('Carousel for Bootstrap themes');
     }
 
-    public function getController(\Request $request)
+    public function getController(\Canopy\Request $request)
     {
         $cmd = $request->shiftCommand();
         if ($cmd == 'admin' && \Current_User::allow('carousel')) {
@@ -26,7 +26,7 @@ class Module extends \Module implements \SettingDefaults
         }
     }
 
-    public function runTime(\Request $request)
+    public function runTime(\Canopy\Request $request)
     {
         if (!$request->isVar('module')) {
             $display = \carousel\SlideFactory::display();
@@ -36,7 +36,7 @@ class Module extends \Module implements \SettingDefaults
         }
     }
 
-    public function afterRun(\Request $request, \Response $response)
+    public function afterRun(\Canopy\Request $request, \Response $response)
     {
         $key = \Key::getCurrent();
         if ($key && !$key->isDummy()) {
@@ -75,7 +75,7 @@ class Module extends \Module implements \SettingDefaults
                 return;
             }
 
-            $opt[] = '<option id="0" style="">' . t('Add slide to this page') . '</option>';
+            $opt[] = '<option id="0" style="">' . 'Add slide to this page' . '</option>';
             foreach ($slides as $s) {
                 $opt[] = '<option value="' . $s['id'] . '">' . substr($s['title'],
                                 0, 15) . '</option>';
@@ -84,7 +84,7 @@ class Module extends \Module implements \SettingDefaults
             $select = '<select data-key-id="' . $key_id . '" id="add-slide" style="font-size:12px" class="form-control">'
                     . implode("\n", $opt) . '</select>';
         } else {
-            $select = '<a href="javascript:void(0)" id="remove-slide" data-key-id="' . $key_id . '">' . t('Remove slide from page') . '</a>';
+            $select = '<a href="javascript:void(0)" id="remove-slide" data-key-id="' . $key_id . '">' . 'Remove slide from page' . '</a>';
         }
         \MiniAdmin::add('carousel', $select);
     }
