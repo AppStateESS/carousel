@@ -123,7 +123,7 @@ class Admin extends \Http\Controller
 
     private function dropSlide($key_id)
     {
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $t = $db->addTable('caro_keyed_slide');
         $t->addFieldConditional('key_id', $key_id);
         $db->delete();
@@ -131,7 +131,7 @@ class Admin extends \Http\Controller
 
     private function pushSlide($key_id, $slide_id)
     {
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $t = $db->addTable('caro_keyed_slide');
         $t->addValue('key_id', $key_id);
         $t->addValue('slide_id', $slide_id);
@@ -154,7 +154,7 @@ class Admin extends \Http\Controller
             $next_slide_queue = null;
         }
 
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         if ($next_slide) {
             if ($move_slide_queue > $next_slide_queue) {
                 $query = "UPDATE caro_slide SET caro_slide.queue=caro_slide.queue+1 WHERE (caro_slide.queue >= $next_slide_queue AND caro_slide.queue < $move_slide_queue)";
@@ -171,7 +171,7 @@ class Admin extends \Http\Controller
             $result = $db->selectOneRow();
             $count = $result['count'];
 
-            $db = \Database::newDB();
+            $db = \phpws2\Database::newDB();
             $query = "UPDATE caro_slide SET caro_slide.queue=caro_slide.queue-1 WHERE (caro_slide.queue <= $count AND caro_slide.queue > $move_slide_queue)";
             $db->exec($query);
             $move_slide->setQueue($count);
@@ -208,12 +208,12 @@ class Admin extends \Http\Controller
 
     private function listSlidesJSON()
     {
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $sg = $db->addTable('caro_slide');
         $sg->addOrderBy($sg->getField('queue'));
         $sg_title = $sg->getField('title');
         $sg_queue = $sg->getField('queue');
-        $pager = new \DatabasePager($db);
+        $pager = new \phpws2\DatabasePager($db);
         $pager->setHeaders(array('title', 'queue'));
         $tbl_headers['title'] = $sg_title;
         $tbl_headers['queue'] = $sg_queue;

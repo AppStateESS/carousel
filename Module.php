@@ -49,7 +49,7 @@ class Module extends \Canopy\Module implements \Canopy\SettingDefaults
         javascript('jquery');
         \Layout::addJSHeader('<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP
                 . 'mod/carousel/javascript/add_slide.js"></script>');
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $t = $db->addTable('caro_keyed_slide');
         $t->addField('slide_id');
         $t->addFieldConditional('key_id', $key_id);
@@ -65,7 +65,7 @@ class Module extends \Canopy\Module implements \Canopy\SettingDefaults
     private function miniAdmin($result, $key_id)
     {
         if (empty($result)) {
-            $db = \Database::newDB();
+            $db = \phpws2\Database::newDB();
             $t2 = $db->addTable('caro_slide');
             $t2->addOrderBy('title');
             $t2->addField('title');
