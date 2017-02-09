@@ -12,11 +12,13 @@ class SlideFactory {
     public static function save(Resource\Slide $slide)
     {
         if (!$slide->isSaved()) {
-            $db = \Database::newDB();
+            $db = \phpws2\Database::newDB();
             $t1 = $db->addTable('caro_slide');
             $q = $t1->addField('queue');
+            $t1->addField('id');
             $ex = $db->getExpression("max($q)", 'max');
             $db->addExpression($ex);
+            $db->setGroupBy(array('id'));
             $max = $db->selectOneRow();
             if (!$max) {
                 $slide->setQueue(0);
@@ -30,7 +32,7 @@ class SlideFactory {
 
     public static function getSlidesFromDB($active = null, $id = null)
     {
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $t1 = $db->addTable('caro_slide');
         if (isset($active)) {
             $t1->addFieldConditional('active', (int) (bool) $active);
@@ -189,13 +191,13 @@ class SlideFactory {
 
     public static function reorderSlides()
     {
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $t1 = $db->addTable('caro_slide');
         $t1->addField('id');
         $t1->addOrderBy($t1->getField('queue'));
         $count = 1;
         while ($id = $db->selectColumn()) {
-            $db2 = \Database::newDB();
+            $db2 = \phpws2\Database::newDB();
             $t2 = $db2->addTable('caro_slide');
             $t2->addValue('queue', $count);
             $t2->addFieldConditional('id', $id);
