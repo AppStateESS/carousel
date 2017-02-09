@@ -4,6 +4,7 @@ $(window).load(function () {
         callback: loadCarousel,
         onRefresh: loadCarousel
     });
+    loadCarousel()
 });
 
 function loadCarousel()
