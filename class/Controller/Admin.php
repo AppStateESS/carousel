@@ -289,7 +289,7 @@ class Admin extends \Http\Controller
         javascript('jquery_ui');
         javascript('ckeditor');
         \Pager::prepare();
-        \Layout::includeJavascript('mod/carousel/javascript/slide_list.js');
+        \Layout::includeJavascript('mod/carousel/javascript/slide_list.min.js');
         \Layout::addStyle('carousel', 'Admin/style.css');
 
         $slide = new \carousel\Resource\Slide;
@@ -364,7 +364,7 @@ class Admin extends \Http\Controller
             \carousel\SlideFactory::deleteImages($this->slide);
 
             $file = $request->getUploadedFileArray('filepath');
-            $file_name = randomString(12) . '.' . str_replace('image/', '', $file['type']);
+            $file_name = \Canopy\TextString::randomString(12) . '.' . str_replace('image/', '', $file['type']);
 
             \PHPWS_File::fileCopy($file['tmp_name'], 'images/carousel/', $file_name, false, true);
             \PHPWS_File::makeThumbnail($file_name, 'images/carousel/', 'images/carousel/', 200);
