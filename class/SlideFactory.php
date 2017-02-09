@@ -27,7 +27,7 @@ class SlideFactory {
             }
         }
 
-        \ResourceFactory::saveResource($slide);
+        \phpws2\ResourceFactory::saveResource($slide);
     }
 
     public static function getSlidesFromDB($active = null, $id = null)
@@ -56,7 +56,7 @@ class SlideFactory {
 
         $tpl['slide'] = array_pop($slides);
         $tpl['controls'] = false;
-        $template = new \Template($tpl);
+        $template = new \phpws2\Template($tpl);
 
         $template->setModuleTemplate('carousel', 'single_slide.html');
         \Layout::add($template->get(), 'carousel', 'slides');
@@ -97,7 +97,7 @@ class SlideFactory {
         \Layout::addJSHeader($script3, 'url-nav');
 
 
-        if (\Settings::get('carousel', 'transition')) {
+        if (\phpws2\Settings::get('carousel', 'transition')) {
             $tpl['fade'] = 'carousel-fade';
             \Layout::addStyle('carousel', 'fade.css');
         } else {
@@ -109,7 +109,7 @@ class SlideFactory {
                     '\\1_tn.\\2', $s['filepath']);
         }
 
-        if (\Settings::get('carousel', 'indicator')) {
+        if (\phpws2\Settings::get('carousel', 'indicator')) {
             $tpl['indicators'] = self::thumbnailIndicator($slides);
         } else {
             $tpl['indicators'] = self::bulletIndicator($slides);
@@ -117,7 +117,7 @@ class SlideFactory {
 
         $tpl['slides'] = $slides;
         $tpl['controls'] = true;
-        $template = new \Template($tpl);
+        $template = new \phpws2\Template($tpl);
 
         $template->setModuleTemplate('carousel', 'slides.html');
         return $template->get();
@@ -133,7 +133,7 @@ class SlideFactory {
             $tpl['rows'][] = array('class' => null, 'count' => $i);
         }
         $tpl['rows'][0]['class'] = 'active';
-        $template = new \Template($tpl);
+        $template = new \phpws2\Template($tpl);
         $template->setModuleTemplate('carousel', 'bullet.html');
         return $template->get();
     }
@@ -152,7 +152,7 @@ class SlideFactory {
             $i++;
         }
 
-        $template = new \Template($tpl);
+        $template = new \phpws2\Template($tpl);
         $template->setModuleTemplate('carousel', 'thumbnail.html');
         return $template->get();
     }
@@ -175,7 +175,7 @@ class SlideFactory {
     {
         $slide = new Resource\Slide;
         if ($id) {
-            \ResourceFactory::loadById($slide, $id);
+            \phpws2\ResourceFactory::loadById($slide, $id);
             return $slide;
         } else {
             return $slide;
@@ -185,7 +185,7 @@ class SlideFactory {
     public static function delete(Resource\Slide $slide)
     {
         self::deleteImages($slide);
-        \ResourceFactory::deleteResource($slide);
+        \phpws2\ResourceFactory::deleteResource($slide);
         self::reorderSlides();
     }
 

@@ -18,7 +18,7 @@ class Menu {
 
     public function get()
     {
-        $template = new \Template;
+        $template = new \phpws2\Template;
         switch ($this->active) {
             case 'slides':
                 $template->add('slides_active', 1);

@@ -230,14 +230,14 @@ class Admin extends \Http\Controller
         $form->setAction('carousel/admin/settings');
         $form->addHidden('command', 'save_settings');
         $iteration = array(0 => 'Forever', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 10 => 10);
-        $form->addSelect('iteration', $iteration, 'Iterations')->setSelection(\Settings::get('carousel', 'iteration'));
+        $form->addSelect('iteration', $iteration, 'Iterations')->setSelection(\phpws2\Settings::get('carousel', 'iteration'));
         $interval = array(1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 15 => 15, 20 => 20);
-        $form->addSelect('time_interval', $interval, 'Slide time interval')->setSelection(\Settings::get('carousel', 'time_interval'));
+        $form->addSelect('time_interval', $interval, 'Slide time interval')->setSelection(\phpws2\Settings::get('carousel', 'time_interval'));
         $slide = $form->addRadio('transition', 0, 'Slide');
         $fade = $form->addRadio('transition', 1, 'Fade');
 
 
-        switch (\Settings::get('carousel', 'transition')) {
+        switch (\phpws2\Settings::get('carousel', 'transition')) {
             case 0:
                 $slide->setSelection(1);
                 break;
@@ -249,7 +249,7 @@ class Admin extends \Http\Controller
 
         $bullet = $form->addRadio('indicator', 0, 'Bullets');
         $thumbnail = $form->addRadio('indicator', 1, 'Thumbnails');
-        switch (\Settings::get('carousel', 'indicator')) {
+        switch (\phpws2\Settings::get('carousel', 'indicator')) {
             case 0:
                 $bullet->setSelection(1);
                 break;
@@ -269,7 +269,7 @@ class Admin extends \Http\Controller
             unset($_SESSION['carousel_message']);
         }
 
-        $template = new \Template($tpl);
+        $template = new \phpws2\Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/Settings.html');
         return $template;
     }
@@ -316,14 +316,14 @@ class Admin extends \Http\Controller
         $tpl = $form->getInputStringArray();
         $tpl['min_width'] = \Settings::get('carousel', 'min_width');
         $tpl['min_height'] = \Settings::get('carousel', 'min_height');
-        $template = new \Template($tpl);
+        $template = new \phpws2\Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/SlideForm.html');
         
         $modal = new \Modal('slide-update', $template->render(), 'Create new slide');
         $modal->sizeLarge();
         $modal->addButton('<button class="btn btn-success save-slide">Save slide</button>');
 
-        $pager_template = new \Template(array('modal' => $modal->__toString()));
+        $pager_template = new \phpws2\Template(array('modal' => $modal->__toString()));
         $pager_template->setModuleTemplate('carousel', 'Admin/ListSlides.html');
 
         return $pager_template;
