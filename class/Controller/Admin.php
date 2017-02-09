@@ -344,7 +344,7 @@ class Admin extends \Http\Controller
                 $_SESSION['carousel_message'] = 'Settings saved';
                 break;
         }
-        $response = new \Http\SeeOtherResponse(\Server::getCurrentUrl(false));
+        $response = new \Http\SeeOtherResponse(\Canopy\Server::getCurrentUrl(false));
         return $response;
     }
 
