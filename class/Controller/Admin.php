@@ -7,7 +7,7 @@ namespace carousel\Controller;
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/lgpl-3.0.html
  */
-class Admin extends \Http\Controller
+class Admin extends \phpws2\Http\Controller
 {
     private $slide;
 
@@ -288,13 +288,13 @@ class Admin extends \Http\Controller
     {
         javascript('jquery_ui');
         javascript('ckeditor');
-        \Pager::prepare();
+        \phpws2\Pager::prepare();
         \Layout::includeJavascript('mod/carousel/javascript/slide_list.min.js');
         \Layout::addStyle('carousel', 'Admin/style.css');
 
         $slide = new \carousel\Resource\Slide;
         $form = $slide->pullForm();
-        $form->setEnctype(\Form::enctype_multipart);
+        $form->setEnctype(\phpws2\Form::enctype_multipart);
         $form->appendCSS('bootstrap');
         $form->requiredScript();
         $form->addHidden('command', 'save_slide');
@@ -314,12 +314,12 @@ class Admin extends \Http\Controller
 
         $form->addSubmit('submit', 'Save slide');
         $tpl = $form->getInputStringArray();
-        $tpl['min_width'] = \Settings::get('carousel', 'min_width');
-        $tpl['min_height'] = \Settings::get('carousel', 'min_height');
+        $tpl['min_width'] = \phpws2\Settings::get('carousel', 'min_width');
+        $tpl['min_height'] = \phpws2\Settings::get('carousel', 'min_height');
         $template = new \phpws2\Template($tpl);
         $template->setModuleTemplate('carousel', 'Admin/SlideForm.html');
         
-        $modal = new \Modal('slide-update', $template->render(), 'Create new slide');
+        $modal = new \phpws2\Modal('slide-update', $template->render(), 'Create new slide');
         $modal->sizeLarge();
         $modal->addButton('<button class="btn btn-success save-slide">Save slide</button>');
 
@@ -350,10 +350,10 @@ class Admin extends \Http\Controller
 
     private function saveSettings(\Canopy\Request $request)
     {
-        \Settings::set('carousel', 'iteration', $request->getVar('iteration'));
-        \Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
-        \Settings::set('carousel', 'transition', $request->getVar('transition'));
-        \Settings::set('carousel', 'indicator', $request->getVar('indicator'));
+        \phpws2\Settings::set('carousel', 'iteration', $request->getVar('iteration'));
+        \phpws2\Settings::set('carousel', 'time_interval', $request->getVar('time_interval'));
+        \phpws2\Settings::set('carousel', 'transition', $request->getVar('transition'));
+        \phpws2\Settings::set('carousel', 'indicator', $request->getVar('indicator'));
     }
 
     private function saveSlide(\Canopy\Request $request)

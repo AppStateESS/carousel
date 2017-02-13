@@ -8,7 +8,7 @@
  */
 function carousel_install(&$content)
 {
-    $db = Database::newDB();
+    $db = \phpws2\Database::newDB();
     $db->begin();
 
     try {

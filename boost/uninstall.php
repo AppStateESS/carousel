@@ -8,7 +8,7 @@
  */
 function carousel_uninstall(&$content)
 {
-    $db = Database::newDB();
+    $db = \phpws2\Database::newDB();
 
     if ($db->tableExists('caro_slide')) {
         $tbl = $db->buildTable('caro_slide');

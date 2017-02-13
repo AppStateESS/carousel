@@ -77,8 +77,8 @@ class SlideFactory {
             return null;
         }
 
-        $iteration = \Settings::get('carousel', 'iteration');
-        $time_interval = \Settings::get('carousel', 'time_interval');
+        $iteration = \phpws2\Settings::get('carousel', 'iteration');
+        $time_interval = \phpws2\Settings::get('carousel', 'time_interval');
 
         $time_interval = $time_interval * 1000;
 
