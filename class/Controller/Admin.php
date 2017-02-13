@@ -226,7 +226,7 @@ class Admin extends \phpws2\Http\Controller
 
     private function settings()
     {
-        $form = new \Form;
+        $form = new \phpws2\Form;
         $form->setAction('carousel/admin/settings');
         $form->addHidden('command', 'save_settings');
         $iteration = array(0 => 'Forever', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 10 => 10);
@@ -344,7 +344,7 @@ class Admin extends \phpws2\Http\Controller
                 $_SESSION['carousel_message'] = 'Settings saved';
                 break;
         }
-        $response = new \Http\SeeOtherResponse(\Canopy\Server::getCurrentUrl(false));
+        $response = new \phpws2\Http\SeeOtherResponse(\Canopy\Server::getCurrentUrl(false));
         return $response;
     }
 
