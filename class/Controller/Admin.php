@@ -38,14 +38,14 @@ class Admin extends \phpws2\Http\Controller
 
 
 
-        if (!empty(\Session::getInstance()->caro_message)) {
-            $ses = \Session::getInstance();
+        if (!empty(\phpws2\Session::getInstance()->caro_message)) {
+            $ses = \phpws2\Session::getInstance();
             $template->add('message', $ses->caro_message);
             unset($ses->caro_message);
         }
 
         $panel = $template->get();
-        $view = new \View\HtmlView(\PHPWS_ControlPanel::display($panel));
+        $view = new \phpws2\View\HtmlView(\PHPWS_ControlPanel::display($panel));
         return $view;
     }
 
