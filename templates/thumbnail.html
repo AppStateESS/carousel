@@ -2,7 +2,7 @@
     <!-- thumb navigation carousel items -->
     <ul class="list-inline">
         <?php foreach ($rows as $r): extract($r); ?>
-        <li class="tn-slide">
+        <li class="tn-slide list-inline-item">
             <a class="<?php echo $selected?> tn-select" style="background-image : url('<?php echo $tn?>')" data-cid="<?php echo $count?>"></a>
         </li>
         <?php endforeach; ?>
