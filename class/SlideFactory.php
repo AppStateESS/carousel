@@ -64,7 +64,7 @@ class SlideFactory {
 
     public static function display()
     {
-        javascript('jquery');
+        javascript('jquery_ui');
         \Layout::addStyle('carousel');
 
         \Layout::addJSHeader("<script type='text/javascript' src='" .
