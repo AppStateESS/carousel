@@ -1,10 +1,9 @@
 <?php
-/**
- * @author Matthew McNaney <mcnaney at gmail dot com>
- * @version $Id$
- */
 
+/**
+ * @author Matthew McNaney <mcnaneym@appstate.edu>
+ * 
+ */
 $use_permissions = true;
 $item_permissions = false;
-
 ?>

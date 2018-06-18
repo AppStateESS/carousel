@@ -3,8 +3,7 @@
 /**
  * Uninstall file for blog
  *
- * @author Matthew McNaney <mcnaney at gmail dot com>
- * @version $Id$
+ * @author Matthew McNaney <mcnaneym@appstate.edu>
  */
 function carousel_uninstall(&$content)
 {
