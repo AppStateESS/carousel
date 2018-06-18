@@ -1,4 +1,4 @@
-$(window).load(function(){
+$(document).ready(function(){
     $('#add-slide').change(function(){
         var slide_id = $(this).val();
         var key_id = $(this).data('keyId');
