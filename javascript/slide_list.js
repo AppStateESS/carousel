@@ -1,5 +1,5 @@
 var carousel = new carousel;
-$(window).load(function () {
+$(document).ready(function () {
     Pagers.options({
         callback: loadCarousel,
         onRefresh: loadCarousel
