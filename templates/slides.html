@@ -1,72 +1,22 @@
-<div id="carousel-slides" class="carousel slide hidden-xs <?php echo $fade?>" data-ride="carousel">
-    <!-- Indicators -->
-    <?php echo $indicators?>
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-        <?php
-        $active=true;
-        foreach ($slides as $id=>$s) {
-        switch($s['caption_zone']){
-        case 0:
-        $vertical = 'bottom';
-        $horizontal = 'center';
-        break;
-        case 1:
-        $vertical = 'top';
-        $horizontal = 'left';
-        break;
-        case 2:
-        $horizontal = 'right';
-        $vertical = 'top';
-        break;
-        case 3:
-        $horizontal = 'left';
-        $vertical = 'bottom';
-        break;
-        case 4:
-        $horizontal = 'right';
-        $vertical = 'bottom';
-        break;
-        }
-        if (!empty($s['url']) && !empty($s['title'])) {
-        $caption_title = '<a href="'.$s['url'].'">'.$s['title'].'</a>';
-        } else {
-        $caption_title = $s['title'];
-        }
-        ?>
-        <div class="item <?php echo $active ? 'active':null;?>" data-slide-number='<?php echo $id?>'>
-            <img class="carousel-slide-image"  data-src=">768:<?php echo $s['filepath']?>" alt="<?php echo $s['title']?>"
-                 style="display:none;" onload="this.style.display = 'inline';
-                         this.style.opacity = '1';" data-url="<?php echo $s['url']?>" />
-            <noscript><img src="<?php echo $s['filepath']?>" alt="<?php echo $s['title']?>" /></noscript>
-            <?php if (!empty($s['caption'])): ?>
-            <div class="carousel-caption <?php echo $vertical?>">
-                <div class="carousel-container <?php echo $horizontal?>">
-                    <?php if ($s['show_title']): ?>
-                    <div class="title">
-                        <h3><?php echo $caption_title?></h3>
-                    </div>
-                    <?php endif;?>
-                    <div class="content">
-                        <?php echo $s['caption']?>
-                    </div>
-                </div>
-            </div>
-            <?php endif; ?>
-        </div>
-        <?php
-        $active = false;
-        } // end slide foreach
-        ?>
-    </div>
+<div id="carousel-slides" class="carousel slide hidden-xs <?=$fade?>" data-ride="carousel">
+  <!-- Indicators -->
+  <?=$indicators?>
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <?php
+    include PHPWS_SOURCE_DIR . 'mod/carousel/templates/slideLogic.php';
+    ?>
+  </div>
 
-    <!-- Controls -->
-    <?php if ($controls): ?>
-    <a class="left carousel-control" href="#carousel-slides" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-    </a>
-    <a class="right carousel-control" href="#carousel-slides" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-    </a>
-    <?php endif; ?>
+  <!-- Controls -->
+  <?php if ($controls): ?>
+  <a class="carousel-control-prev" href="#carousel-slides" data-slide="prev" role="button">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carousel-slides" data-slide="next" role="button">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+  <?php endif; ?>
 </div>
