@@ -1,13 +1,10 @@
 <?php
 
 /**
- *
- * @author Matthew McNaney <mcnaney at gmail dot com>
- * @package Global
- * @license http://opensource.org/licenses/lgpl-3.0.html
+ * @author Matthew McNaney <mcnaneym@appstate.edu>
  */
 $proper_name = 'Carousel for Bootstrap';
-$version = '1.4.0';
+$version = '1.5.0';
 $import_sql = false;
 $image_dir = true;
 ?>
