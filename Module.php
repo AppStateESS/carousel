@@ -4,7 +4,7 @@ namespace carousel;
 
 /**
  *
- * @author Matthew McNaney <mcnaney at gmail dot com>
+ * @author Matthew McNaney <mcnaneym@appstate.edu>
  * @license http://opensource.org/licenses/lgpl-3.0.html
  */
 class Module extends \Canopy\Module implements \Canopy\SettingDefaults
@@ -46,7 +46,6 @@ class Module extends \Canopy\Module implements \Canopy\SettingDefaults
 
     private function checkKey($key_id)
     {
-        javascript('jquery');
         \Layout::addJSHeader('<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP
                 . 'mod/carousel/javascript/add_slide.js"></script>');
         $db = \phpws2\Database::newDB();
