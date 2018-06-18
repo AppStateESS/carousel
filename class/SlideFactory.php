@@ -4,7 +4,7 @@ namespace carousel;
 
 /**
  *
- * @author Matthew McNaney <mcnaney at gmail dot com>
+ * @author Matthew McNaney <mcnaneym@appstate.edu>
  * @license http://opensource.org/licenses/lgpl-3.0.html
  */
 class SlideFactory {
@@ -47,7 +47,6 @@ class SlideFactory {
 
     public static function showKeySlide($row)
     {
-        javascript('jquery');
         \Layout::addStyle('carousel');
         $slides = self::getSlidesFromDB(null, $row);
         if (empty($slides)) {
@@ -66,11 +65,6 @@ class SlideFactory {
     {
         javascript('jquery_ui');
         \Layout::addStyle('carousel');
-
-        \Layout::addJSHeader("<script type='text/javascript' src='" .
-                PHPWS_SOURCE_HTTP . "javascript/responsive_img/responsive-img.min.js'></script>",
-                81);
-
 
         $slides = self::getSlidesFromDB(true);
         if (empty($slides)) {
@@ -91,10 +85,8 @@ class SlideFactory {
             \Layout::addJSHeader($script, 'iteration');
         }
 
-        $script2 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/onclick.js"></script>';
-        \Layout::addJSHeader($script2, 'url-onclick');
-        $script3 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/slide_navigation.js"></script>';
-        \Layout::addJSHeader($script3, 'url-nav');
+        $script2 = '<script type="text/javascript" src="' . PHPWS_SOURCE_HTTP . 'mod/carousel/javascript/slide_navigation.js"></script>';
+        \Layout::addJSHeader($script2, 'url-nav');
 
 
         if (\phpws2\Settings::get('carousel', 'transition')) {
