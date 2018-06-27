@@ -15,6 +15,11 @@ function carousel_update(&$content, $version)
 --------------------
 + Updated for Canopy
 </pre>';
+        case version_compare($version, '1.5.1', '<'):
+            $content[] = '<pre>1.5.1
+--------------------
++ Fixed keyed Carousel images not showing.
+</pre>';
     } // end of switch
 
     return true;

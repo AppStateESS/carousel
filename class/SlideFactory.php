@@ -47,18 +47,17 @@ class SlideFactory {
 
     public static function showKeySlide($row)
     {
+        $key = new \Canopy\Key($row);
         \Layout::addStyle('carousel');
         $slides = self::getSlidesFromDB(null, $row);
         if (empty($slides)) {
             return null;
         }
-
-        $tpl['slide'] = array_pop($slides);
-        $tpl['controls'] = false;
-        $template = new \phpws2\Template($tpl);
-
-        $template->setModuleTemplate('carousel', 'single_slide.html');
-        \Layout::add($template->get(), 'carousel', 'slides');
+        $slide = array_pop($slides);
+        $image = <<<EOF
+<img src="{$slide['filepath']}" class="img-fluid" title="{$key->title}"/>
+EOF;
+        \Layout::add($image, 'carousel', 'slides');
     }
 
     public static function display()
