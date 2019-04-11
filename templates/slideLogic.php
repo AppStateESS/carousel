@@ -1,7 +1,7 @@
 <?php
 /**
  * MIT License
- * Copyright (c) 2018 Electronic Student Services @ Appalachian State University
+ * Copyright (c) 2019 Electronic Student Services @ Appalachian State University
  * 
  * See LICENSE file in root directory for copyright and distribution permissions.
  * 

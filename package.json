@@ -1,0 +1,51 @@
+{
+  "name": "Carousel",
+  "version": "2.0.0",
+  "description": "Iamge carousel for page header",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AppStateESS/carousel.git"
+  },
+  "homepage": "https://github.com/AppStateESS/carousel#readme",
+  "author": "Matt McNaney <mcnaneym@appstate.edu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AppStateESS/carousel/issues"
+  },
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "build": "rm -rf ./javascript/build && webpack --mode production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "@essappstate/canopy-react-bigcheckbox": "^0.2.0",
+    "@essappstate/canopy-react-buttongroup": "^0.2.1",
+    "@essappstate/canopy-react-overlay": "^0.2.1",
+    "@essappstate/react-navbar": "^1.0.2",
+    "@essappstate/react-waiting": "^1.0.4",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "assets-webpack-plugin": "^3.9.7",
+    "babel-loader": "^8.0.4",
+    "browser-sync": "^2.26.3",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "css-loader": "^1.0.1",
+    "es6-promise": "^4.2.5",
+    "node-sass": "^4.11.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.3",
+    "react-contextmenu": "^2.11.0",
+    "react-dom": "^16.6.3",
+    "react-dropzone-uploader": "^2.8.1",
+    "react-quill": "^1.3.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "terser": "^3.14.1",
+    "terser-webpack-plugin": "^1.2.1",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2"
+  }
+}
