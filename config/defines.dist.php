@@ -15,6 +15,8 @@
 define('CAROUSEL_SYSTEM_SETTINGS',
         [
     'productionMode' => true,
-    'friendlyErrors' => true
+    'friendlyErrors' => true,
+    'maxThumbWidth' => 200,
+    'maxThumbHeight' => 50,
         ]
 );
