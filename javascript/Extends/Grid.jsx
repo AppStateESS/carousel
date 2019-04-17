@@ -32,14 +32,13 @@ const Grid = ({listing, columns, sortFunction, currentSort, contextMenu}) => {
         icon = <FontAwesomeIcon icon={faCaretDown}/>
       }
       if (value.className) {
-        className.push('bg-primary')
+        className.push(value.className)
       }
 
       let style
       if (value.style && typeof value.style === 'object') {
         style = value.style
       }
-
       return (
         <th
           style={style}
@@ -72,7 +71,7 @@ const Grid = ({listing, columns, sortFunction, currentSort, contextMenu}) => {
   let rows = listing.map((resource, key) => {
     let stack = columns.map((value, subkey) => {
       if (value.callback) {
-        return <td key={subkey} className={value.className}>{value.callback(resource)}</td>
+        return <td key={subkey} className={value.className}>{value.callback(resource, key)}</td>
       } else {
         return <td key={subkey} className={value.className}>{resource[value.column]}</td>
       }
@@ -116,7 +115,8 @@ Grid.propTypes = {
   columns: PropTypes.array,
   sortFunction: PropTypes.func,
   currentSort: PropTypes.object,
-  contextMenu: PropTypes.array
+  contextMenu: PropTypes.array,
+  name: PropTypes.string,
 }
 
 Grid.defaultProps = {
