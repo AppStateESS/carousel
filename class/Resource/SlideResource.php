@@ -18,9 +18,11 @@ use carousel\Resource\AbstractResource;
 class SlideResource extends AbstractResource
 {
 
+    protected $carouselId;
     protected $title;
     protected $show_title;
     protected $filepath;
+    protected $thumbnail;
     protected $caption;
     protected $queue;
     protected $url;
@@ -43,9 +45,13 @@ class SlideResource extends AbstractResource
     public function __construct()
     {
         parent::__construct();
+        $this->carouselId = new \phpws2\Variable\IntegerVar(0, 'carouselId');
         $this->title = new \phpws2\Variable\TextOnly(null, 'title');
         $this->show_title = new \phpws2\Variable\BooleanVar(1, 'show_title');
         $this->filepath = new \phpws2\Variable\FileVar(null, 'filepath');
+        $this->filepath->allowNull(true);
+        $this->thumbnail = new \phpws2\Variable\FileVar(null, 'thumbnail');
+        $this->thumbnail->allowNull(true);
         $this->caption = new \phpws2\Variable\StringVar(null, 'caption');
         $this->caption->allowEmpty(true);
         $this->caption->setInputType('textarea');
