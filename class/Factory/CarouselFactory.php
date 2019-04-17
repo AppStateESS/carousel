@@ -38,7 +38,7 @@ class CarouselFactory extends BaseFactory
         return $carousel;
     }
 
-    public function listing(array $options=[])
+    public function listing(array $options = [])
     {
         $db = Database::getDB();
         $tbl = $db->addTable('caro_carousel');
@@ -58,7 +58,7 @@ class CarouselFactory extends BaseFactory
         $carousel->pause = $request->pullPutBoolean('pause');
         return $carousel;
     }
-    
+
     public function delete(Resource $carousel)
     {
         $slideFactory = new SlideFactory;
@@ -69,5 +69,4 @@ class CarouselFactory extends BaseFactory
         $db->setLimit(1);
         $db->delete();
     }
-
 }
