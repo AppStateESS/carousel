@@ -46,12 +46,15 @@ export default class Listing extends Component {
     this.load = this.load.bind(this)
     this.reset = this.reset.bind(this)
     this.sortByColumn = this.sortByColumn.bind(this)
-    this.handle = this.handle.bind(this)
     this.overlayOn = this.overlayOn.bind(this)
     this.overlayOff = this.overlayOff.bind(this)
     this.editResource = this.editResource.bind(this)
     this.delayLoad = debounce(this.delayLoad, 1000)
     this.update = this.update.bind(this)
+    this.create = this.create.bind(this)
+    this.success = this.success.bind(this)
+    this.error = this.error.bind(this)
+    this.complete = this.complete.bind(this)
   }
 
   componentDidMount() {
@@ -64,24 +67,32 @@ export default class Listing extends Component {
     this.overlayOff()
   }
 
+  create() {
+    this.setState(
+      {overlay: true, resource: Object.assign({}, this.defaultResource)}
+    )
+  }
+
   overlayOn() {
     this.setState({overlay: true})
   }
 
   overlayOff() {
-    this.setState({overlay: false})
+    this.reset()
   }
 
-  loadResource(key) {
+  loadResource(key, callback = null) {
     const resource = Object.assign({}, this.state.listing[key])
-    this.setState({resource})
+    this.setState({
+      resource
+    }, callback)
   }
 
   editResource(key) {
     this.loadResource(key)
     this.overlayOn()
   }
-  
+
   deleteResource(key) {
     const resource = this.state.listing[key]
     if (confirm('Are you sure you want to delete this carousel along with all it\'s slides?')) {
@@ -89,29 +100,19 @@ export default class Listing extends Component {
         url: this.getUrl() + '/' + resource.id,
         dataType: 'json',
         type: 'delete',
-        success: ()=>{
-          this.setMessage(this.label +  ' deleted.', 'success')
+        success: () => {
+          this.setMessage(this.label + ' deleted.', 'success')
           this.load()
         },
-        error: ()=>{
-          this.setMessage('Sorry. An error prevented deleting the ' + this.label, 'danger')
-        }
+        error: data => this.error(data)
       })
     }
   }
 
-  handle(varname, value) {
-    if (typeof value === 'object') {
-      value = value.target.value
-    }
-    const resource = this.state.resource
-    resource[varname] = value
-    this.setState({resource})
-  }
-
   reset() {
-    this.overlayOff()
-    this.setState({resource: Object.assign({}, this.defaultResource)})
+    this.setState(
+      {overlay: false, resource: Object.assign({}, this.defaultResource)}
+    )
   }
 
   getSearch() {
@@ -186,7 +187,7 @@ export default class Listing extends Component {
   setMessage(message, messageType = 'danger') {
     setTimeout(() => {
       this.clearMessage()
-    }, 5000)
+    }, 6000)
 
     this.setState({message, messageType})
   }
@@ -204,28 +205,49 @@ export default class Listing extends Component {
     }
     $.ajax({
       url,
+      type,
       data: {
         ...this.state.resource
       },
       dataType: 'json',
-      type,
-      success: () => {
-        this.load()
-        this.setMessage(
-          <div>
-            <i className="far fa-thumbs-up"></i>&nbsp;Save successful.</div>,
-          'success'
-        )
-      },
-      error: () => {
-        this.setMessage(
-          <div>
-            <i className="fas fa-exclamation-triangle"></i>&nbsp;Unable to save&nbsp;{this.label}.</div>
-        )
-      },
-      complete: () => this.reset()
-
+      success: this.success,
+      error: this.error,
+      complete: this.complete
     })
+  }
+
+  success(data) {
+    if (data.success) {
+      this.load()
+      this.setMessage(
+        <div>
+          <i className="far fa-thumbs-up"></i>&nbsp;Save successful.</div>,
+        'success'
+      )
+      this.reset()
+    } else {
+      this.setMessage(
+        <div>
+          <i className="fas fa-exclamation-triangle"></i>&nbsp;Unable to save: {data.error}</div>
+      )
+    }
+  }
+
+  error(data) {
+    let message = 'unknown'
+    if (data.responseJSON.exception.message !== undefined) {
+      message = data.responseJSON.exception.message
+    } else if (data.exception.message !== undefined) {
+      message = data.exception.message
+    }
+    this.setMessage(
+      <div>
+        <i className="fas fa-exclamation-triangle"></i>&nbsp;An error occurred: {message}</div>
+    )
+  }
+
+  complete() {
+    this.reset()
   }
 
   message() {
@@ -248,10 +270,7 @@ export default class Listing extends Component {
         <i className="fas fa-plus"></i>&nbsp;Create</span>
     )
     const button = (
-      <NavbarButton
-        color="outline-primary"
-        label={label}
-        handleClick={this.overlayOn}/>
+      <NavbarButton color="outline-primary" label={label} handleClick={this.create}/>
     )
     return button
   }
@@ -276,7 +295,7 @@ export default class Listing extends Component {
       leftSide={[button]}
       rightSide={[search]}
       background="light"
-      className="border rounded"/>
+      className="border rounded mb-3"/>
   }
 
   title() {
