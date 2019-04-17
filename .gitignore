@@ -1,1 +1,8 @@
+*~
+/.babelrc
+/assets.json
 /nbproject/private/
+/node_modules/
+/conf/defines.php
+/javascript/build/
+/javascript/dev/
