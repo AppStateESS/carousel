@@ -2,18 +2,40 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Dropzone from 'react-dropzone-uploader'
+import ratio from '../Extends/ratio'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
 import './style.scss'
 import 'react-dropzone-uploader/dist/styles.css'
 
-const Form = ({close, update, resource, save, upload}) => {
+const Form = ({
+  update,
+  resource,
+  save,
+  upload,
+  dropzone,
+  removeMedia
+}) => {
 
-  const uploadPrompt = (
+  let uploadPrompt = (
     <div key="1">
       <div className="upload-text">Click to browse<br/>- or -<br/>drag image or video file here.</div>
     </div>
   )
+  if (resource.filepath.length > 0) {
+    uploadPrompt = <div key="1"><img className="preview" src={resource.filepath}/></div>
+  }
 
+  const Preview = (props) => {
+    const {meta} = props
+    return (<div key="1"><img className="preview" src={meta.previewUrl}/></div>)
+  }
+
+  let dimensions
+  if (dropzone.file !== null) {
+    dimensions = (
+      <div>{dropzone.meta.width} x {dropzone.meta.height} px - ratio {ratio(dropzone.meta.width, dropzone.meta.height)}</div>
+    )
+  }
   return (
     <div>
       <div className="mb-3">
@@ -26,17 +48,25 @@ const Form = ({close, update, resource, save, upload}) => {
         classNames={{
           dropzone: 'dropzone'
         }}
-        accept="image/jpg,image/png,video/mp4,video/webm"
+        accept="image/jpeg,image/png,video/mp4,video/webm"
         getUploadParams={upload}
         maxFiles={1}
         multiple={false}
-        canCancel={false}
-        canRestart={false}
+        canCancel={true}
+        canRestart={true}
         minSizeBytes={1024}
         maxSizeBytes={8388608}
+        PreviewComponent={Preview}
         inputContent={uploadPrompt}
         autoUpload={true}/>
-      <div className="row mt-3 mb-3">
+      <div className="text-center">
+        {dimensions}
+        <button
+          className="btn btn-danger"
+          onClick={removeMedia}
+          disabled={dropzone.file === null}>Clear</button>
+      </div>
+      <div className="row mt-3">
         <div className="col-sm-3">
           <label>Title</label>
         </div>
@@ -56,7 +86,23 @@ const Form = ({close, update, resource, save, upload}) => {
           </div>
         </div>
       </div>
-      <div className="row mb-3">
+      <div className="row">
+        <div className="col-sm-3">
+          <label htmlFor="url">Url</label>
+        </div>
+        <div className="col-sm-9">
+          <div className="input-group">
+            <div className="input-group-prepend">
+              <div className="input-group-text">http://</div>
+            </div><input
+              className="form-control"
+              type="text"
+              name="url"
+              value={resource.url}
+              onChange={update.bind(null, 'url')}/></div>
+        </div>
+      </div>
+      <div className="row">
         <div className="col-sm-3">
           <label htmlFor="caption">Caption</label>
         </div>
@@ -88,6 +134,12 @@ const Form = ({close, update, resource, save, upload}) => {
           </select>
         </div>
       </div>
+      <div className="text-center">
+        <button
+          className="btn btn-success"
+          onClick={save}
+          disabled={dropzone.file === null}>Save slide</button>
+      </div>
     </div>
   )
 }
@@ -96,7 +148,12 @@ Form.propTypes = {
   resource: PropTypes.object,
   finish: PropTypes.func,
   save: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  upload: PropTypes.func,
+  meta: PropTypes.object,
+  dropzone: PropTypes.object,
+  fileWithMeta: PropTypes.func,
+  removeMedia: PropTypes.func
 }
 
 export default Form
