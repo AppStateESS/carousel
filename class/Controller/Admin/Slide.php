@@ -43,8 +43,10 @@ class Slide extends SubController
     protected function listHtml(Request $request)
     {
         $carouselId = $request->pullGetInteger('carousel');
+        $carouselFactory = new \carousel\Factory\CarouselFactory;
+        $carousel = $carouselFactory->load($carouselId);
         return $this->view->scriptView('Slide', true,
-                        ['carouselId' => $carouselId]);
+                        ['carouselId' => $carouselId, 'carouselTitle' => $carousel->title]);
     }
 
     protected function listJson(Request $request)
@@ -53,11 +55,45 @@ class Slide extends SubController
         return ['listing' => $listing];
     }
 
-    protected function uploadPost(Request $request)
+    protected function mediaPost(Request $request)
     {
-        $carouselId = $request->pullPostInteger('carouselId');
-        $this->factory->upload($carouselId);
+        try {
+            $slide = $this->factory->load($request->pullPostInteger('slideId'));
+            $this->factory->postMedia($slide);
+            $this->factory->save($slide);
+            return ['success' => true];
+        } catch (\Exception $e) {
+            $this->factory->delete($slide);
+            throw $e;
+        }
+    }
+
+    protected function post(Request $request)
+    {
+        $slide = $this->factory->post($request);
+        $this->factory->save($slide);
+        return ['success' => true, 'slideId' => $slide->id];
+    }
+
+    protected function put(Request $request)
+    {
+        $slide = $this->factory->put($this->id, $request);
+        $this->factory->save($slide);
+        return ['success' => true, 'slideId' => $slide->id];
+    }
+
+    protected function activePatch(Request $request)
+    {
+        $slide = $this->factory->patch($this->id, 'active',
+                $request->pullPatchBoolean('active'));
+        $this->factory->save($slide);
         return ['success' => true];
+    }
+
+    protected function delete(Request $request)
+    {
+        $slide = $this->factory->load($this->id);
+        $this->factory->delete($slide);
     }
 
 }
