@@ -4,35 +4,67 @@ import ReactDOM from 'react-dom'
 import Listing from '../Extends/Listing'
 import Form from './Form'
 import PropTypes from 'prop-types'
+import ratio from '../Extends/ratio'
+import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
+import './style.scss'
 
-/* global carouselId, $ */
+/* global carouselId, carouselTitle, $ */
 
 export default class Slide extends Listing {
   constructor(props) {
     super(props)
-    this.state.overlay = true
+    this.state.overlay = false
+    this.state.dropzone = {
+      remove: ()=>{},
+      file: null,
+      meta: null
+    }
     this.module = 'carousel'
     this.role = 'Admin'
     this.control = 'Slide'
     this.label = 'Slide'
     this.defaultResource = {
-      id: 0,
+      id: '0',
+      carouselId: props.carouselId,
       title: '',
       show_title: false,
       filepath: '',
       caption: '',
-      queue: 0,
+      queue: '0',
       url: '',
-      caption_zone: 0,
+      caption_zone: '0',
       active: true,
-      width: 0,
-      height: 0,
-      type: 0
+      width: '0',
+      height: '0',
+      type: '0'
     }
     this.columns = [
       {
+        column: 'active',
+        callback: (row, key) => {
+          return (
+            <BigCheckbox checked={row.active} handle={this.toggleActive.bind(this, key)}/>
+          )
+        }
+      }, {
+        column: 'thumbnail',
+        callback: (value) => {
+          return <img src={value.thumbnail}/>
+        }
+      }, {
         column: 'title',
         label: 'Title'
+      }, {
+        label: 'Dimensions',
+        callback: (row) => {
+          return <span>{row.width} x {row.height}</span>
+        }
+      }, {
+        column: 'ratio',
+        label: 'Ratio',
+        callback: (row) => {
+          return ratio(row.width, row.height)
+        }
       }
     ]
     this.contextMenu = [
@@ -58,6 +90,9 @@ export default class Slide extends Listing {
     ]
     this.state.resource = this.defaultResource
     this.upload = this.upload.bind(this)
+    this.removeMedia = this.removeMedia.bind(this)
+    this.saveMedia = this.saveMedia.bind(this)
+    this.toggleActive = this.toggleActive.bind(this)
   }
 
   command(event, data) {
@@ -74,40 +109,117 @@ export default class Slide extends Listing {
     }
   }
 
-  upload(upload) {
-    let formData = new FormData()
-    formData.append('carouselId', this.props.carouselId)
-    formData.append('file', upload.file)
+  dropzoneReset() {
+    const {dropzone} = this.state
+    dropzone.remove()
+    dropzone.file = null
+    dropzone.meta = null
+    this.setState({dropzone})
+  }
+
+  reset() {
+    super.reset()
+    this.dropzoneReset()
+  }
+
+  toggleActive(key) {
+    const {listing} = this.state
+    const resource = listing[key]
+    resource.active = resource.active === '1'
+      ? '0'
+      : '1'
     $.ajax({
-      url: './carousel/Admin/Slide/upload',
-      type: 'POST',
+      url: `./carousel/Admin/Slide/${resource.id}/active`,
+      data: {
+        'active': resource.active
+      },
+      dataType: 'json',
+      type: 'patch',
+      success: () => {
+        listing[key] = resource
+        this.setState({listing})
+      },
+      error: () => {}
+    })
+  }
+
+  title() {
+    return <h3>Slides:&nbsp;{this.props.carouselTitle}</h3>
+  }
+
+  removeMedia() {
+    this.update('filepath', '')
+    const {dropzone} = this.state
+    dropzone.remove()
+    dropzone.file = null
+    dropzone.meta = null
+    this.setState({dropzone})
+  }
+
+  upload(dropzone) {
+    const {resource} = this.state
+    if (resource.title.length === 0) {
+      resource.title = dropzone.file.name.replace(/\.(jpg|jpeg|png|gif)$/, '')
+      resource.title = resource.title.replace(/-/, ' ')
+    }
+    this.setState({resource, dropzone})
+  }
+
+  saveMedia(slideId) {
+    const formData = new FormData()
+    formData.append('slideId', slideId)
+    formData.append('file', this.state.dropzone.file)
+    $.ajax({
+      url: './carousel/Admin/Slide/media',
       data: formData,
-      cache: false,
       dataType: 'json',
       processData: false,
       contentType: false,
-      success: (data) => {
-        console.log(data)
+      type: 'post',
+      success: () => {
+        this.load()
+        this.setMessage(
+          <div>
+            <i className="far fa-thumbs-up"></i>&nbsp;Save successful.</div>,
+          'success'
+        )
       },
       error: (data) => {
-        console.log(data)
-        alert(
-          'Sorry but your file is unacceptable. It may be of the wrong type or too large ' +
-          '(8MB is the maximum allowed). Please try again.'
-        )
+        let message = <div>An unknown error occurred</div>
+        if (data.responseJSON.exception.message !== undefined) {
+          message = data.responseJSON.exception.message
+        } else if (data.exception.message !== undefined) {
+          message = data.exception.message
+        }
+        this.setMessage(<div>{message}</div>)
       }
     })
   }
 
+  success(data) {
+    if (data.success) {
+      this.saveMedia(data.slideId)
+    } else {
+      this.setMessage(
+        <div>
+          <i className="fas fa-exclamation-triangle"></i>&nbsp;Unable to save: {data.error}</div>
+      )
+    }
+  }
+
   overlay() {
-    const title = this.state.resource.id > 0 ? 'Edit slide' : 'Create slide'
+    const title = this.state.resource.id > 0
+      ? 'Edit slide'
+      : 'Create slide'
     const form = (
       <Form
         close={this.finish}
         update={this.update}
         resource={this.state.resource}
         upload={this.upload}
-        save={this.save}/>
+        dropzone={this.state.dropzone}
+        save={this.save}
+        removeMedia={this.removeMedia}/>
     )
     return {content: (<div className="slide-form">{form}
     </div>), width: '80%', title: title, close: this.load}
@@ -115,9 +227,13 @@ export default class Slide extends Listing {
 }
 
 Slide.propTypes = {
-  carouselId: PropTypes.string
+  carouselId: PropTypes.string,
+  carouselTitle: PropTypes.string
 }
 
-ReactDOM.render(<Slide carouselId={carouselId}/>, document.getElementById(
-  'Slide'
-))
+ReactDOM.render(
+  <Slide carouselId={carouselId} carouselTitle={carouselTitle}/>,
+  document.getElementById(
+    'Slide'
+  )
+)
