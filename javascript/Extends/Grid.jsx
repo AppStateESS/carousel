@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCaretUp, faCaretDown} from '@fortawesome/free-solid-svg-icons'
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
+
 import './grid.scss'
 
 const Grid = ({listing, columns, sortFunction, currentSort, contextMenu}) => {
@@ -70,11 +71,13 @@ const Grid = ({listing, columns, sortFunction, currentSort, contextMenu}) => {
 
   let rows = listing.map((resource, key) => {
     let stack = columns.map((value, subkey) => {
+      let columnContent
       if (value.callback) {
-        return <td key={subkey} className={value.className}>{value.callback(resource, key)}</td>
+        columnContent = value.callback(resource, key)
       } else {
-        return <td key={subkey} className={value.className}>{resource[value.column]}</td>
+        columnContent = resource[value.column]
       }
+      return <td key={subkey} className={value.className}>{columnContent}</td>
     })
     
     if (contextMenu) {
