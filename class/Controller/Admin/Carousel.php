@@ -71,5 +71,11 @@ class Carousel extends SubController
         $this->factory->delete($carousel);
         return ['success' => true];
     }
+    
+    protected function frontpagePatch(Request $request)
+    {
+        $this->factory->toggleFrontPage($this->id);
+        return ['success'=>true, 'id'=>$this->id];
+    }
 
 }
