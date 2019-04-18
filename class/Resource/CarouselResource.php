@@ -25,6 +25,7 @@ class CarouselResource extends AbstractResource
     protected $controls;
     protected $pause;
     protected $lockDimensions;
+    protected $frontpage;
     
     protected $table = 'caro_carousel';
 
@@ -41,6 +42,7 @@ class CarouselResource extends AbstractResource
         $this->controls = new \phpws2\Variable\BooleanVar(true, 'controls');
         $this->pause = new \phpws2\Variable\BooleanVar(true, 'pause');
         $this->lockDimensions = new \phpws2\Variable\BooleanVar(true, 'lockDimensions');
+        $this->frontpage = new \phpws2\Variable\BooleanVar(false, 'frontpage');
     }
     
 }
