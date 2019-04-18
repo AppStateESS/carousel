@@ -264,6 +264,11 @@ export default class Listing extends Component {
     }
   }
 
+  navLeft() {
+    const button = this.navbarButton()
+    return [button]
+  }
+
   navbarButton() {
     const label = (
       <span>
@@ -288,11 +293,9 @@ export default class Listing extends Component {
   }
 
   navbar() {
-    const button = this.navbarButton()
-
     const search = this.getSearch()
     return <Navbar
-      leftSide={[button]}
+      leftSide={this.navLeft()}
       rightSide={[search]}
       background="light"
       className="border rounded mb-3"/>
