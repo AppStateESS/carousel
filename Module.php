@@ -12,6 +12,7 @@ use Canopy\Request;
 use Canopy\Response;
 use Canopy\Server;
 use Canopy\SettingDefaults;
+use carousel\View\CarouselView;
 use carousel\Controller\Controller;
 
 if (is_file(PHPWS_SOURCE_DIR . 'mod/carousel/config/defines.php')) {
@@ -68,18 +69,6 @@ class Module extends \Canopy\Module implements \Canopy\SettingDefaults
                 throw $e;
             }
         }
-        /*
-          catch (\Exception $e) {
-          if (CAROUSEL_SYSTEM_SETTINGS['friendlyErrors']) {
-          \phpws2\Error::log($e);
-          $controller = new Controller\FriendlyErrorController($this);
-          return $controller;
-          } else {
-          throw $e;
-          }
-          }
-         *
-         */
     }
 
     public function getSettingDefaults()
@@ -95,6 +84,13 @@ class Module extends \Canopy\Module implements \Canopy\SettingDefaults
         return $s;
     }
 
+    public function runTime(Request $request) {
+        if (!$request->isVar('module')) {
+            $view = new CarouselView;
+            \Layout::add($view->homeView(), 'carousel', 'slides');
+        }
+    }
+    
     /*
       public function runTime(\Canopy\Request $request)
       {
