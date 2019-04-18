@@ -6,6 +6,7 @@ import Form from './Form'
 import PropTypes from 'prop-types'
 import ratio from '../Extends/ratio'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
+import {NavbarLink} from '@essappstate/react-navbar'
 import './style.scss'
 
 /* global carouselId, carouselTitle, $ */
@@ -15,7 +16,7 @@ export default class Slide extends Listing {
     super(props)
     this.state.overlay = false
     this.state.dropzone = {
-      remove: ()=>{},
+      remove: () => {},
       file: null,
       meta: null
     }
@@ -55,15 +56,9 @@ export default class Slide extends Listing {
         column: 'title',
         label: 'Title'
       }, {
-        label: 'Dimensions',
+        label: 'Dimensions/Ratio',
         callback: (row) => {
-          return <span>{row.width} x {row.height}</span>
-        }
-      }, {
-        column: 'ratio',
-        label: 'Ratio',
-        callback: (row) => {
-          return ratio(row.width, row.height)
+          return <div>{row.width}x{row.height}&nbsp;/&nbsp;{ratio(row.width, row.height)}</div>
         }
       }
     ]
@@ -144,7 +139,8 @@ export default class Slide extends Listing {
   }
 
   title() {
-    return <h3>Slides:&nbsp;{this.props.carouselTitle}</h3>
+    return <h3>Slides:&nbsp;<a href="./carousel/Admin/Carousel">{this.props.carouselTitle}</a>
+    </h3>
   }
 
   removeMedia() {
@@ -163,6 +159,13 @@ export default class Slide extends Listing {
       resource.title = resource.title.replace(/-/, ' ')
     }
     this.setState({resource, dropzone})
+  }
+
+  navLeft() {
+    const left = super.navLeft()
+    const back = <NavbarLink href="./carousel/Admin/Carousel">Carousel list</NavbarLink>
+    left.push(back)
+    return left
   }
 
   saveMedia(slideId) {
