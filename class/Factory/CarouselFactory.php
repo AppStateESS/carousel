@@ -69,4 +69,43 @@ class CarouselFactory extends BaseFactory
         $db->setLimit(1);
         $db->delete();
     }
+    
+    public function getHomeCarousel() {
+        $db = Database::getDB();
+        $tbl = $db->addTable('caro_carousel');
+        $tbl->addFieldConditional('frontpage', 1);
+        $db->setLimit(1);
+        $carousel = $db->selectAsResources('\carousel\Resource\CarouselResource');
+        if (empty($carousel)) {
+            return;
+        }
+        return $carousel[0];
+    }
+    
+    /**
+     * Toggles the selected carousel to front page status
+     * @param int $carouselId
+     */
+    public function toggleFrontPage(int $carouselId)
+    {
+        $carousel = $this->load($carouselId);
+        if ($carousel->frontpage) {
+            $carousel->frontpage = false;
+            self::saveResource($carousel);
+        } else {
+            $this->removeFrontPage();
+            $carousel->frontpage = true;
+            self::saveResource($carousel);
+        }
+    }
+    
+    /**
+     * Removes front page status from ALL carousels.
+     */
+    private function removeFrontPage() {
+        $db = Database::getDB();
+        $tbl = $db->addTable('caro_carousel');
+        $tbl->addValue('frontpage', 0);
+        $db->update();
+    }
 }
