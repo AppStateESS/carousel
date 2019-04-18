@@ -2,7 +2,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Listing from '../Extends/Listing'
+import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
 import Form from './Form'
+
+/* global $ */
 
 export default class Carousel extends Listing {
   constructor(props) {
@@ -13,7 +16,7 @@ export default class Carousel extends Listing {
     this.label = 'Carousel'
     this.form = this.form.bind(this)
     this.defaultResource = {
-      id: 0,
+      id: '0',
       title: '',
       iterations: '2',
       intervalTime: '4',
@@ -23,6 +26,15 @@ export default class Carousel extends Listing {
     }
     this.columns = [
       {
+        column: 'frontpage',
+        callback: (row, key) => {
+          return (
+            <BigCheckbox checked={row.frontpage === '1'} handle={this.sentToFrontPage.bind(this, key)}/>
+          )
+        },
+        label: 'Front page',
+        style: {width : '20%'}
+      }, {
         column: 'title',
         label: 'Title'
       }
@@ -58,6 +70,20 @@ export default class Carousel extends Listing {
       }
     ]
     this.state.resource = this.defaultResource
+  }
+  
+  sentToFrontPage(key) {
+    const {listing} = this.state
+    const resource = listing[key]
+    $.ajax({
+      url: `./carousel/Admin/Carousel/${resource.id}/frontpage`,
+      dataType: 'json',
+      type: 'patch',
+      success: ()=>{
+        this.load()
+      },
+      error: (data) => this.error(data)
+    })
   }
 
   command(event, data) {
