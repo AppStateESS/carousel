@@ -42,6 +42,7 @@ class Slide extends SubController
 
     protected function listHtml(Request $request)
     {
+        \Layout::hideDefault();
         $carouselId = $request->pullGetInteger('carousel');
         $carouselFactory = new \carousel\Factory\CarouselFactory;
         $carousel = $carouselFactory->load($carouselId);
