@@ -7,6 +7,8 @@ import PropTypes from 'prop-types'
 import ratio from '../Extends/ratio'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
 import {NavbarLink} from '@essappstate/react-navbar'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faBars} from '@fortawesome/free-solid-svg-icons'
 import './style.scss'
 
 /* global carouselId, carouselTitle, $ */
@@ -20,6 +22,7 @@ export default class Slide extends Listing {
       file: null,
       meta: null
     }
+    this.allowSort = true
     this.module = 'carousel'
     this.role = 'Admin'
     this.control = 'Slide'
@@ -39,13 +42,36 @@ export default class Slide extends Listing {
       height: '0',
       type: '0'
     }
+
+    const dropdown = (key) => {
+      return (
+        <div className="dropdown">
+          <button
+            className="btn btn-outline-secondary"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+            <FontAwesomeIcon icon={faBars}/>
+          </button>
+          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a
+              className="dropdown-item pointer"
+              onClick={this.editResource.bind(this, key)}>Edit</a>
+            <a
+              className="dropdown-item pointer"
+              onClick={this.deleteResource.bind(this, key)}>Delete</a>
+          </div>
+        </div>
+      )
+    }
+
     this.columns = [
       {
-        column: 'active',
+        column: 'options',
         callback: (row, key) => {
-          return (
-            <BigCheckbox checked={row.active} handle={this.toggleActive.bind(this, key)}/>
-          )
+          return dropdown(key)
         }
       }, {
         column: 'thumbnail',
@@ -54,54 +80,29 @@ export default class Slide extends Listing {
         }
       }, {
         column: 'title',
+        sort: true,
         label: 'Title'
       }, {
         label: 'Dimensions/Ratio',
         callback: (row) => {
           return <div>{row.width}x{row.height}&nbsp;/&nbsp;{ratio(row.width, row.height)}</div>
         }
-      }
-    ]
-    this.contextMenu = [
-      {
-        handleClick: this.command.bind(this),
-        data: {
-          command: 'edit'
-        },
-        label: (
-          <a href="#">
-            <i className="fas fa-edit"></i>&nbsp;Edit slide</a>
-        )
       }, {
-        handleClick: this.command.bind(this),
-        data: {
-          command: 'delete'
-        },
-        label: (
-          <a href="#">
-            <i className="fas fa-trash"></i>&nbsp;Delete slide</a>
-        )
+        column: 'active',
+        label: 'Active',
+        callback: (row, key) => {
+          return (
+            <BigCheckbox checked={row.active} handle={this.toggleActive.bind(this, key)}/>
+          )
+        }
       }
     ]
+
     this.state.resource = this.defaultResource
     this.upload = this.upload.bind(this)
     this.removeMedia = this.removeMedia.bind(this)
     this.saveMedia = this.saveMedia.bind(this)
     this.toggleActive = this.toggleActive.bind(this)
-  }
-
-  command(event, data) {
-    event.preventDefault()
-    switch (data.command) {
-      case 'edit':
-        this.editResource(data.name)
-        break
-
-      case 'delete':
-        this.deleteResource(data.name)
-        break
-
-    }
   }
 
   dropzoneReset() {
@@ -115,6 +116,23 @@ export default class Slide extends Listing {
   reset() {
     super.reset()
     this.dropzoneReset()
+  }
+
+  handleRowSort({oldIndex, newIndex}) {
+    if (oldIndex === newIndex) {
+      return 
+    }
+    
+    $.ajax({
+      url: `./carousel/Admin/Slide/${this.state.listing[oldIndex].id}/sort`,
+      data: {position: this.state.listing[newIndex].id},
+      dataType: 'json',
+      type: 'patch',
+      success: ()=>{
+        this.load()
+      },
+      error: (data)=>this.error(data)
+    })
   }
 
   toggleActive(key) {
