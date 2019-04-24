@@ -59,7 +59,7 @@ class Controller extends \phpws2\Http\Controller
         }
 
         if ($roleController === 'Admin' && !$this->role->isAdmin()) {
-            throw new \carousel\Exception\PrivilegeMissing;
+            \Current_User::requireLogin();
         }
 
         $subController = filter_var($request->shiftCommand(),
