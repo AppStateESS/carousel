@@ -63,11 +63,7 @@ class CarouselFactory extends BaseFactory
     {
         $slideFactory = new SlideFactory;
         $slideFactory->deleteByCarouselId($carousel->id);
-        $db = Database::getDB();
-        $tbl = $db->addTable('caro_carousel');
-        $tbl->addFieldConditional($carousel->id);
-        $db->setLimit(1);
-        $db->delete();
+        self::deleteResource($carousel);
     }
     
     public function getHomeCarousel() {
