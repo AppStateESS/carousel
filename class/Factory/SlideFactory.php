@@ -36,7 +36,7 @@ class SlideFactory extends BaseFactory
 
         $db = Database::getDB();
         $tbl = $db->addTable('caro_slide');
-        $tbl->addFieldConditional('carouselId');
+        $tbl->addFieldConditional('carouselId', $carouselId);
         $db->delete();
     }
 
@@ -60,7 +60,7 @@ class SlideFactory extends BaseFactory
         }
     }
 
-    public function resort(SlideResource $slide)
+    public function requeue(SlideResource $slide)
     {
         $sortable = new \phpws2\Sortable('caro_slide', 'queue');
         $sortable->setAnchor('carouselId', $slide->carouselId);
@@ -202,30 +202,42 @@ class SlideFactory extends BaseFactory
     {
         
     }
+    
+    private function getImageOptions($pic, $imageDirectory, int $carouselId)
+    {
+        $imageDirectory = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
+        $imagePath = PHPWS_HOME_DIR . $imageDirectory;
+        $options = array(
+            'max_width' => CAROUSEL_SYSTEM_SETTINGS['maxWidth'],
+            'max_height' => CAROUSEL_SYSTEM_SETTINGS['maxHeight'],
+            'current_image_extensions' => true,
+            'param_name' => 'file',
+            'upload_dir' => $imagePath,
+            'upload_url' => \Canopy\Server::getSiteUrl(true) . $imageDirectory,
+            'image_versions' => array()
+        );
+        return $options;
+    }
 
-    public function moveImage($pic, $carouselId)
+    public function moveImage($pic, int $carouselId)
     {
         if ($pic['error'] !== 0) {
             throw new \Exception('Upload error');
         }
-
-        if (!in_array($pic['type'],
-                        array('image/jpeg', 'image/gif', 'image/png'))) {
-            throw new \carousel\Exception\WrongImageType;
-        }
         $destination = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
-        if (!is_dir($destination)) {
-            if (!mkdir($destination, 0755)) {
-                throw new \Exception('Could not create directory');
-            }
-        }
+        $options = $this->getImageOptions($pic, $destination, $carouselId);
+        $upload_handler = new UploadHandler($options, false);
+        $result = $upload_handler->post(false);
+        return $destination . $result['file'][0]->name;
+    }
 
-        $file_name = rand() . time() . '.' . \phpws\PHPWS_File::getFileExtension($pic['name']);
-        $path = $destination . $file_name;
-        if (!move_uploaded_file($pic['tmp_name'], $path)) {
-            throw new properties\Exception\FileSaveFailure($path);
-        }
-        return $path;
+    public function resort(int $slideId, int $newPosition)
+    {
+        $slide = $this->load($slideId);
+        $sortTo = $this->load($newPosition);
+        $sortable = new \phpws2\Sortable('caro_slide', 'queue');
+        $sortable->setAnchor('carouselId', $slide->carouselId);
+        $sortable->moveTo($slideId, $sortTo->queue);
     }
 
 }
