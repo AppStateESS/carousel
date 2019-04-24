@@ -10,3 +10,10 @@ nav.react-contextmenu {
   box-shadow: 5px 5px 5px rgb(157, 157, 157,);
   min-width : 100px;
 }
+
+tr.grid-row-sort-move {
+  display : flex;
+  justify-content: space-around;
+  align-items: center;
+  border : 2px #e3e3e3 dashed;
+}
