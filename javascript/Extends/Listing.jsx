@@ -34,6 +34,7 @@ export default class Listing extends Component {
       overlay: false,
       resource: {}
     }
+    this.allowSort = false
     this.module = 'module'
     this.role = 'role'
     this.control = 'control'
@@ -42,7 +43,6 @@ export default class Listing extends Component {
     this.sortByDir = 0
     this.defaultResource = {}
     this.save = this.save.bind(this)
-    this.showGrid = this.showGrid.bind(this)
     this.load = this.load.bind(this)
     this.reset = this.reset.bind(this)
     this.sortByColumn = this.sortByColumn.bind(this)
@@ -55,6 +55,7 @@ export default class Listing extends Component {
     this.success = this.success.bind(this)
     this.error = this.error.bind(this)
     this.complete = this.complete.bind(this)
+    this.handleRowSort = this.handleRowSort.bind(this)
   }
 
   componentDidMount() {
@@ -88,12 +89,14 @@ export default class Listing extends Component {
     }, callback)
   }
 
-  editResource(key) {
+  editResource(key, e) {
+    e.preventDefault()
     this.loadResource(key)
     this.overlayOn()
   }
 
-  deleteResource(key) {
+  deleteResource(key, e) {
+    e.preventDefault()
     const resource = this.state.listing[key]
     if (confirm('Are you sure you want to delete this carousel along with all it\'s slides?')) {
       $.ajax({
@@ -181,8 +184,6 @@ export default class Listing extends Component {
       }
     })
   }
-
-  showGrid() {}
 
   setMessage(message, messageType = 'danger') {
     setTimeout(() => {
@@ -337,6 +338,12 @@ export default class Listing extends Component {
 
   }
 
+  /* Extended function should do actual work. This is a stub. */
+
+  handleRowSort({oldIndex, newIndex}) {
+    console.log(`moving ${oldIndex} to ${newIndex}`)
+  }
+
   content() {
     if (this.state.loading) {
       return <div><Waiting/></div>
@@ -352,6 +359,8 @@ export default class Listing extends Component {
     return (
       <Grid
         listing={this.state.listing}
+        handleRowSort={this.handleRowSort}
+        allowSort={this.allowSort}
         edit={this.editResource}
         contextMenu={this.contextMenu}
         columns={this.columns}
