@@ -96,5 +96,11 @@ class Slide extends SubController
         $slide = $this->factory->load($this->id);
         $this->factory->delete($slide);
     }
+    
+    protected function sortPatch(Request $request)
+    {
+        $this->factory->resort($this->id, $request->pullPatchInteger('position'));
+        return ['success'=>true];
+    }
 
 }
