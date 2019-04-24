@@ -18,5 +18,7 @@ define('CAROUSEL_SYSTEM_SETTINGS',
     'friendlyErrors' => true,
     'maxThumbWidth' => 200,
     'maxThumbHeight' => 50,
+    'maxWidth' => 1920,
+    'maxHeight' => 600
         ]
 );
