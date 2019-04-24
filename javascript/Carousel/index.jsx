@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 import Listing from '../Extends/Listing'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
 import Form from './Form'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faBars} from '@fortawesome/free-solid-svg-icons'
 
 /* global $ */
 
@@ -24,54 +26,67 @@ export default class Carousel extends Listing {
       controls: true,
       pause: true
     }
+
+    const dropdown = (key) => {
+      return (
+        <div className="dropdown">
+          <button
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            className="btn btn-outline-secondary">
+            <FontAwesomeIcon icon={faBars}/>
+          </button>
+          <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a
+              className="dropdown-item pointer"
+              href={`./carousel/Admin/Slide/?carousel=${this.state.listing[key].id}`}>Slides</a>
+            <a
+              className="dropdown-item pointer"
+              href="#"
+              onClick={this.editResource.bind(this, key)}>Edit</a>
+            <a
+              className="dropdown-item pointer"
+              href="#"
+              onClick={this.deleteResource.bind(this, key)}>Delete</a>
+          </div>
+        </div>
+      )
+    }
+
     this.columns = [
       {
-        column: 'frontpage',
+        column: 'options',
         callback: (row, key) => {
-          return (
-            <BigCheckbox checked={row.frontpage === '1'} handle={this.sentToFrontPage.bind(this, key)}/>
-          )
+          return dropdown(key)
         },
-        label: 'Front page',
-        style: {width : '20%'}
+        style: {
+          width: '10%'
+        }
+
       }, {
         column: 'title',
         label: 'Title'
+      }, {
+        column: 'frontpage',
+        callback: (row, key) => {
+          return (
+            <BigCheckbox
+              checked={row.frontpage === '1'}
+              handle={this.sentToFrontPage.bind(this, key)}/>
+          )
+        },
+        label: 'Front page',
+        style: {
+          width: '20%'
+        }
       }
     ]
-    this.contextMenu = [
-      {
-        handleClick: this.command.bind(this),
-        data: {
-          command: 'edit'
-        },
-        label: (
-          <a href="#">
-            <i className="fas fa-edit"></i>&nbsp;Edit Carousel</a>
-        )
-      }, {
-        handleClick: this.command.bind(this),
-        data: {
-          command: 'slides'
-        },
-        label: (
-          <a href="#">
-            <i className="fas fa-images"></i>&nbsp;Update Slides</a>
-        )
-      }, {
-        handleClick: this.command.bind(this),
-        data: {
-          command: 'delete'
-        },
-        label: (
-          <a href="#">
-            <i className="fas fa-trash"></i>&nbsp;Delete Carousel</a>
-        )
-      }
-    ]
+
     this.state.resource = this.defaultResource
   }
-  
+
   sentToFrontPage(key) {
     const {listing} = this.state
     const resource = listing[key]
@@ -79,7 +94,7 @@ export default class Carousel extends Listing {
       url: `./carousel/Admin/Carousel/${resource.id}/frontpage`,
       dataType: 'json',
       type: 'patch',
-      success: ()=>{
+      success: () => {
         this.load()
       },
       error: (data) => this.error(data)
