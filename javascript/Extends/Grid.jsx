@@ -1,13 +1,11 @@
 'use strict'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCaretUp, faCaretDown} from '@fortawesome/free-solid-svg-icons'
-import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
-
+import GridHeader from './GridHeader'
+import {SortableElement, SortableContainer} from 'react-sortable-hoc'
 import './grid.scss'
 
-const Grid = ({listing, columns, sortFunction, currentSort, contextMenu}) => {
+const Grid = ({listing, columns, sortFunction, currentSort, allowSort, handleRowSort}) => {
   const sortIconTrack = {}
   columns.forEach((value) => {
     sortIconTrack[value.column] = 0
@@ -16,99 +14,33 @@ const Grid = ({listing, columns, sortFunction, currentSort, contextMenu}) => {
     sortIconTrack[currentSort.sortBy] = currentSort.sortByDir
   }
 
-  const MENU_TYPE = 'SIMPLE'
-  const collect = (props) => {
-    return {name: props.name}
-  }
-
-  const headers = (columns, sortFunction) => {
-    const th = columns.map((value, key) => {
-      let icon
-      let className = []
-      if (sortIconTrack[value.column] === 1) {
-        className.push('pointer')
-        icon = <FontAwesomeIcon icon={faCaretUp}/>
-      } else if (sortIconTrack[value.column] === 2) {
-        className.push('pointer')
-        icon = <FontAwesomeIcon icon={faCaretDown}/>
-      }
-      if (value.className) {
-        className.push(value.className)
-      }
-
-      let style
-      if (value.style && typeof value.style === 'object') {
-        style = value.style
-      }
-      return (
-        <th
-          style={style}
-          className={className}
-          key={key}
-          onClick={sortFunction.bind(null, value.column)}>{value.label}&nbsp;{icon}
-        </th>
-      )
-    })
-    return (<tr>{th}</tr>)
-  }
   let tableClass = 'table table-striped table-hover'
 
-  let menu
-  if (contextMenu) {
-    let menuOptions = contextMenu.map((value, key) => {
-      return (
-        <MenuItem onClick={value.handleClick} data={value.data} key={key}>
-          {value.label}
-        </MenuItem>
-      )
-    })
-    menu = (
-      <ContextMenu id={MENU_TYPE}>
-        {menuOptions}
-      </ContextMenu>
-    )
-  }
+  let tbody
 
-  let rows = listing.map((resource, key) => {
-    let stack = columns.map((value, subkey) => {
-      let columnContent
-      if (value.callback) {
-        columnContent = value.callback(resource, key)
-      } else {
-        columnContent = resource[value.column]
-      }
-      return <td key={subkey} className={value.className}>{columnContent}</td>
+  if (allowSort) {
+    tbody = (
+      <SortableList axis="y" lockAxis="y" pressDelay={200} items={listing} helperClass="grid-row-sort-move" onSortEnd={handleRowSort} columns={columns}/>
+    )
+  } else {
+    let rows = listing.map((resource, key) => {
+      let tdStack = buildTdColumns(resource, columns, key)
+      return <tr className="grid-row" key={key}>{tdStack}</tr>
     })
-    
-    if (contextMenu) {
-      return (
-        <ContextMenuTrigger
-          renderTag="tr"
-          name={key}
-          id={MENU_TYPE}
-          holdToDisplay={1000}
-          key={key}
-          attributes={{className: 'context'}}
-          collect={collect}>
-          {stack}
-        </ContextMenuTrigger>
-      )
-    } else {
-      return (<tr key={key}>
-        {stack}
-      </tr>)
-    }
-  })
+    tbody = <tbody>{rows}</tbody>
+  }
 
   return (
     <div>
       <table className={tableClass}>
-        <tbody>
-          {headers(columns, sortFunction)}
-          {rows}
-        </tbody>
+        <thead>
+          <GridHeader
+            columns={columns}
+            sortFunction={sortFunction}
+            sortIconTrack={sortIconTrack}/>
+        </thead>
+        {tbody}
       </table>
-      {menu}
     </div>
   )
 }
@@ -119,10 +51,38 @@ Grid.propTypes = {
   sortFunction: PropTypes.func,
   currentSort: PropTypes.object,
   contextMenu: PropTypes.array,
+  allowSort: PropTypes.bool,
   name: PropTypes.string,
+  handleRowSort: PropTypes.func,
 }
 
 Grid.defaultProps = {
   contextMenu: null
 }
+
 export default Grid
+
+const buildTdColumns = (resource, columns, index) => {
+  let tdStack = columns.map((value, subkey) => {
+    let columnContent
+    if (value.callback) {
+      columnContent = value.callback(resource, index)
+    } else {
+      columnContent = resource[value.column]
+    }
+    return <td key={subkey} className={value.className}>{columnContent}</td>
+  })
+  return tdStack
+}
+
+const SortableItem = SortableElement(({value}) => {
+  return <tr className="grid-row-sort">{value}</tr>
+})
+
+const SortableList = SortableContainer(({items, columns}) => {
+  let rows = items.map((resource, index) => {
+    let tdStack = buildTdColumns(resource, columns, index)
+    return <SortableItem key={`item-${index}`} index={index} value={tdStack}/>
+  })
+  return (<tbody>{rows}</tbody>)
+})
