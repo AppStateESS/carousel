@@ -32,16 +32,16 @@ export default class Carousel extends Listing {
         <div className="dropdown">
           <button
             type="button"
-            id="dropdownMenuButton"
             data-toggle="dropdown"
             aria-haspopup="true"
-            className="btn btn-outline-secondary">
+            className="btn btn-outline-secondary"
+            id="dropdownMenuButton">
             <FontAwesomeIcon icon={faBars}/>
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a
               className="dropdown-item pointer"
-              href={`./carousel/Admin/Slide/?carousel=${this.state.listing[key].id}`}>Slides</a>
+              href={`./carousel/Admin/Slide/?carouselId=${this.state.listing[key].id}`}>Slides</a>
             <a
               className="dropdown-item pointer"
               href="#"
