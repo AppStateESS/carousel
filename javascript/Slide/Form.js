@@ -36,6 +36,8 @@ const Form = ({
       <div>{dropzone.meta.width} x {dropzone.meta.height} px - ratio {ratio(dropzone.meta.width, dropzone.meta.height)}</div>
     )
   }
+  
+  const disableSave = dropzone.file === null && resource.filepath.length === 0
   return (
     <div>
       <div className="mb-3">
@@ -138,7 +140,7 @@ const Form = ({
         <button
           className="btn btn-success"
           onClick={save}
-          disabled={dropzone.file === null}>Save slide</button>
+          disabled={disableSave}>Save slide</button>
       </div>
     </div>
   )
