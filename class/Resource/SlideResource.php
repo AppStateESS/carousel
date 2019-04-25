@@ -39,6 +39,11 @@ class SlideResource extends AbstractResource
     protected $active;
     protected $width;
     protected $height;
+    /**
+     * 0 image
+     * 1 video
+     * @var phpws2\Variable\IntegerVar
+     */
     protected $type;
     protected $table = 'caro_slide';
 
