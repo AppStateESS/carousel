@@ -58,6 +58,10 @@ class CarouselView extends AbstractView
             $active = false;
         }
         $vars = $carousel->getStringVars();
+        // no controls if only one slide.
+        if (count($slides)  === 1) {
+            $vars['controls'] = 0;
+        }
         $vars['slides'] = implode("\n", $htmlSlides);
         $template = new Template($vars);
         $template->setModuleTemplate('carousel', 'carousel.html');

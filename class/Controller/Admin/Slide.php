@@ -60,8 +60,7 @@ class Slide extends SubController
     protected function mediaPost(Request $request)
     {
         try {
-            $slide = $this->factory->load($request->pullPostInteger('slideId'));
-            $this->factory->postMedia($slide);
+            $slide = $this->factory->postMedia($request);
             $this->factory->save($slide);
             return ['success' => true];
         } catch (\Exception $e) {

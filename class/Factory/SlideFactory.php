@@ -117,16 +117,22 @@ class SlideFactory extends BaseFactory
         return $db->selectColumn();
     }
 
-    public function postMedia($slide)
+    public function postMedia(Request $request)
     {
+        $slide = $this->load($request->pullPostInteger('slideId'));
         $result = $this->upload($slide->carouselId);
 
         $slide->filepath = $result['filepath'];
         $slide->thumbnail = $result['thumbnail'];
         $slide->type = $result['type'];
-        $dim = getimagesize($slide->filepath);
-        $slide->width = $dim[0];
-        $slide->height = $dim[1];
+        if ($slide->type == 1) {
+            $slide->width = $request->pullPostInteger('videoWidth');
+            $slide->height = $request->pullPostInteger('videoHeight');
+        } else {
+            $dim = getimagesize($slide->filepath);
+            $slide->width = $dim[0];
+            $slide->height = $dim[1];
+        }
         return $slide;
     }
 
@@ -186,6 +192,16 @@ class SlideFactory extends BaseFactory
         return ['filepath' => $filepath, 'thumbnail' => $thumbnail];
     }
 
+    private function saveMedia(array $file, int $carouselId)
+    {
+        $filepath = $this->moveMedia($file, $carouselId);
+        $dirStack = explode('/', $filepath);
+        $filename = array_pop($dirStack);
+        $path = implode('/', $dirStack) . '/';
+        $thumbnail = '';
+        return ['filepath' => $filepath, 'thumbnail' => $thumbnail];
+    }
+
     /**
      * Creates a thumbnail based on object variables.
      */
@@ -213,11 +229,6 @@ class SlideFactory extends BaseFactory
         return $sourceDirectory . 'thumbnail/' . $filename;
     }
 
-    private function saveMedia(array $file, SlideResource $slide)
-    {
-        
-    }
-
     private function getImageOptions($pic, $imageDirectory, int $carouselId)
     {
         $imageDirectory = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
@@ -225,7 +236,19 @@ class SlideFactory extends BaseFactory
         $options = array(
             'max_width' => CAROUSEL_SYSTEM_SETTINGS['maxWidth'],
             'max_height' => CAROUSEL_SYSTEM_SETTINGS['maxHeight'],
-            'current_image_extensions' => true,
+            'param_name' => 'file',
+            'upload_dir' => $imagePath,
+            'upload_url' => \Canopy\Server::getSiteUrl(true) . $imageDirectory,
+            'image_versions' => array()
+        );
+        return $options;
+    }
+    
+    private function getMediaOptions($pic, $imageDirectory, int $carouselId)
+    {
+        $imageDirectory = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
+        $imagePath = PHPWS_HOME_DIR . $imageDirectory;
+        $options = array(
             'param_name' => 'file',
             'upload_dir' => $imagePath,
             'upload_url' => \Canopy\Server::getSiteUrl(true) . $imageDirectory,
@@ -241,6 +264,18 @@ class SlideFactory extends BaseFactory
         }
         $destination = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
         $options = $this->getImageOptions($pic, $destination, $carouselId);
+        $upload_handler = new UploadHandler($options, false);
+        $result = $upload_handler->post(false);
+        return $destination . $result['file'][0]->name;
+    }
+    
+    public function moveMedia($file, int $carouselId)
+    {
+        if ($file['error'] !== 0) {
+            throw new \Exception('Upload error');
+        }
+        $destination = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
+        $options = $this->getMediaOptions($file, $destination, $carouselId);
         $upload_handler = new UploadHandler($options, false);
         $result = $upload_handler->post(false);
         return $destination . $result['file'][0]->name;

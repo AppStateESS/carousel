@@ -8,7 +8,7 @@ import ratio from '../Extends/ratio'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
 import {NavbarLink} from '@essappstate/react-navbar'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faBars} from '@fortawesome/free-solid-svg-icons'
+import {faBars, faVideo} from '@fortawesome/free-solid-svg-icons'
 import './style.scss'
 
 /* global carouselId, carouselTitle, $ */
@@ -52,7 +52,7 @@ export default class Slide extends Listing {
             id="dropdownMenuButton"
             data-toggle="dropdown"
             aria-haspopup="true"
-          aria-expanded="false">
+            aria-expanded="false">
             <FontAwesomeIcon icon={faBars}/>
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -78,7 +78,11 @@ export default class Slide extends Listing {
       }, {
         column: 'thumbnail',
         callback: (value) => {
-          return <img src={value.thumbnail}/>
+          if (value.thumbnail == '') {
+            return <FontAwesomeIcon icon={faVideo} size="lg"/>
+          } else {
+            return <img src={value.thumbnail}/>
+          }
         }
       }, {
         column: 'title',
@@ -181,7 +185,10 @@ export default class Slide extends Listing {
   upload(dropzone) {
     const {resource} = this.state
     if (resource.title.length === 0) {
-      resource.title = dropzone.file.name.replace(/\.(jpg|jpeg|png|gif)$/, '')
+      resource.title = dropzone.file.name.replace(
+        /\.(jpg|jpeg|png|gif|mp4|webm)$/,
+        ''
+      )
       resource.title = resource.title.replace(/-/, ' ')
       resource.title = resource.title.charAt(0).toUpperCase() + resource.title.slice(
         1
@@ -198,9 +205,14 @@ export default class Slide extends Listing {
   }
 
   saveMedia(slideId) {
+    const {dropzone} = this.state
     const formData = new FormData()
     formData.append('slideId', slideId)
-    formData.append('file', this.state.dropzone.file)
+    formData.append('file', dropzone.file)
+    if (dropzone.meta.videoWidth !== undefined) {
+      formData.append('videoWidth', dropzone.meta.videoWidth)
+      formData.append('videoHeight', dropzone.meta.videoHeight)
+    }
     $.ajax({
       url: './carousel/Admin/Slide/media',
       data: formData,
@@ -218,9 +230,9 @@ export default class Slide extends Listing {
       },
       error: (data) => {
         let message = <div>An unknown error occurred</div>
-        if (data.responseJSON.exception.message !== undefined) {
+        if (data.responseJSON !== undefined) {
           message = data.responseJSON.exception.message
-        } else if (data.exception.message !== undefined) {
+        } else if (data.exception !== undefined) {
           message = data.exception.message
         }
         this.setMessage(<div>{message}</div>)

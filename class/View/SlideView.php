@@ -27,8 +27,7 @@ class SlideView extends AbstractView
         }
     }
 
-    public function imageSlide(SlideResource $slide, bool $active = false)
-    {
+    private function getSlideVars(SlideResource $slide, bool $active = false) {
         $vars = $slide->getStringVars();
         $vars['active'] = $active;
         
@@ -59,6 +58,12 @@ class SlideView extends AbstractView
         } else {
             $vars['caption_title'] = $slide->title;
         }
+        return $vars;
+    }
+    
+    public function imageSlide(SlideResource $slide, bool $active = false)
+    {
+        $vars = $this->getSlideVars($slide, $active);
         $template = new Template($vars);
         $template->setModuleTemplate('carousel', 'imageSlide.html');
         return $template->get();
@@ -66,8 +71,8 @@ class SlideView extends AbstractView
 
     public function mediaSlide(SlideResource $slide, bool $active = false)
     {
-        $vars = $slide->getStringVars();
-        $vars['active'] = $active;
+        $vars = $this->getSlideVars($slide, $active);
+        $vars['videoType'] = preg_match('/\.mp4$/', $slide->filepath) ? 'video/mp4' : 'video/webm';
         $template = new Template($vars);
         $template->setModuleTemplate('carousel', 'mediaSlide.html');
         return $template->get();

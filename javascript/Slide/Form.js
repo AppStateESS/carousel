@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import Dropzone from 'react-dropzone-uploader'
 import ratio from '../Extends/ratio'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faVideo} from '@fortawesome/free-solid-svg-icons'
 import './style.scss'
 import 'react-dropzone-uploader/dist/styles.css'
 
@@ -22,21 +24,51 @@ const Form = ({
     </div>
   )
   if (resource.filepath.length > 0) {
-    uploadPrompt = <div key="1"><img className="preview" src={resource.filepath}/></div>
+    if (resource.type == '0') {
+      uploadPrompt = (
+        <div key="1"><img className="preview" src={resource.filepath}/></div>
+      )
+    } else {
+      uploadPrompt = (
+        <div className="text-center" key="1">
+          <FontAwesomeIcon icon={faVideo} size="4x"/>
+          <h3>{resource.filepath.replace(/.*\/([\w\s\.\-]+)/, '$1')}</h3>
+        </div>
+      )
+    }
   }
 
   const Preview = (props) => {
     const {meta} = props
-    return (<div key="1"><img className="preview" src={meta.previewUrl}/></div>)
+    if (meta.type.match(/^video/)) {
+      return (
+        <div className="text-center">
+          <FontAwesomeIcon icon={faVideo} size="4x"/>
+          <h3>{meta.name}</h3>
+        </div>
+      )
+    } else {
+      return (<div key="1"><img className="preview" src={meta.previewUrl}/></div>)
+    }
   }
 
   let dimensions
   if (dropzone.file !== null) {
-    dimensions = (
-      <div>{dropzone.meta.width} x {dropzone.meta.height} px - ratio {ratio(dropzone.meta.width, dropzone.meta.height)}</div>
-    )
+    if (dropzone.meta.type.match(/^video/)) {
+      dimensions = (
+        <div>
+          {dropzone.meta.videoWidth}&nbsp;x&nbsp;{dropzone.meta.videoHeight}
+          px - ratio {ratio(dropzone.meta.videoWidth, dropzone.meta.videoHeight)}
+        </div>
+      )
+    } else {
+      dimensions = (
+        <div>{dropzone.meta.width}&nbsp;x&nbsp;{dropzone.meta.height}
+          px - ratio {ratio(dropzone.meta.width, dropzone.meta.height)}</div>
+      )
+    }
   }
-  
+
   const disableSave = dropzone.file === null && resource.filepath.length === 0
   return (
     <div>
@@ -57,7 +89,7 @@ const Form = ({
         canCancel={true}
         canRestart={true}
         minSizeBytes={1024}
-        maxSizeBytes={8388608}
+        maxSizeBytes={18388608}
         PreviewComponent={Preview}
         inputContent={uploadPrompt}
         autoUpload={true}/>
@@ -137,10 +169,7 @@ const Form = ({
         </div>
       </div>
       <div className="text-center">
-        <button
-          className="btn btn-success"
-          onClick={save}
-          disabled={disableSave}>Save slide</button>
+        <button className="btn btn-success" onClick={save} disabled={disableSave}>Save slide</button>
       </div>
     </div>
   )
