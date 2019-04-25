@@ -61,7 +61,7 @@ abstract class AbstractView
     protected function getAssetPath($scriptName)
     {
         if (!is_file($this->getDirectory() . 'assets.json')) {
-            exit('Missing assets.json file. Run "npm run build" in the stories directory.');
+            exit('Missing assets.json file. Run "npm run build" in the carousel directory.');
         }
         $jsonRaw = file_get_contents($this->getDirectory() . 'assets.json');
         $json = json_decode($jsonRaw, true);
@@ -79,10 +79,10 @@ abstract class AbstractView
      * @param array $vars
      * @return string
      */
-    public function scriptView($view_name, $add_anchor = true, $vars = null)
+    public function scriptView($view_name, $add_anchor = true, $vars = null, $skip_vendor = false)
     {
         static $vendor_included = false;
-        if (!$vendor_included) {
+        if (!$vendor_included && !$skip_vendor) {
             $script[] = $this->getScript('vendor');
             $vendor_included = true;
         }
