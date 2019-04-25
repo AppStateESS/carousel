@@ -43,7 +43,7 @@ class Slide extends SubController
     protected function listHtml(Request $request)
     {
         \Layout::hideDefault();
-        $carouselId = $request->pullGetInteger('carousel');
+        $carouselId = $request->pullGetInteger('carouselId');
         $carouselFactory = new \carousel\Factory\CarouselFactory;
         $carousel = $carouselFactory->load($carouselId);
         return $this->view->scriptView('Slide', true,
@@ -52,7 +52,8 @@ class Slide extends SubController
 
     protected function listJson(Request $request)
     {
-        $listing = $this->factory->listing();
+        $carouselId = $request->pullGetInteger('carouselId');
+        $listing = $this->factory->listing(['carouselId'=>$carouselId]);
         return ['listing' => $listing];
     }
 
