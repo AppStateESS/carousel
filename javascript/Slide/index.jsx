@@ -52,15 +52,17 @@ export default class Slide extends Listing {
             id="dropdownMenuButton"
             data-toggle="dropdown"
             aria-haspopup="true"
-            aria-expanded="false">
+          aria-expanded="false">
             <FontAwesomeIcon icon={faBars}/>
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a
-              className="dropdown-item pointer"
+              href="#"
+              className="dropdown-item"
               onClick={this.editResource.bind(this, key)}>Edit</a>
             <a
-              className="dropdown-item pointer"
+              href="#"
+              className="dropdown-item"
               onClick={this.deleteResource.bind(this, key)}>Delete</a>
           </div>
         </div>
@@ -105,6 +107,10 @@ export default class Slide extends Listing {
     this.toggleActive = this.toggleActive.bind(this)
   }
 
+  load() {
+    super.load({carouselId: this.props.carouselId})
+  }
+
   dropzoneReset() {
     const {dropzone} = this.state
     dropzone.remove()
@@ -120,18 +126,20 @@ export default class Slide extends Listing {
 
   handleRowSort({oldIndex, newIndex}) {
     if (oldIndex === newIndex) {
-      return 
+      return
     }
-    
+
     $.ajax({
       url: `./carousel/Admin/Slide/${this.state.listing[oldIndex].id}/sort`,
-      data: {position: this.state.listing[newIndex].id},
+      data: {
+        position: this.state.listing[newIndex].id
+      },
       dataType: 'json',
       type: 'patch',
-      success: ()=>{
+      success: () => {
         this.load()
       },
-      error: (data)=>this.error(data)
+      error: (data) => this.error(data)
     })
   }
 
@@ -175,6 +183,9 @@ export default class Slide extends Listing {
     if (resource.title.length === 0) {
       resource.title = dropzone.file.name.replace(/\.(jpg|jpeg|png|gif)$/, '')
       resource.title = resource.title.replace(/-/, ' ')
+      resource.title = resource.title.charAt(0).toUpperCase() + resource.title.slice(
+        1
+      )
     }
     this.setState({resource, dropzone})
   }
@@ -219,7 +230,16 @@ export default class Slide extends Listing {
 
   success(data) {
     if (data.success) {
-      this.saveMedia(data.slideId)
+      if (this.state.dropzone.file !== null) {
+        this.saveMedia(data.slideId)
+      } else {
+        this.load()
+        this.setMessage(
+          <div>
+            <i className="far fa-thumbs-up"></i>&nbsp;Save successful.</div>,
+          'success'
+        )
+      }
     } else {
       this.setMessage(
         <div>
