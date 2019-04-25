@@ -45,7 +45,18 @@ class SlideFactory extends BaseFactory
         $db = Database::getDB();
         $tbl = $db->addTable('caro_slide');
         $tbl->addOrderBy('queue');
-        $result = $db->select();
+        if (!empty($options['carouselId'])) {
+            $tbl->addFieldConditional('carouselId', $options['carouselId']);
+        }
+        if (!empty($options['activeOnly'])) {
+            $tbl->addFieldConditional('active', 1);
+        }
+
+        if (!empty($options['asResource'])) {
+            $result = $db->selectAsResources('\\carousel\\Resource\\SlideResource');
+        } else {
+            $result = $db->select();
+        }
         return $result;
     }
 
@@ -53,8 +64,9 @@ class SlideFactory extends BaseFactory
     {
         try {
             unlink($slide->filepath);
+            unlink($slide->thumbnail);
             $this->deleteResource($slide);
-            $this->resort($slide);
+            $this->requeue($slide);
         } catch (\Exception $e) {
             return $this->deleteResource($slide);
         }
@@ -107,10 +119,11 @@ class SlideFactory extends BaseFactory
 
     public function postMedia($slide)
     {
-        $paths = $this->upload($slide->carouselId);
+        $result = $this->upload($slide->carouselId);
 
-        $slide->filepath = $paths['filepath'];
-        $slide->thumbnail = $paths['thumbnail'];
+        $slide->filepath = $result['filepath'];
+        $slide->thumbnail = $result['thumbnail'];
+        $slide->type = $result['type'];
         $dim = getimagesize($slide->filepath);
         $slide->width = $dim[0];
         $slide->height = $dim[1];
@@ -152,13 +165,15 @@ class SlideFactory extends BaseFactory
         $file = $_FILES['file'];
 
         if (in_array($file['type'], $imageTypes)) {
-            $paths = $this->saveImage($file, $carouselId);
+            $result = $this->saveImage($file, $carouselId);
+            $result['type'] = 0;
         } elseif (in_array($file['type'], $videoTypes)) {
-            $paths = $this->saveMedia($file, $carouselId);
+            $result = $this->saveMedia($file, $carouselId);
+            $result['type'] = 1;
         } else {
             throw carousel\Exception\WrongFileType;
         }
-        return $paths;
+        return $result;
     }
 
     private function saveImage(array $file, int $carouselId)
@@ -202,7 +217,7 @@ class SlideFactory extends BaseFactory
     {
         
     }
-    
+
     private function getImageOptions($pic, $imageDirectory, int $carouselId)
     {
         $imageDirectory = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
@@ -231,10 +246,10 @@ class SlideFactory extends BaseFactory
         return $destination . $result['file'][0]->name;
     }
 
-    public function resort(int $slideId, int $newPosition)
+    public function resort(int $slideId, int $newPositionId)
     {
         $slide = $this->load($slideId);
-        $sortTo = $this->load($newPosition);
+        $sortTo = $this->load($newPositionId);
         $sortable = new \phpws2\Sortable('caro_slide', 'queue');
         $sortable->setAnchor('carouselId', $slide->carouselId);
         $sortable->moveTo($slideId, $sortTo->queue);
