@@ -98,7 +98,7 @@ export default class Listing extends Component {
   deleteResource(key, e) {
     e.preventDefault()
     const resource = this.state.listing[key]
-    if (confirm('Are you sure you want to delete this carousel along with all it\'s slides?')) {
+    if (confirm('Are you sure you want to delete this item along with all its content?')) {
       $.ajax({
         url: this.getUrl() + '/' + resource.id,
         dataType: 'json',
@@ -164,15 +164,17 @@ export default class Listing extends Component {
     return `${this.module}/${this.role}/${this.control}`
   }
 
-  load() {
+  load(otherData = {}) {
     const url = this.getUrl()
+    const data = {
+      search: this.state.search,
+      sortBy: this.sortBy,
+      sortByDir: this.sortByDir
+    }
+    const sendData = Object.assign(otherData, data)
     $.ajax({
       url,
-      data: {
-        search: this.state.search,
-        sortBy: this.sortBy,
-        sortByDir: this.sortByDir
-      },
+      data: sendData,
       dataType: 'json',
       type: 'get',
       success: (data) => {
@@ -236,9 +238,9 @@ export default class Listing extends Component {
 
   error(data) {
     let message = 'unknown'
-    if (data.responseJSON.exception.message !== undefined) {
+    if (data.responseJSON !== undefined) {
       message = data.responseJSON.exception.message
-    } else if (data.exception.message !== undefined) {
+    } else if (data.exception !== undefined) {
       message = data.exception.message
     }
     this.setMessage(
