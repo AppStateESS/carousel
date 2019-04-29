@@ -4,6 +4,7 @@ import {Navbar, NavbarButton, NavbarSearch} from '@essappstate/react-navbar'
 import Waiting from '@essappstate/react-waiting'
 import Grid from './Grid'
 import Overlay from '@essappstate/canopy-react-overlay'
+import './Listing.scss'
 /* global $ */
 
 export function debounce(fn, delay) {
@@ -42,6 +43,7 @@ export default class Listing extends Component {
     this.sortBy = null
     this.sortByDir = 0
     this.defaultResource = {}
+    this.clearMessage = this.clearMessage.bind(this)
     this.save = this.save.bind(this)
     this.load = this.load.bind(this)
     this.reset = this.reset.bind(this)
@@ -254,12 +256,12 @@ export default class Listing extends Component {
   }
 
   message() {
-    const cn = `alert alert-${this.state.messageType} alert-dismissible fade show`
+    const cn = `fixed-message alert alert-${this.state.messageType} fade show alert-dismissible`
     if (this.state.message) {
       return (
         <div className={cn}>
           <span>{this.state.message}</span>
-          <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+          <button type="button" className="close" onClick={this.clearMessage} aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
