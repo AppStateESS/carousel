@@ -65,6 +65,29 @@ export default class Form extends Component {
       activeColor="primary"/>
   }
 
+  transition() {
+    const {resource, update} = this.props
+    const buttons = [
+      {
+        value: '0',
+        label: (<span>
+          Slide
+        </span>)
+      }, {
+        value: '1',
+        label: (<span>Fade</span>)
+      }
+    ]
+    return (
+      <ButtonGroup
+        name="transition"
+        buttons={buttons}
+        match={resource.transition}
+        handle={update.bind(this, 'transition')}
+        activeColor="primary"/>
+    )
+  }
+
   indicator() {
     const {resource, update} = this.props
     const buttons = [
@@ -121,12 +144,15 @@ export default class Form extends Component {
           value={resource.title}
           onChange={update.bind(this, 'title')}/>
         <div className="row">
-          <div className="col-sm-6 mb-3">
+          <div className="col-sm-4 mb-3">
             <label className="lead">Iterations</label>
             <div className="d-inline">{this.iterations()}</div>
           </div>
-          <div className="col-sm-6 mb-3">
+          <div className="col-sm-4 mb-3">
             <label className="lead">Interval</label>{this.intervalTime()}
+          </div>
+          <div className="col-sm-4 mb-3">
+            <label className="lead">Transition</label>{this.transition()}
           </div>
           <div className="col-sm-6 mb-3">
             <label className="lead">Indicator</label>{this.indicator()}
@@ -145,5 +171,5 @@ Form.propTypes = {
   resource: PropTypes.object,
   finish: PropTypes.func,
   save: PropTypes.func,
-  update: PropTypes.func,
+  update: PropTypes.func
 }
