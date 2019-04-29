@@ -19,6 +19,11 @@ class CarouselResource extends AbstractResource
 
     protected $id;
     protected $title;
+    /**
+     *
+     * @var phpws2\Variable\IntegerVar
+     */
+    protected $transition;
     protected $iterations;
     protected $intervalTime;
     protected $indicator;
@@ -33,11 +38,12 @@ class CarouselResource extends AbstractResource
     {
         parent::__construct();
         $this->title = new \phpws2\Variable\StringVar('', 'title');
-        $this->iterations = new \phpws2\Variable\IntegerVar(2, 'iterations');
+        $this->transition = new \phpws2\Variable\SmallInteger(0, 'transition');
+        $this->iterations = new \phpws2\Variable\SmallInteger(2, 'iterations');
         $this->iterations->setRange(0,3);
-        $this->intervalTime = new \phpws2\Variable\IntegerVar(4, 'intervalTime');
+        $this->intervalTime = new \phpws2\Variable\SmallInteger(4, 'intervalTime');
         $this->intervalTime->setRange(1,10);
-        $this->indicator = new \phpws2\Variable\IntegerVar(0, 'indicator');
+        $this->indicator = new \phpws2\Variable\SmallInteger(0, 'indicator');
         $this->indicator->setRange(0,3);
         $this->controls = new \phpws2\Variable\BooleanVar(true, 'controls');
         $this->pause = new \phpws2\Variable\BooleanVar(true, 'pause');
