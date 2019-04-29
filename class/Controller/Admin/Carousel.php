@@ -77,5 +77,19 @@ class Carousel extends SubController
         $this->factory->toggleFrontPage($this->id);
         return ['success'=>true, 'id'=>$this->id];
     }
+    
+    protected function pinPut(Request $request)
+    {
+        $keyId = $request->pullPutInteger('keyId');
+        $this->factory->pin($this->id, $keyId);
+        return ['success'=>true];
+    }
+    
+    protected function unpinPut(Request $request)
+    {
+        $keyId = $request->pullPutInteger('keyId');
+        $this->factory->unpin($this->id, $keyId);
+        return ['success'=>true];
+    }
 
 }

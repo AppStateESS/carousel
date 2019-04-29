@@ -21,7 +21,7 @@ if (is_file(PHPWS_SOURCE_DIR . 'mod/carousel/config/defines.php')) {
     require_once PHPWS_SOURCE_DIR . 'mod/carousel/config/defines.dist.php';
 }
 
-class Module extends \Canopy\Module implements \Canopy\SettingDefaults
+class Module extends \Canopy\Module
 {
 
     public function __construct()
@@ -71,26 +71,38 @@ class Module extends \Canopy\Module implements \Canopy\SettingDefaults
         }
     }
 
-    public function getSettingDefaults()
+    public function runTime(Request $request)
     {
-        $s['min_width'] = 1000;
-        $s['min_height'] = 100;
-        $s['iteration'] = 0;
-        $s['time_interval'] = 5;
-        $s['display_mobile'] = false;
-        // transition 0 slide, 1 fade
-        $s['transition'] = 0;
-        $s['indicator'] = 0;
-        return $s;
-    }
-
-    public function runTime(Request $request) {
         if (!$request->isVar('module')) {
             $view = new CarouselView;
             \Layout::add($view->homeView(), 'carousel', 'slides');
         }
     }
+
+    public function afterRun(Request $request, \Canopy\Response $response)
+    {
+        $key = \Canopy\Key::getCurrent();
+        if ($key && !$key->isDummy() && !$key->isHomeKey()) {
+            if (\Current_User::allow('carousel')) {
+                $this->pinForm($key->id);
+            }
+            $this->viewPinned($key->id);
+        }
+    }
+
+    private function viewPinned($keyId)
+    {
+        $carouselView = new View\CarouselView;
+        \Layout::add($carouselView->viewPinned($keyId), 'carousel', 'slides');
+    }
     
+    private function pinForm($keyId)
+    {
+        $carouselView = new View\CarouselView;
+        $content = $carouselView->miniAdmin($keyId);
+        \MiniAdmin::add('carousel', $content);
+    }
+
     /*
       public function runTime(\Canopy\Request $request)
       {
