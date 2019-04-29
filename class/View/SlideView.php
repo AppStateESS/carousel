@@ -27,10 +27,11 @@ class SlideView extends AbstractView
         }
     }
 
-    private function getSlideVars(SlideResource $slide, bool $active = false) {
+    private function getSlideVars(SlideResource $slide, bool $active = false)
+    {
         $vars = $slide->getStringVars();
         $vars['active'] = $active;
-        
+
         switch ($slide->caption_zone) {
             case 0:
                 $vars['vertical'] = 'bottom';
@@ -60,7 +61,7 @@ class SlideView extends AbstractView
         }
         return $vars;
     }
-    
+
     public function imageSlide(SlideResource $slide, bool $active = false)
     {
         $vars = $this->getSlideVars($slide, $active);
