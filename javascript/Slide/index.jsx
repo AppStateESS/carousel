@@ -59,11 +59,13 @@ export default class Slide extends Listing {
             <a
               href="#"
               className="dropdown-item"
-              onClick={this.editResource.bind(this, key)}>Edit</a>
+              onClick={this.editResource.bind(this, key)}>
+              <i className="fas fa-edit"></i>&nbsp;Edit</a>
             <a
               href="#"
               className="dropdown-item"
-              onClick={this.deleteResource.bind(this, key)}>Delete</a>
+              onClick={this.deleteResource.bind(this, key)}>
+              <i className="fas fa-trash"></i>&nbsp;Delete</a>
           </div>
         </div>
       )
@@ -199,7 +201,7 @@ export default class Slide extends Listing {
 
   navLeft() {
     const left = super.navLeft()
-    const back = <NavbarLink href="./carousel/Admin/Carousel">Carousel list</NavbarLink>
+    const back = <NavbarLink href="./carousel/Admin/Carousel"><i className="fas fa-list"></i>&nbsp;Carousel list</NavbarLink>
     left.push(back)
     return left
   }
