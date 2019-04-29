@@ -12,8 +12,14 @@ function carousel_uninstall(&$content)
     if ($db->tableExists('caro_slide')) {
         $tbl = $db->buildTable('caro_slide');
         $tbl->drop();
-        $tbl2 = $db->buildTable('caro_keyed_slide');
-        $tbl2->drop();
+    }
+    if ($db->tableExists('caro_carousel')) {
+        $tbl = $db->buildTable('caro_carousel');
+        $tbl->drop();
+    }
+    if ($db->tableExists('caro_pin')) {
+        $tbl = $db->buildTable('caro_pin');
+        $tbl->drop();
     }
     return true;
 }
