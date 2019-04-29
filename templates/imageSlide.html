@@ -1,11 +1,10 @@
 <div class="carousel-item<?= $active ? ' active' : null?>">
   <img
     src="<?=$filepath?>"
-    data-url="<?=$url?>"
+    data-url="//<?=$url?>"
     class="carousel-slide-image d-block w-100"
     alt="<?=$title?>"
-    data-slide-number="<?=$id?>"
-    title="<?=$title?>">
+    data-slide-number="<?=$id?>">
   <?php if (!empty($caption)): ?>
   <div class="carousel-caption <?=$vertical?>">
     <div class="carousel-container <?=$horizontal?>">
