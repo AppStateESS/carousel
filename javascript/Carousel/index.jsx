@@ -20,6 +20,7 @@ export default class Carousel extends Listing {
     this.defaultResource = {
       id: '0',
       title: '',
+      transition: '1',
       iterations: '2',
       intervalTime: '4',
       indicator: '0',
@@ -35,21 +36,23 @@ export default class Carousel extends Listing {
             data-toggle="dropdown"
             aria-haspopup="true"
             className="btn btn-outline-secondary"
-            id="dropdownMenuButton">
+          id="dropdownMenuButton">
             <FontAwesomeIcon icon={faBars}/>
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a
               className="dropdown-item pointer"
-              href={`./carousel/Admin/Slide/?carouselId=${this.state.listing[key].id}`}>Slides</a>
+              href={`./carousel/Admin/Slide/?carouselId=${this.state.listing[key].id}`}><i className="fas fa-images"></i>&nbsp;Slides</a>
             <a
               className="dropdown-item pointer"
               href="#"
-              onClick={this.editResource.bind(this, key)}>Edit</a>
+              onClick={this.editResource.bind(this, key)}>
+              <i className="fas fa-edit"></i>&nbsp;Edit</a>
             <a
               className="dropdown-item pointer"
               href="#"
-              onClick={this.deleteResource.bind(this, key)}>Delete</a>
+              onClick={this.deleteResource.bind(this, key)}>
+              <i className="fas fa-trash"></i>&nbsp;Delete</a>
           </div>
         </div>
       )
@@ -126,6 +129,10 @@ export default class Carousel extends Listing {
         resource={this.state.resource}
         save={this.save}/>
     )
+  }
+  
+  title() {
+    return <h2>Carousels</h2>
   }
 
   overlay() {
