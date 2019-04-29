@@ -31,14 +31,26 @@
   margin: 0 auto;
 }
 
+.carousel-thumbnails .carousel-indicators.thumbnail {
+  background-color : rgba(0,0,0,.7);
+  bottom : 0px;
+  li {
+    height: auto;
+    width: 100px;
+    text-indent: inherit;
+    background-color: inherit;
+
+  }
+}
+
 .carousel-caption {
   div.title {
-    background-color: rgba(0,0,0, 0.7);
+    background-color: rgba(0,0,0, 0.3);
     text-align: left;
     padding: 4px 8px;
 
     h3 {
-      color: #ffcc00;
+      color: white;
       margin: 0;
 
       a {
@@ -53,19 +65,8 @@
 
   div.content {
     text-align: left;
-    background-color: rgba(255, 255, 255, 0.7);
-    color: black;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
     padding: 4px 8px;
   }
-}
-/* hides arrow until mouse over */
-.carousel .carousel-control,
-.carousel .carousel-indicators {
-  opacity: 0;
-  transition: opacity 1s linear;
-}
-
-.carousel:hover .carousel-control,
-.carousel:hover .carousel-indicators {
-  opacity: 1;
 }
