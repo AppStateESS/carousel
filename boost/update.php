@@ -1,8 +1,10 @@
 <?php
-
 /**
  * @author Matthew McNaney <mcnaneym@appstate.edu>
  */
+
+require_once PHPWS_SOURCE_DIR . 'mod/carousel/boost/Version2.php';
+
 function carousel_update(&$content, $version)
 {
     switch ($version) {
@@ -21,19 +23,16 @@ function carousel_update(&$content, $version)
 + Fixed keyed Carousel images not showing.
 </pre>';
         case version_compare($version, '2.0.0', '<'):
-            $db = \phpws2\Database::getDB();
-            $tbl = $db->addTable('controlpanel_link');
-            $tbl->addValue('url', 'carousel/Admin/List');
-            $tbl->addFieldConditional('itemname', 'carousel');
-            $db->update();
+            $version2 = new Version2;
+            $version2->runUpdate();
+            
             $content[] = '<pre>2.0.0
 --------------------
-+ Rewrite
++ Rewrite of Carousel
++ Multiple Carousels
++ Ability to use videos
++ Pinning of Carousels to pages.
 </pre>';
-            $db->clearConditional();
-            $db->clearTables();
-            $carousel = new \carousel\Resource\CarouselResource;
-            $carousel->createTable($db);
     } // end of switch
 
     return true;
