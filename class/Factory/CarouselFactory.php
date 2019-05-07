@@ -76,6 +76,10 @@ class CarouselFactory extends BaseFactory
         self::deleteResource($carousel);
     }
 
+    /**
+     * 
+     * @return \carousel\Resource\CarouselResource
+     */
     public function getHomeCarousel()
     {
         $db = Database::getDB();
