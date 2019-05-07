@@ -40,7 +40,7 @@ class CarouselResource extends AbstractResource
         $this->title = new \phpws2\Variable\StringVar('', 'title');
         $this->transition = new \phpws2\Variable\SmallInteger(0, 'transition');
         $this->iterations = new \phpws2\Variable\SmallInteger(2, 'iterations');
-        $this->iterations->setRange(0,3);
+        $this->iterations->setRange(0,5);
         $this->intervalTime = new \phpws2\Variable\SmallInteger(4, 'intervalTime');
         $this->intervalTime->setRange(1,10);
         $this->indicator = new \phpws2\Variable\SmallInteger(0, 'indicator');
