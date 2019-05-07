@@ -102,7 +102,10 @@ class SlideFactory extends BaseFactory
         $slide->url = $request->pullPostString('url');
         $slide->caption_zone = $request->pullPostInteger('caption_zone');
         $slide->active = $request->pullPostBoolean('active');
+        $slide->opacity = $request->pullPostInteger('opacity');
         $slide->queue = $this->lastSlide($slide->carouselId) + 1;
+        $slide->filepath = '';
+        $slide->thumbnail = '';
 
         return $slide;
     }
@@ -145,6 +148,7 @@ class SlideFactory extends BaseFactory
         $slide->caption = $request->pullPutString('caption');
         $slide->url = $request->pullPutString('url');
         $slide->caption_zone = $request->pullPutInteger('caption_zone');
+        $slide->opacity = $request->pullPutInteger('opacity');
         $slide->active = $request->pullPutBoolean('active');
 
         return $slide;
