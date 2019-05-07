@@ -30,11 +30,12 @@ class SlideView extends AbstractView
     private function getSlideVars(SlideResource $slide, bool $active = false)
     {
         $vars = $slide->getStringVars();
+        $vars['url'] = $slide->removeUrlProtocol();
         $vars['active'] = $active;
 
         switch ($slide->caption_zone) {
             case 0:
-                $vars['vertical'] = 'bottom';
+                $vars['vertical'] = 'center';
                 $vars['horizontal'] = 'center';
                 break;
             case 1:
@@ -53,9 +54,18 @@ class SlideView extends AbstractView
                 $vars['horizontal'] = 'right';
                 $vars['vertical'] = 'bottom';
                 break;
+            case 5:
+                $vars['horizontal'] = 'center';
+                $vars['vertical'] = 'top';
+                break;
+            case 6:
+                $vars['horizontal'] = 'center';
+                $vars['vertical'] = 'bottom';
+                break;
         }
+        
         if (!empty($slide->url) && !empty($slide->title)) {
-            $vars['caption_title'] = '<a href="' . $slide->url . '">' . $slide->title . '</a>';
+            $vars['caption_title'] = '<a href="//' . $slide->removeUrlProtocol() . '">' . $slide->title . '</a>';
         } else {
             $vars['caption_title'] = $slide->title;
         }
