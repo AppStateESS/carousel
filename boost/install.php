@@ -9,15 +9,27 @@ function carousel_install(&$content)
     $db->begin();
 
     try {
-        $slide = new \carousel\Resource\Slide;
+        $slide = new \carousel\Resource\SlideResource;
         $st = $slide->createTable($db);
-        $keyed_slide = $db->buildTable('caro_keyed_slide');
-        $dt = $keyed_slide->addDataType('slide_id', 'int');
-        $dt = $keyed_slide->addDataType('key_id', 'int');
-        $keyed_slide->create();
+        
+        $carousel = new \carousel\Resource\CarouselResource;
+        $ct = $carousel->createTable($db);
+        
+        $caroPin = $db->buildTable('caro_pin');
+        $ci = $caroPin->addDataType('carouselId', 'int');
+        $ki = $caroPin->addDataType('keyId', 'int');
+        $caroPin->create();
+        $unique = new \phpws2\Database\Unique([$ci, $ki]);
+        $unique->add();
     } catch (\Exception $e) {
         if (isset($st) && $db->tableExists($st->getName())) {
             $st->drop();
+        }
+        if (isset($ct) && $db->tableExists($ct->getName())) {
+            $ct->drop();
+        }
+        if (isset($caroPin) && $db->tableExists($caroPin->getName())) {
+            $caroPin->drop();
         }
         $db->rollback();
         throw $e;

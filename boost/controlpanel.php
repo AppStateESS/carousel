@@ -5,7 +5,7 @@
  */
 $link[] = array('label' => 'Carousel',
     'restricted' => TRUE,
-    'url' => 'carousel/admin/',
+    'url' => 'carousel/Admin/Carousel',
     'description' => 'Image carousel for Bootstrap themes',
     'image' => 'carousel.gif',
     'tab' => 'content'
