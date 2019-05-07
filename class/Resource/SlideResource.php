@@ -33,6 +33,8 @@ class SlideResource extends AbstractResource
      * 2 = Top right
      * 3 = Bottom left
      * 4 = Bottom right
+     * 5 = Top center
+     * 6 = Bottom center
      * @var integer
      */
     protected $caption_zone;
@@ -45,6 +47,11 @@ class SlideResource extends AbstractResource
      * @var phpws2\Variable\IntegerVar
      */
     protected $type;
+    /**
+     *
+     * @var \phpws2\Variable\SmallInteger
+     */
+    protected $opacity;
     protected $table = 'caro_slide';
 
     public function __construct()
@@ -65,13 +72,24 @@ class SlideResource extends AbstractResource
         $this->url = new \phpws2\Variable\StringVar(null, 'url');
         $this->url->allowEmpty(1);
         $this->url->setInputType('textarea');
-        $this->caption_zone = new \phpws2\Variable\IntegerVar(0, 'caption_zone');
+        $this->caption_zone = new \phpws2\Variable\SmallInteger(0, 'caption_zone');
         $this->width = new \phpws2\Variable\IntegerVar(0, 'width');
         $this->width->setRange(0, 5000);
         $this->height = new \phpws2\Variable\IntegerVar(0, 'height');
         $this->height->setRange(0, 5000);
         $this->type = new \phpws2\Variable\IntegerVar(0, 'type');
         $this->type->setRange(0,2);
+        $this->opacity = new \phpws2\Variable\SmallInteger(50, 'opacity');
+        $this->opacity->setRange(0, 100);
     }
 
+    /**
+     * 
+     * @returns string
+     */
+    public function removeUrlProtocol()
+    {
+       return preg_replace('@^https?:/\/@', '', $this->url);
+    }
+    
 }
