@@ -8,6 +8,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faVideo} from '@fortawesome/free-solid-svg-icons'
 import './style.scss'
 import 'react-dropzone-uploader/dist/styles.css'
+import RangeSlider from '@gilbarbara/react-range-slider'
 
 const Form = ({
   update,
@@ -165,7 +166,24 @@ const Form = ({
             <option value="2" label="Top right">Top right</option>
             <option value="3" label="Bottom left">Bottom left</option>
             <option value="4" label="Bottom right">Bottom right</option>
+            <option value="5" label="Top center">Bottom right</option>
+            <option value="6" label="Bottom center">Bottom right</option>
           </select>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-sm-3">
+          <label>Background opacity</label>
+        </div>
+        <div className="col-sm-9">
+          <RangeSlider
+            axis="x"
+            xMin="0"
+            xMax="100"
+            x={resource.opacity}
+            onChange={({x}) => update('opacity', x)}
+          />
+          <div className="text-center">{resource.opacity}%</div>
         </div>
       </div>
       <div className="text-center">
