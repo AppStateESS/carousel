@@ -66,7 +66,7 @@ EOF;
             $filepath = $slide->filepath;
             return <<<EOF
 <li data-target="#carousel-slides" data-slide-to="$key" class="$className">
-<img src="$filepath" class="img-fluid" /></li>
+<img src="$filepath" /></li>
 EOF;
         }
     }
