@@ -77,7 +77,7 @@ export default class Listing extends Component {
   }
 
   overlayOn() {
-    this.setState({overlay: true})
+    this.setState({overlay: true, message: null})
   }
 
   overlayOff() {
