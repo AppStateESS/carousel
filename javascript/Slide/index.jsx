@@ -40,6 +40,7 @@ export default class Slide extends Listing {
       active: true,
       width: '0',
       height: '0',
+      opacity: '50',
       type: '0'
     }
 
