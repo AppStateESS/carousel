@@ -81,8 +81,8 @@ class Module extends \Canopy\Module
             $view = new CarouselView;
             $factory = new CarouselFactory;
             $carousel = $factory->getHomeCarousel();
-            $homeView = $view->view($carousel);
-            if (!empty($homeView)) {
+            if (!empty($carousel)) {
+                $homeView = $view->view($carousel);
                 \Layout::add($homeView, 'carousel', 'slides');
                 if (\Current_User::allow('carousel')) {
                     \MiniAdmin::add('carousel',
