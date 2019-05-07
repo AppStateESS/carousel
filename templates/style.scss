@@ -10,12 +10,16 @@
   width: 90%;
   left: 5%;
 
-  .top {
+  &.top {
     top: 5%;
   }
 
-  .bottom {
+  &.bottom {
     bottom: 13%;
+  }
+  
+  &.center {
+    top: 50%;
   }
 
   .carousel-container {
@@ -31,21 +35,28 @@
   margin: 0 auto;
 }
 
-.carousel-thumbnails .carousel-indicators.thumbnail {
-  background-color : rgba(0,0,0,.7);
-  bottom : 0px;
+.carousel-thumbnails ol.carousel-indicators.thumbnail {
+  margin-bottom : 5px;
   li {
-    height: auto;
-    width: 100px;
+    border : 2px solid white;
+    border-radius : 4px;
+    position : relative;
+    overflow: hidden;
+    text-align : center;
+    height: 50px;
+    width : 50px;
     text-indent: inherit;
     background-color: inherit;
-
+    img {
+      position : absolute;
+      left : -25px;
+      height: 50px;
+    }
   }
 }
 
 .carousel-caption {
   div.title {
-    background-color: rgba(0,0,0, 0.3);
     text-align: left;
     padding: 4px 8px;
 
@@ -54,8 +65,7 @@
       margin: 0;
 
       a {
-        color: #ffcc00;
-
+        color : white;
         &:hover {
           text-decoration: none;
         }
@@ -65,8 +75,13 @@
 
   div.content {
     text-align: left;
-    background-color: rgba(0, 0, 0, 0.3);
     color: white;
     padding: 4px 8px;
+    a {
+      color : white;
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 }
