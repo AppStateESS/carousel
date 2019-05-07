@@ -9,11 +9,11 @@
   <div class="carousel-caption <?=$vertical?>">
     <div class="carousel-container <?=$horizontal?>">
       <?php if ($show_title): ?>
-      <div class="title">
+      <div class="title" style="background-color: rgba(0,0,0, <?=$opacity?>%)">
         <h3><?=$caption_title?></h3>
       </div>
       <?php endif; ?>
-      <div class="content">
+      <div class="content" style="background-color: rgba(0,0,0, <?=$opacity?>%)">
         <?=$caption?>
       </div>
     </div>
