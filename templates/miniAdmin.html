@@ -1,6 +1,7 @@
 <?php if (!empty($unpinId)):?>
-  <div class="text-center mb-2">
+  <div class="mb-2">
     <button class="btn btn-outline-dark btn-sm" id="carousel-unpin-button" data-id="<?=$unpinId?>">Unpin current Carousel</button>
+    <a href="./carousel/Admin/Slide/?carouselId=<?=$unpinId?>">Edit current slides</a>
   </div>
 <?php else:?>
   <div class="input-group mb-2">
@@ -11,7 +12,7 @@
       <?php endforeach;?>
     </select>
     <div class="input-group-append">
-      <button type="button" id="carousel-pin-button" class="btn btn-primary btn-sm float-rigth">Pin</button>
+      <button type="button" id="carousel-pin-button" class="btn btn-primary btn-sm float-right">Pin</button>
     </div>
   </div>
 <?php endif;?>
