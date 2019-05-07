@@ -1,0 +1,18 @@
+sudo: false
+language: php
+php:
+- 7
+install:
+- npm install
+script:
+- ".travis-build/phplint ."
+deploy:
+  provider: releases
+  api_key:
+    secure: Ge0AhIEgxvlSETNfzxEZtdka17pJcZhPLTbs66k/jP5or8uC9vj8A0Q8G7wp95Z8GPkNqeuAWSoSk5tEHN3U1aWOhByd12mMvnbCDPjpRgQiP+vLtBEPmHpEkPjnlSmH5yHMi8Tkis+mwyR7Wi+wERrqP9qf+rYzoxilxFF+rxw=
+  file: "carousel.tar.gz"
+  overwrite: true
+  on:
+    repo: AppStateESS/carousel
+    branch: master
+    tags: true
