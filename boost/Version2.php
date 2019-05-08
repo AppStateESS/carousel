@@ -23,7 +23,6 @@ class Version2
     {
         $this->updateControlpanel();
         $this->createCarouselTable();
-        $this->createThumbnailDirectory();
         $this->createPinTable();
         $this->updateSlideTable();
         $carouselId = $this->createFirstCarousel();
@@ -91,14 +90,6 @@ class Version2
         return $carousel->id;
     }
 
-    private function createThumbnailDirectory()
-    {
-        $imgDirectory = PHPWS_HOME_DIR . 'images/carousel/thumbnail/';
-        if (!is_dir($imgDirectory)) {
-            mkdir($imgDirectory);
-        }
-    }
-
     private function updateSlideTable()
     {
         $db = \phpws2\Database::getDB();
@@ -120,18 +111,6 @@ class Version2
         $opacity->add();
     }
 
-    private function moveThumbnail($slide)
-    {
-        $filepath = $slide->filepath;
-        $oldThumbnailPath = preg_replace('/\.(png|jpeg)$/', '_tn.\\1', $filepath);
-        $pathArray = explode('/', $oldThumbnailPath);
-        $thumbnailFile = array_pop($pathArray);
-        $newPath = PHPWS_HOME_DIR . 'images/carousel/thumbnail/' . $thumbnailFile;
-        copy($oldThumbnailPath, $newPath);
-        unlink($oldThumbnailPath);
-        return 'images/carousel/thumbnail/' . $thumbnailFile;
-    }
-
     private function updateSlides($carouselId)
     {
         $db = \phpws2\Database::getDB();
@@ -144,7 +123,7 @@ class Version2
             $slide->height = $dim[1];
             $slide->type = 0;
             $slide->carouselId = $carouselId;
-            $newPath = $this->moveThumbnail($slide);
+            $newPath = preg_replace('/\.(png|jpe?g)$/', '_tn.\\1', $slide->filepath);
             $slide->thumbnail = $newPath;
             \carousel\Factory\SlideFactory::saveResource($slide);
         }
