@@ -88,6 +88,10 @@ export default class Slide extends Listing {
           }
         }
       }, {
+        column: 'queue',
+        sort: true,
+        label: 'Order'
+      }, {
         column: 'title',
         sort: true,
         label: 'Title'
