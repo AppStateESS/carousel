@@ -3,7 +3,7 @@
     autoplay
     loop
     muted
-    data-url="//<?=$url?>"
+    data-url="<?=$url?>"
     class="carousel-slide-image d-block w-100"
     data-slide-number="<?=$id?>">
     <source src="<?=$filepath?>" type="<?=$videoType?>"/>
@@ -11,7 +11,7 @@
       <a href="<?=$filepath?>">link to the video</a>
       instead.</p>
   </video>
-  <?php if (!empty($caption)): ?>
+  <?php if (!empty($caption) || (!empty($title) && $show_title)): ?>
   <div class="carousel-caption <?=$vertical?>">
     <div class="carousel-container <?=$horizontal?>">
       <?php if ($show_title): ?>
