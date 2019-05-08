@@ -40,6 +40,7 @@ function carousel_update(&$content, $version)
 + Fixed relative urls.
 + Fixed url links on captions.
 + Fixed text orientation on captioning.
++ Fixed sorting and searching in lists.
 </pre>';
     } // end of switch
 
