@@ -34,10 +34,13 @@ class SlideFactory extends BaseFactory
             throw new \Exception('Carousel id is empty');
         }
 
-        $db = Database::getDB();
-        $tbl = $db->addTable('caro_slide');
-        $tbl->addFieldConditional('carouselId', $carouselId);
-        $db->delete();
+        $slides = $this->listing(['carouselId'=>$carouselId, 'asResource'=>true]);
+        if (empty($slides)) {
+            return;
+        }
+        foreach ($slides as $slide) {
+            $this->delete($slide);
+        }
     }
 
     public function listing(array $options = [])
