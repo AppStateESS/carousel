@@ -82,14 +82,4 @@ class SlideResource extends AbstractResource
         $this->opacity = new \phpws2\Variable\SmallInteger(50, 'opacity');
         $this->opacity->setRange(0, 100);
     }
-
-    /**
-     * 
-     * @returns string
-     */
-    public function removeUrlProtocol()
-    {
-       return preg_replace('@^https?:/\/@', '', $this->url);
-    }
-    
 }
