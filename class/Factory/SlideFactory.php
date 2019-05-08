@@ -34,7 +34,7 @@ class SlideFactory extends BaseFactory
             throw new \Exception('Carousel id is empty');
         }
 
-        $slides = $this->listing(['carouselId'=>$carouselId, 'asResource'=>true]);
+        $slides = $this->listing(['carouselId' => $carouselId, 'asResource' => true]);
         if (empty($slides)) {
             return;
         }
@@ -47,14 +47,25 @@ class SlideFactory extends BaseFactory
     {
         $db = Database::getDB();
         $tbl = $db->addTable('caro_slide');
-        $tbl->addOrderBy('queue');
         if (!empty($options['carouselId'])) {
             $tbl->addFieldConditional('carouselId', $options['carouselId']);
         }
         if (!empty($options['activeOnly'])) {
             $tbl->addFieldConditional('active', 1);
         }
-
+        if (!empty($options['sort']) && !empty($options['sortDir'])) {
+            $tbl->addOrderBy($options['sort'], $options['sortDir']);
+        } else {
+            $tbl->addOrderBy('queue');
+        }
+        if (!empty($options['search'])) {
+            $search = $options['search'];
+            $searchArray = explode(' ', $search);
+            foreach ($searchArray as $s) {
+                $tbl->addFieldConditional('title', "%$s%", 'like');
+            }
+        }
+        //exit($db->selectQuery());
         if (!empty($options['asResource'])) {
             $result = $db->selectAsResources('\\carousel\\Resource\\SlideResource');
         } else {
@@ -250,7 +261,7 @@ class SlideFactory extends BaseFactory
         );
         return $options;
     }
-    
+
     private function getMediaOptions($pic, $imageDirectory, int $carouselId)
     {
         $imageDirectory = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
@@ -275,7 +286,7 @@ class SlideFactory extends BaseFactory
         $result = $upload_handler->post(false);
         return $destination . $result['file'][0]->name;
     }
-    
+
     public function moveMedia($file, int $carouselId)
     {
         if ($file['error'] !== 0) {

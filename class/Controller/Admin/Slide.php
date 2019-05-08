@@ -53,7 +53,10 @@ class Slide extends SubController
     protected function listJson(Request $request)
     {
         $carouselId = $request->pullGetInteger('carouselId');
-        $listing = $this->factory->listing(['carouselId'=>$carouselId]);
+        $search = $request->pullGetString('search', true);
+        $sort = $request->pullGetString('sortBy', true);
+        $sortDir = $request->pullGetString('sortByDir', true);
+        $listing = $this->factory->listing(['carouselId'=>$carouselId, 'search'=>$search, 'sort'=>$sort, 'sortDir'=>$sortDir]);
         return ['listing' => $listing];
     }
 
