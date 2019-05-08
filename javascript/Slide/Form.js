@@ -69,6 +69,12 @@ const Form = ({
       )
     }
   }
+  
+  const updateUrl = (e) => {
+    let url = e.target.value
+    url = url.replace(/^https?:\/\//, '')
+    update('url', url)
+  }
 
   const disableSave = dropzone.file === null && resource.filepath.length === 0
   return (
@@ -134,7 +140,7 @@ const Form = ({
               type="text"
               name="url"
               value={resource.url}
-              onChange={update.bind(null, 'url')}/></div>
+              onChange={updateUrl}/></div>
         </div>
       </div>
       <div className="row">
