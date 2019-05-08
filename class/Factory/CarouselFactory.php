@@ -47,6 +47,14 @@ class CarouselFactory extends BaseFactory
             $tbl->addField('id');
             $tbl->addField('title');
         }
+        
+        if (!empty($options['search'])) {
+            $search = $options['search'];
+            $searchArray = explode(' ', $search);
+            foreach ($searchArray as $s) {
+                $tbl->addFieldConditional('title', "%$s%", 'like');
+            }
+        }
 
         if (!empty($options['notPinned'])) {
             $tbl->addFieldConditional('id', $options['notPinned'], '!=');

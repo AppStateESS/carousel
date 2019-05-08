@@ -48,7 +48,8 @@ class Carousel extends SubController
 
     protected function listJson(Request $request)
     {
-        return ['listing' => $this->factory->listing()];
+        $search = $request->pullGetString('search', true);
+        return ['listing' => $this->factory->listing(['search'=>$search])];
     }
 
     protected function post(Request $request)
