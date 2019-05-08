@@ -63,11 +63,15 @@ class SlideView extends AbstractView
                 break;
         }
 
-        if (!empty($slide->url) && !empty($slide->title)) {
-            $vars['caption_title'] = '<a href="' . $this->prepareUrl($slide->url) . '">' . $slide->title . '</a>';
-        } else {
-            $vars['caption_title'] = $slide->title;
+        if (!empty($slide->url)) {
+            if (!empty($slide->title)) {
+                $vars['caption_title'] = '<a href="' . $this->prepareUrl($slide->url) . '">' . $slide->title . '</a>';
+            }
+            if (!empty($slide->caption)) {
+                $vars['caption'] = '<a href="' . $this->prepareUrl($slide->url) . '">' . $slide->caption . '</a>';
+            }
         }
+
         return $vars;
     }
 
