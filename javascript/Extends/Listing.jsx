@@ -167,11 +167,25 @@ export default class Listing extends Component {
   }
 
   load(otherData = {}) {
+    let sortByDir
+    switch (this.sortByDir) {
+      case 1:
+        sortByDir = 'asc'
+        break
+
+      case 2:
+        sortByDir = 'desc'
+        break
+
+      default:
+        sortByDir = null
+    }
+
     const url = this.getUrl()
     const data = {
       search: this.state.search,
       sortBy: this.sortBy,
-      sortByDir: this.sortByDir
+      sortByDir: sortByDir
     }
     const sendData = Object.assign(otherData, data)
     $.ajax({
@@ -261,7 +275,11 @@ export default class Listing extends Component {
       return (
         <div className={cn}>
           <span>{this.state.message}</span>
-          <button type="button" className="close" onClick={this.clearMessage} aria-label="Close">
+          <button
+            type="button"
+            className="close"
+            onClick={this.clearMessage}
+            aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
