@@ -110,20 +110,29 @@ class Version2
         $opacity->setDefault(50);
         $opacity->add();
     }
-
+    
     private function updateSlides($carouselId)
     {
         $db = \phpws2\Database::getDB();
         $tbl = $db->addTable('caro_slide');
         $slides = $db->selectAsResources('\\carousel\\Resource\\SlideResource');
+        if (isset($GLOBALS['boost_branch_dir'])) {
+            $prefix = $GLOBALS['boost_branch_dir'];
+        } else {
+            $prefix = '';
+        }
 
         foreach ($slides as $slide) {
-            $dim = getimagesize($slide->filepath);
+            if (!is_file($prefix . $slide->filepath)) {
+                continue;
+            }
+            $dim = getimagesize($prefix . $slide->filepath);
             $slide->width = $dim[0];
             $slide->height = $dim[1];
             $slide->type = 0;
             $slide->carouselId = $carouselId;
-            $newPath = preg_replace('/\.(png|jpe?g)$/', '_tn.\\1', $slide->filepath);
+            $newPath = preg_replace('/\.(png|jpe?g)$/', '_tn.\\1',
+                    $slide->filepath);
             $slide->thumbnail = $newPath;
             \carousel\Factory\SlideFactory::saveResource($slide);
         }
