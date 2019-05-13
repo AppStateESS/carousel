@@ -125,6 +125,9 @@ class Version2
         $db = \phpws2\Database::getDB();
         $tbl = $db->addTable('caro_slide');
         $slides = $db->selectAsResources('\\carousel\\Resource\\SlideResource');
+        if (empty($slides)) {
+            return;
+        }
         if (isset($GLOBALS['boost_branch_dir'])) {
             $prefix = $GLOBALS['boost_branch_dir'];
         } else {
