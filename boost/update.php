@@ -42,6 +42,12 @@ function carousel_update(&$content, $version)
 + Fixed text orientation on captioning.
 + Fixed sorting and searching in lists.
 </pre>';
+            
+        case version_compare($version, '2.0.2', '<'):
+            $content[] = '<pre>2.0.2
+--------------------
++ Fixed branch update.
+</pre>';
     } // end of switch
 
     return true;
