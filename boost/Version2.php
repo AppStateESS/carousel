@@ -75,16 +75,25 @@ class Version2
         $factory = new \carousel\Factory\CarouselFactory;
         $carousel = $factory->build();
         $carousel->title = 'First Carousel';
-        $carousel->iterations = $this->previousSettings['iteration'];
-        if ($carousel->iterations > 3) {
+        if (!isset($this->previousSettings['iteration'])) {
             $carousel->iterations = 3;
+        } else {
+            $carousel->iterations = $this->previousSettings['iteration'];
+            if ($carousel->iterations > 3) {
+                $carousel->iterations = 3;
+            }
         }
-        $carousel->intervalTime = $this->previousSettings['time_interval'];
-        if ($carousel->intervalTime % 2) {
-            $carousel->intervalTime = $carousel->intervalTime + 1;
+
+        if (!isset($this->previousSettings['time_interval'])) {
+            $carousel->intervalTime = 4;
+        } else {
+            $carousel->intervalTime = $this->previousSettings['time_interval'];
+            if ($carousel->intervalTime % 2) {
+                $carousel->intervalTime = $carousel->intervalTime + 1;
+            }
         }
-        $carousel->transition = $this->previousSettings['transition'];
-        $carousel->indicator = $this->previousSettings['indicator'];
+        $carousel->transition = $this->previousSettings['transition'] ?? 0;
+        $carousel->indicator = $this->previousSettings['indicator'] ?? 0;
         $carousel->frontpage = true;
         $factory->save($carousel);
         return $carousel->id;
@@ -110,7 +119,7 @@ class Version2
         $opacity->setDefault(50);
         $opacity->add();
     }
-    
+
     private function updateSlides($carouselId)
     {
         $db = \phpws2\Database::getDB();
