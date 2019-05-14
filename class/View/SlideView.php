@@ -62,7 +62,7 @@ class SlideView extends AbstractView
                 $vars['vertical'] = 'bottom';
                 break;
         }
-
+        $vars['caption_title'] = $slide->title;
         if (!empty($slide->url)) {
             if (!empty($slide->title)) {
                 $vars['caption_title'] = '<a href="' . $this->prepareUrl($slide->url) . '">' . $slide->title . '</a>';
