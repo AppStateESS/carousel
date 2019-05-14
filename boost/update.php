@@ -48,6 +48,17 @@ function carousel_update(&$content, $version)
 --------------------
 + Fixed branch update.
 </pre>';
+            
+        case version_compare($version, '2.0.3', '<'):
+            $version2 = new Version2;
+            $version2->fixQueue();
+            $content[] = '<pre>2.0.3
+--------------------
++ Fixed caption title error.
++ Fixed queue numbering on new slides.
++ Caption space no longer shows if empty.
+</pre>';
+            
     } // end of switch
 
     return true;
