@@ -130,6 +130,7 @@ class SlideFactory extends BaseFactory
         $tbl = $db->addTable('caro_slide');
         $tbl->addField('queue');
         $tbl->addOrderBy('queue', 'desc');
+        $tbl->addFieldConditional('carouselId', $carouselId);
         $db->setLimit(1);
         return $db->selectColumn();
     }
