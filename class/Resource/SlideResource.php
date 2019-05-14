@@ -74,9 +74,9 @@ class SlideResource extends AbstractResource
         $this->url->setInputType('textarea');
         $this->caption_zone = new \phpws2\Variable\SmallInteger(0, 'caption_zone');
         $this->width = new \phpws2\Variable\IntegerVar(0, 'width');
-        $this->width->setRange(0, 5000);
+        $this->width->setRange(0, 20000);
         $this->height = new \phpws2\Variable\IntegerVar(0, 'height');
-        $this->height->setRange(0, 5000);
+        $this->height->setRange(0, 20000);
         $this->type = new \phpws2\Variable\IntegerVar(0, 'type');
         $this->type->setRange(0,2);
         $this->opacity = new \phpws2\Variable\SmallInteger(50, 'opacity');
