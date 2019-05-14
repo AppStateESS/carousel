@@ -150,4 +150,19 @@ class Version2
         }
     }
 
+    public function fixQueue()
+    {
+        $db = phpws2\Database::getDB();
+        $carousel = $db->addTable('caro_carousel');
+        $carousel->addField('id');
+        $carousels = $db->select();
+        if (!empty($carousels)) {
+            foreach ($carousels as $c) {
+                $sortable = new phpws2\Sortable('caro_slide', 'queue');
+                $sortable->setAnchor('carouselId', $c['id']);
+                $sortable->reorder();
+            }
+        }
+    }
+
 }
