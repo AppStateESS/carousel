@@ -1,6 +1,6 @@
 {
   "name": "Carousel",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -992,6 +992,12 @@
         "lodash": "^4.17.11",
         "to-fast-properties": "^2.0.0"
       }
+    },
+    "@essappstate/canopy-listing": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/@essappstate/canopy-listing/-/canopy-listing-1.0.0.tgz",
+      "integrity": "sha512-goNl+sYP3yR4Mf9RaEz+fTZ0QXiWT9Iq1EFueWZJGbkLx143JKD0iEmBxonYaRw4HXgNO1/4D/lwBWF2uzACNg==",
+      "dev": true
     },
     "@essappstate/canopy-react-bigcheckbox": {
       "version": "0.2.0",

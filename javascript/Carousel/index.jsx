@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Listing from '../Extends/Listing'
+import Listing from '@essappstate/canopy-listing'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
 import Form from './Form'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'

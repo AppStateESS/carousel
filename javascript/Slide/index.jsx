@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Listing from '../Extends/Listing'
+import Listing from '@essappstate/canopy-listing'
 import Form from './Form'
 import PropTypes from 'prop-types'
 import ratio from '../Extends/ratio'

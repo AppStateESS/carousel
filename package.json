@@ -1,6 +1,6 @@
 {
   "name": "Carousel",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Iamge carousel for page header",
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
+    "@essappstate/canopy-listing": "^1.0.1",
     "@essappstate/canopy-react-bigcheckbox": "^0.2.0",
     "@essappstate/canopy-react-buttongroup": "^0.2.1",
     "@essappstate/canopy-react-overlay": "^0.2.2",

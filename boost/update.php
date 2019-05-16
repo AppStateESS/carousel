@@ -59,6 +59,12 @@ function carousel_update(&$content, $version)
 + Caption space no longer shows if empty.
 </pre>';
             
+        case version_compare($version, '2.0.4', '<'):
+            $content[] = '<pre>2.0.4
+--------------------
++ Moved Listing/Grid into own npm library.
+</pre>';
+            
     } // end of switch
 
     return true;
