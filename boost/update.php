@@ -42,13 +42,13 @@ function carousel_update(&$content, $version)
 + Fixed text orientation on captioning.
 + Fixed sorting and searching in lists.
 </pre>';
-            
+
         case version_compare($version, '2.0.2', '<'):
             $content[] = '<pre>2.0.2
 --------------------
 + Fixed branch update.
 </pre>';
-            
+
         case version_compare($version, '2.0.3', '<'):
             $version2 = new Version2;
             $version2->fixQueue();
@@ -58,13 +58,20 @@ function carousel_update(&$content, $version)
 + Fixed queue numbering on new slides.
 + Caption space no longer shows if empty.
 </pre>';
-            
+
         case version_compare($version, '2.0.4', '<'):
             $content[] = '<pre>2.0.4
 --------------------
 + Moved Listing/Grid into own npm library.
 </pre>';
-            
+
+        case version_compare($version, '2.0.5', '<'):
+            $content[] = '<pre>2.0.5
+--------------------
++ Updated code to work with canopy-listing change.
++ Fixed Clear button on Slide form
++ Fixed rows causing horizontal scroll.
+</pre>';
     } // end of switch
 
     return true;
