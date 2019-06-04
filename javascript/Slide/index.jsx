@@ -23,9 +23,7 @@ export default class Slide extends Listing {
       meta: null
     }
     this.allowSort = true
-    this.module = 'carousel'
-    this.role = 'Admin'
-    this.control = 'Slide'
+    this.restUrl = 'carousel/Admin/Slide/'
     this.label = 'Slide'
     this.defaultResource = {
       id: '0',

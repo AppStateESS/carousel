@@ -12,9 +12,7 @@ import {faBars} from '@fortawesome/free-solid-svg-icons'
 export default class Carousel extends Listing {
   constructor(props) {
     super(props)
-    this.module = 'carousel'
-    this.role = 'Admin'
-    this.control = 'Carousel'
+    this.restUrl = 'carousel/Admin/Carousel/'
     this.label = 'Carousel'
     this.form = this.form.bind(this)
     this.defaultResource = {
@@ -36,13 +34,14 @@ export default class Carousel extends Listing {
             data-toggle="dropdown"
             aria-haspopup="true"
             className="btn btn-outline-secondary"
-          id="dropdownMenuButton">
-            <FontAwesomeIcon icon={faBars}/>
+            id="dropdownMenuButton">
+            <i className="fas fa-bars"></i>
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a
               className="dropdown-item pointer"
-              href={`./carousel/Admin/Slide/?carouselId=${this.state.listing[key].id}`}><i className="fas fa-images"></i>&nbsp;Slides</a>
+              href={`./carousel/Admin/Slide/?carouselId=${this.state.listing[key].id}`}>
+              <i className="fas fa-images"></i>&nbsp;Slides</a>
             <a
               className="dropdown-item pointer"
               href="#"
@@ -67,7 +66,6 @@ export default class Carousel extends Listing {
         style: {
           width: '10%'
         }
-
       }, {
         column: 'title',
         label: 'Title'
@@ -87,7 +85,7 @@ export default class Carousel extends Listing {
       }
     ]
 
-    this.state.resource = this.defaultResource
+    this.state.resource = Object.assign({}, this.defaultResource)
   }
 
   sentToFrontPage(key) {
@@ -130,7 +128,7 @@ export default class Carousel extends Listing {
         save={this.save}/>
     )
   }
-  
+
   title() {
     return <h2>Carousels</h2>
   }
