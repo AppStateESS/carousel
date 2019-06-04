@@ -17,21 +17,21 @@
     "build": "rm -rf ./javascript/build && webpack --mode production"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
-    "@essappstate/canopy-listing": "^1.0.1",
+    "@essappstate/canopy-listing": "^1.1.0",
     "@essappstate/canopy-react-bigcheckbox": "^0.2.0",
     "@essappstate/canopy-react-buttongroup": "^0.2.1",
-    "@essappstate/canopy-react-overlay": "^0.2.2",
-    "@essappstate/react-navbar": "^1.0.4",
+    "@essappstate/canopy-react-overlay": "^0.2.3",
+    "@essappstate/react-navbar": "^1.0.5",
     "@essappstate/react-waiting": "^1.0.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@gilbarbara/react-range-slider": "^0.4.3",
     "assets-webpack-plugin": "^3.9.7",
-    "babel-loader": "^8.0.4",
+    "babel-loader": "^8.0.6",
     "browser-sync": "^2.26.5",
     "browser-sync-webpack-plugin": "^2.2.2",
     "css-loader": "^1.0.1",
@@ -46,8 +46,8 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "terser": "^3.14.1",
-    "terser-webpack-plugin": "^1.2.1",
-    "webpack": "^4.30.0",
+    "terser-webpack-plugin": "^1.3.0",
+    "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2"
   }
 }
