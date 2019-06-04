@@ -143,23 +143,25 @@ export default class Form extends Component {
           placeholder="Required"
           value={resource.title}
           onChange={update.bind(this, 'title')}/>
-        <div className="row">
-          <div className="col-sm-4 mb-3">
-            <label className="lead">Iterations</label>
-            <div className="d-inline">{this.iterations()}</div>
-          </div>
-          <div className="col-sm-4 mb-3">
-            <label className="lead">Interval</label>{this.intervalTime()}
-          </div>
-          <div className="col-sm-4 mb-3">
-            <label className="lead">Transition</label>{this.transition()}
-          </div>
-          <div className="col-sm-6 mb-3">
-            <label className="lead">Indicator</label>{this.indicator()}
-          </div>
-          <div className="col-sm-6 mb-3">
-            <div>{this.controls()}</div>
-            <div>{this.pause()}</div>
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-4 mb-3">
+              <label className="lead">Iterations</label>
+              <div className="d-inline">{this.iterations()}</div>
+            </div>
+            <div className="col-sm-4 mb-3">
+              <label className="lead">Interval</label>{this.intervalTime()}
+            </div>
+            <div className="col-sm-4 mb-3">
+              <label className="lead">Transition</label>{this.transition()}
+            </div>
+            <div className="col-sm-6 mb-3">
+              <label className="lead">Indicator</label>{this.indicator()}
+            </div>
+            <div className="col-sm-6 mb-3">
+              <div>{this.controls()}</div>
+              <div>{this.pause()}</div>
+            </div>
           </div>
         </div>
         <button className="btn btn-primary" disabled={disableSave} onClick={save}>Save Carousel</button>
