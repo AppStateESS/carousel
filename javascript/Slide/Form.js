@@ -69,13 +69,12 @@ const Form = ({
       )
     }
   }
-  
+
   const updateUrl = (e) => {
     let url = e.target.value
     url = url.replace(/^https?:\/\//, '')
     update('url', url)
   }
-
   const disableSave = dropzone.file === null && resource.filepath.length === 0
   return (
     <div>
@@ -105,91 +104,92 @@ const Form = ({
         <button
           className="btn btn-danger"
           onClick={removeMedia}
-          disabled={dropzone.file === null}>Clear</button>
+          disabled={dropzone.file === null && resource.filepath.length === 0}>Clear</button>
       </div>
-      <div className="row mt-3">
-        <div className="col-sm-3">
-          <label>Title</label>
-        </div>
-        <div className="col-sm-9">
-          <input
-            className="form-control"
-            type="text"
-            name="title"
-            placeholder="Appears on image, above caption"
-            value={resource.title}
-            onChange={update.bind(null, 'title')}/>
-          <div className="ml-3">
-            <BigCheckbox
-              label="Show title"
-              checked={resource.show_title}
-              handle={update.bind(null, 'show_title')}/>
+      <div className="container">
+        <div className="row mt-3">
+          <div className="col-sm-3">
+            <label>Title</label>
           </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-3">
-          <label htmlFor="url">Url</label>
-        </div>
-        <div className="col-sm-9">
-          <div className="input-group">
-            <div className="input-group-prepend">
-              <div className="input-group-text">http://</div>
-            </div><input
+          <div className="col-sm-9">
+            <input
               className="form-control"
               type="text"
-              name="url"
-              value={resource.url}
-              onChange={updateUrl}/></div>
+              name="title"
+              placeholder="Appears on image, above caption"
+              value={resource.title}
+              onChange={update.bind(null, 'title')}/>
+            <div className="ml-3">
+              <BigCheckbox
+                label="Show title"
+                checked={resource.show_title}
+                handle={update.bind(null, 'show_title')}/>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-3">
-          <label htmlFor="caption">Caption</label>
+        <div className="row">
+          <div className="col-sm-3">
+            <label htmlFor="url">Url</label>
+          </div>
+          <div className="col-sm-9">
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <div className="input-group-text">http://</div>
+              </div><input
+                className="form-control"
+                type="text"
+                name="url"
+                value={resource.url}
+                onChange={updateUrl}/></div>
+          </div>
         </div>
-        <div className="col-sm-9">
-          <textarea
-            className="form-control"
-            placeholder="If not blank, appears on image, below title."
-            name="caption"
-            value={resource.caption}
-            onChange={update.bind(null, 'caption')}/>
+        <div className="row">
+          <div className="col-sm-3">
+            <label htmlFor="caption">Caption</label>
+          </div>
+          <div className="col-sm-9">
+            <textarea
+              className="form-control"
+              placeholder="If not blank, appears on image, below title."
+              name="caption"
+              value={resource.caption}
+              onChange={update.bind(null, 'caption')}/>
+          </div>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-3">
-          <label htmlFor="caption_zone">Caption zone</label>
+        <div className="row">
+          <div className="col-sm-3">
+            <label htmlFor="caption_zone">Caption zone</label>
+          </div>
+          <div className="col-sm-4">
+            <select
+              className="form-control"
+              name="caption_zone"
+              value={resource.caption_zone}
+              onChange={update.bind(null, 'caption_zone')}>
+              <option value="" disabled="disabled">Choose where you want your caption to appear</option>
+              <option value="0" label="Center">Center</option>
+              <option value="1" label="Top left">Top left</option>
+              <option value="2" label="Top right">Top right</option>
+              <option value="3" label="Bottom left">Bottom left</option>
+              <option value="4" label="Bottom right">Bottom right</option>
+              <option value="5" label="Top center">Bottom right</option>
+              <option value="6" label="Bottom center">Bottom right</option>
+            </select>
+          </div>
         </div>
-        <div className="col-sm-4">
-          <select
-            className="form-control"
-            name="caption_zone"
-            value={resource.caption_zone}
-            onChange={update.bind(null, 'caption_zone')}>
-            <option value="" disabled="disabled">Choose where you want your caption to appear</option>
-            <option value="0" label="Center">Center</option>
-            <option value="1" label="Top left">Top left</option>
-            <option value="2" label="Top right">Top right</option>
-            <option value="3" label="Bottom left">Bottom left</option>
-            <option value="4" label="Bottom right">Bottom right</option>
-            <option value="5" label="Top center">Bottom right</option>
-            <option value="6" label="Bottom center">Bottom right</option>
-          </select>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-sm-3">
-          <label>Background opacity</label>
-        </div>
-        <div className="col-sm-9">
-          <RangeSlider
-            axis="x"
-            xMin="0"
-            xMax="100"
-            x={resource.opacity}
-            onChange={({x}) => update('opacity', x)}
-          />
-          <div className="text-center">{resource.opacity}%</div>
+        <div className="row">
+          <div className="col-sm-3">
+            <label>Background opacity</label>
+          </div>
+          <div className="col-sm-9">
+            <RangeSlider
+              axis="x"
+              xMin="0"
+              xMax="100"
+              x={resource.opacity}
+              onChange={({x}) => update('opacity', x)}/>
+            <div className="text-center">{resource.opacity}%</div>
+          </div>
         </div>
       </div>
       <div className="text-center">
