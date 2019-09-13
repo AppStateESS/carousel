@@ -46,7 +46,7 @@ class Slide extends SubController
         $carouselId = $request->pullGetInteger('carouselId');
         $carouselFactory = new \carousel\Factory\CarouselFactory;
         $carousel = $carouselFactory->load($carouselId);
-        return $this->view->scriptView('Slide', true,
+        return $this->view->scriptView('Slide',
                         ['carouselId' => $carouselId, 'carouselTitle' => $carousel->title]);
     }
 
@@ -56,18 +56,21 @@ class Slide extends SubController
         $search = $request->pullGetString('search', true);
         $sort = $request->pullGetString('sortBy', true);
         $sortDir = $request->pullGetString('sortByDir', true);
-        $listing = $this->factory->listing(['carouselId'=>$carouselId, 'search'=>$search, 'sort'=>$sort, 'sortDir'=>$sortDir]);
+        $listing = $this->factory->listing(['carouselId' => $carouselId, 'search' => $search, 'sort' => $sort, 'sortDir' => $sortDir]);
         return ['listing' => $listing];
     }
 
     protected function mediaPost(Request $request)
     {
         try {
-            $slide = $this->factory->postMedia($request);
+            $slide = $this->factory->load($request->pullPostInteger('slideId'));
+            $this->factory->postMedia($slide, $request);
             $this->factory->save($slide);
             return ['success' => true];
         } catch (\Exception $e) {
-            $this->factory->delete($slide);
+            if (isset($slide) && empty($slide->filepath)) {
+                $this->factory->delete($slide);
+            }
             throw $e;
         }
     }
@@ -99,11 +102,11 @@ class Slide extends SubController
         $slide = $this->factory->load($this->id);
         $this->factory->delete($slide);
     }
-    
+
     protected function sortPatch(Request $request)
     {
         $this->factory->resort($this->id, $request->pullPatchInteger('position'));
-        return ['success'=>true];
+        return ['success' => true];
     }
 
 }

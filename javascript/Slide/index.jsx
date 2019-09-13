@@ -42,7 +42,7 @@ export default class Slide extends Listing {
       type: '0'
     }
 
-    const dropdown = (key) => {
+    const dropdown = key => {
       return (
         <div className="dropdown">
           <button
@@ -52,19 +52,21 @@ export default class Slide extends Listing {
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-            <FontAwesomeIcon icon={faBars}/>
+            <FontAwesomeIcon icon={faBars} />
           </button>
           <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a
               href="#"
               className="dropdown-item"
               onClick={this.editResource.bind(this, key)}>
-              <i className="fas fa-edit"></i>&nbsp;Edit</a>
+              <i className="fas fa-edit"></i>&nbsp;Edit
+            </a>
             <a
               href="#"
               className="dropdown-item"
               onClick={this.deleteResource.bind(this, key)}>
-              <i className="fas fa-trash"></i>&nbsp;Delete</a>
+              <i className="fas fa-trash"></i>&nbsp;Delete
+            </a>
           </div>
         </div>
       )
@@ -76,34 +78,47 @@ export default class Slide extends Listing {
         callback: (row, key) => {
           return dropdown(key)
         }
-      }, {
+      },
+      {
         column: 'thumbnail',
-        callback: (value) => {
+        callback: value => {
           if (value.thumbnail == '') {
-            return <FontAwesomeIcon icon={faVideo} size="lg"/>
+            return <FontAwesomeIcon icon={faVideo} size="lg" />
           } else {
-            return <img src={value.thumbnail}/>
+            return <img src={value.thumbnail} />
           }
         }
-      }, {
+      },
+      {
         column: 'queue',
         sort: true,
         label: 'Order'
-      }, {
+      },
+      {
         column: 'title',
         sort: true,
         label: 'Title'
-      }, {
+      },
+      {
         label: 'Dimensions/Ratio',
-        callback: (row) => {
-          return <div>{row.width}x{row.height}&nbsp;/&nbsp;{ratio(row.width, row.height)}</div>
+        callback: row => {
+          return (
+            <div>
+              {row.width}x{row.height}&nbsp;/&nbsp;
+              {ratio(row.width, row.height)}
+            </div>
+          )
         }
-      }, {
+      },
+      {
         column: 'active',
         label: 'Active',
         callback: (row, key) => {
           return (
-            <BigCheckbox checked={row.active} handle={this.toggleActive.bind(this, key)}/>
+            <BigCheckbox
+              checked={row.active}
+              handle={this.toggleActive.bind(this, key)}
+            />
           )
         }
       }
@@ -148,20 +163,18 @@ export default class Slide extends Listing {
       success: () => {
         this.load()
       },
-      error: (data) => this.error(data)
+      error: data => this.error(data)
     })
   }
 
   toggleActive(key) {
     const {listing} = this.state
     const resource = listing[key]
-    resource.active = resource.active === '1'
-      ? '0'
-      : '1'
+    resource.active = resource.active === '1' ? '0' : '1'
     $.ajax({
       url: `./carousel/Admin/Slide/${resource.id}/active`,
       data: {
-        'active': resource.active
+        active: resource.active
       },
       dataType: 'json',
       type: 'patch',
@@ -174,8 +187,12 @@ export default class Slide extends Listing {
   }
 
   title() {
-    return <h3>Slides:&nbsp;<a href="./carousel/Admin/Carousel">{this.props.carouselTitle}</a>
-    </h3>
+    return (
+      <h3>
+        Slides:&nbsp;
+        <a href="./carousel/Admin/Carousel">{this.props.carouselTitle}</a>
+      </h3>
+    )
   }
 
   removeMedia() {
@@ -195,16 +212,19 @@ export default class Slide extends Listing {
         ''
       )
       resource.title = resource.title.replace(/-/, ' ')
-      resource.title = resource.title.charAt(0).toUpperCase() + resource.title.slice(
-        1
-      )
+      resource.title =
+        resource.title.charAt(0).toUpperCase() + resource.title.slice(1)
     }
     this.setState({resource, dropzone})
   }
 
   navLeft() {
     const left = super.navLeft()
-    const back = <NavbarLink href="./carousel/Admin/Carousel"><i className="fas fa-list"></i>&nbsp;Carousel list</NavbarLink>
+    const back = (
+      <NavbarLink href="./carousel/Admin/Carousel">
+        <i className="fas fa-list"></i>&nbsp;Carousel list
+      </NavbarLink>
+    )
     left.push(back)
     return left
   }
@@ -229,11 +249,12 @@ export default class Slide extends Listing {
         this.load()
         this.setMessage(
           <div>
-            <i className="far fa-thumbs-up"></i>&nbsp;Save successful.</div>,
+            <i className="far fa-thumbs-up"></i>&nbsp;Save successful.
+          </div>,
           'success'
         )
       },
-      error: (data) => {
+      error: data => {
         let message = <div>An unknown error occurred</div>
         if (data.responseJSON !== undefined) {
           message = data.responseJSON.exception.message
@@ -253,22 +274,23 @@ export default class Slide extends Listing {
         this.load()
         this.setMessage(
           <div>
-            <i className="far fa-thumbs-up"></i>&nbsp;Save successful.</div>,
+            <i className="far fa-thumbs-up"></i>&nbsp;Save successful.
+          </div>,
           'success'
         )
       }
     } else {
       this.setMessage(
         <div>
-          <i className="fas fa-exclamation-triangle"></i>&nbsp;Unable to save: {data.error}</div>
+          <i className="fas fa-exclamation-triangle"></i>&nbsp;Unable to save:{' '}
+          {data.error}
+        </div>
       )
     }
   }
 
   overlay() {
-    const title = this.state.resource.id > 0
-      ? 'Edit slide'
-      : 'Create slide'
+    const title = this.state.resource.id > 0 ? 'Edit slide' : 'Create slide'
     const form = (
       <Form
         close={this.finish}
@@ -277,10 +299,15 @@ export default class Slide extends Listing {
         upload={this.upload}
         dropzone={this.state.dropzone}
         save={this.save}
-        removeMedia={this.removeMedia}/>
+        removeMedia={this.removeMedia}
+      />
     )
-    return {content: (<div className="slide-form">{form}
-    </div>), width: '80%', title: title, close: this.load}
+    return {
+      content: <div className="slide-form">{form}</div>,
+      width: '80%',
+      title: title,
+      close: this.load
+    }
   }
 }
 
@@ -290,8 +317,6 @@ Slide.propTypes = {
 }
 
 ReactDOM.render(
-  <Slide carouselId={carouselId} carouselTitle={carouselTitle}/>,
-  document.getElementById(
-    'Slide'
-  )
+  <Slide carouselId={carouselId} carouselTitle={carouselTitle} />,
+  document.getElementById('Slide')
 )

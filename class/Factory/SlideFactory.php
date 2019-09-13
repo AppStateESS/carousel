@@ -17,7 +17,7 @@ use phpws2\Database;
 use carousel\Resource\SlideResource;
 use carousel\UploadHandler;
 
-define('CAROUSEL_MEDIA_DIRECTORY', './images/carousel/');
+define('CAROUSEL_MEDIA_DIRECTORY', 'images/carousel/');
 
 class SlideFactory extends BaseFactory
 {
@@ -135,9 +135,8 @@ class SlideFactory extends BaseFactory
         return $db->selectColumn();
     }
 
-    public function postMedia(Request $request)
+    public function postMedia(SlideResource $slide, Request $request)
     {
-        $slide = $this->load($request->pullPostInteger('slideId'));
         $result = $this->upload($slide->carouselId);
 
         $slide->filepath = $result['filepath'];
@@ -151,7 +150,6 @@ class SlideFactory extends BaseFactory
             $slide->width = $dim[0];
             $slide->height = $dim[1];
         }
-        return $slide;
     }
 
     public function put($slideId, Request $request)
@@ -188,7 +186,7 @@ class SlideFactory extends BaseFactory
             throw new \Exception('Upload missing image/media file.');
         }
         $file = $_FILES['file'];
-
+        $file['name'] = preg_replace('/[|;,!@#$()<>\"\'`~{}\[\]=+&\^\s\t]/', '_', $file['name']);
         if (in_array($file['type'], $imageTypes)) {
             $result = $this->saveImage($file, $carouselId);
             $result['type'] = 0;
@@ -253,6 +251,7 @@ class SlideFactory extends BaseFactory
         $imageDirectory = CAROUSEL_MEDIA_DIRECTORY . $carouselId . '/';
         $imagePath = PHPWS_HOME_DIR . $imageDirectory;
         $options = array(
+            'name' => $pic['name'],
             'max_width' => CAROUSEL_SYSTEM_SETTINGS['maxWidth'],
             'max_height' => CAROUSEL_SYSTEM_SETTINGS['maxHeight'],
             'param_name' => 'file',

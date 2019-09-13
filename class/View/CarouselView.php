@@ -36,7 +36,7 @@ class CarouselView extends AbstractView
         }
         $options['intervalTime'] = $carousel->intervalTime * 1000;
         $options['iterations'] = $carousel->iterations * count($slides);
-        $this->scriptView('View', false, $options, true);
+        $this->scriptView('View', $options, true);
         \Layout::addStyle('carousel');
         return $this->viewSlides($carousel, $slides);
     }
@@ -111,7 +111,7 @@ EOF;
 
     public function miniAdmin(int $keyId)
     {
-        $this->scriptView('MiniAdmin', false, ['keyId' => $keyId], true);
+        $this->scriptView('MiniAdmin', ['keyId' => $keyId], true);
 
         $options['titleOnly'] = true;
         $pinnedCarousel = $this->factory->getPinned($keyId);

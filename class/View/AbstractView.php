@@ -17,20 +17,22 @@ use phpws2\Template;
 
 abstract class AbstractView
 {
+
     const directory = PHPWS_SOURCE_DIR . 'mod/carousel/';
     const http = PHPWS_SOURCE_HTTP . 'mod/carousel/';
-    
+
     protected $factory;
 
-    
-    protected function getDirectory() {
+    protected function getDirectory()
+    {
         return self::directory;
     }
-    
-    protected function getHttp() {
+
+    protected function getHttp()
+    {
         return self::http;
     }
-    
+
     private function addScriptVars($vars)
     {
         if (empty($vars)) {
@@ -79,24 +81,23 @@ abstract class AbstractView
      * @param array $vars
      * @return string
      */
-    public function scriptView($view_name, $add_anchor = true, $vars = null, $skip_vendor = false)
+    public function scriptView($view_name, $vars = null, $skip_vendor = false)
     {
         static $vendor_included = false;
         if (!$vendor_included && !$skip_vendor) {
             $script[] = $this->getScript('vendor');
             $vendor_included = true;
         }
-        if (!empty($vars)) {
+        if (!empty($vars) && is_array($vars)) {
             $script[] = $this->addScriptVars($vars);
         }
         $script[] = $this->getScript($view_name);
         $react = implode("\n", $script);
         \Layout::addJSHeader($react);
-        if ($add_anchor) {
-            $content = <<<EOF
+        $content = <<<EOF
 <div id="$view_name"></div>
 EOF;
-            return $content;
-        }
+        return $content;
     }
+
 }
