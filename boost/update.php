@@ -72,12 +72,18 @@ function carousel_update(&$content, $version)
 + Fixed Clear button on Slide form
 + Fixed rows causing horizontal scroll.
 </pre>';
-            
+
         case version_compare($version, '2.0.6', '<'):
             $content[] = '<pre>2.0.6
 --------------------
 + Fixed file name errors.
 + Fixed bad files still creating slides.
+</pre>';
+
+        case version_compare($version, '2.0.7', '<'):
+            $content[] = '<pre>2.0.7
+--------------------
++ Updated all packages
 </pre>';
     } // end of switch
 
