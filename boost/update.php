@@ -85,6 +85,11 @@ function carousel_update(&$content, $version)
 --------------------
 + Updated all packages
 </pre>';
+        case version_compare($version, '2.0.8', '<'):
+            $content[] = '<pre>2.0.8
+--------------------
++ Updated all packages
+</pre>';
     } // end of switch
 
     return true;
