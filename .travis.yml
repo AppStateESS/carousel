@@ -1,21 +1,24 @@
-sudo: false
+os:
+  - linux
+dist: xenial
 language: php
 php:
-- 7
+  - 7
 install:
-- npm install
+  - nvm install 10
+  - npm install
 script:
-- ".travis-build/phplint ."
+  - '.travis-build/phplint .'
 after_success:
-- npm run build
-- rm -rf node_modules
-- tar -czf carousel.tar.gz *
+  - npm run build
+  - rm -rf node_modules
+  - tar -czf carousel.tar.gz *
 deploy:
   provider: releases
   skip_cleanup: true
-  api_key:
+  token:
     secure: Ge0AhIEgxvlSETNfzxEZtdka17pJcZhPLTbs66k/jP5or8uC9vj8A0Q8G7wp95Z8GPkNqeuAWSoSk5tEHN3U1aWOhByd12mMvnbCDPjpRgQiP+vLtBEPmHpEkPjnlSmH5yHMi8Tkis+mwyR7Wi+wERrqP9qf+rYzoxilxFF+rxw=
-  file: "carousel.tar.gz"
+  file: 'carousel.tar.gz'
   overwrite: true
   on:
     repo: AppStateESS/carousel
