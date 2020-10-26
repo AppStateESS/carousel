@@ -1,7 +1,7 @@
 {
   "name": "carousel",
   "version": "2.0.9",
-  "description": "Iamge carousel for page header",
+  "description": "Image carousel for page header",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AppStateESS/carousel.git"
