@@ -84,7 +84,11 @@ module.exports = (env, argv) => {
       })
     )
     settings.plugins.push(
-      new AssetsPlugin({filename: 'assets.json', prettyPrint: true})
+      new AssetsPlugin({
+        filename: 'assets.json',
+        prettyPrint: true,
+        removeFullPathAutoPrefix: true,
+      })
     )
     settings.output = {
       path: setup.path.join(setup.APP_DIR, 'build'),
