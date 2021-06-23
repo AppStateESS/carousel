@@ -48,7 +48,7 @@ class Module extends \Canopy\Module
         array_shift($class_array);
         $class_dir = implode('/', $class_array);
 
-        $class_path = PHPWS_SOURCE_DIR . 'mod/conference/class/' . $class_dir . '.php';
+        $class_path = PHPWS_SOURCE_DIR . 'mod/carousel/class/' . $class_dir . '.php';
         if (is_file($class_path)) {
             require_once $class_path;
             return true;
