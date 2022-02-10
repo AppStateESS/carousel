@@ -36,7 +36,7 @@
     "browser-sync-webpack-plugin": "^2.2.2",
     "css-loader": "^5.0.0",
     "es6-promise": "^4.2.8",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
