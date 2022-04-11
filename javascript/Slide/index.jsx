@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Listing from '@essappstate/canopy-listing'
+import Listing from '../canopy-listing/index'
 import Form from './Form'
 import PropTypes from 'prop-types'
 import ratio from '../Extends/ratio'
@@ -20,7 +20,7 @@ export default class Slide extends Listing {
     this.state.dropzone = {
       remove: () => {},
       file: null,
-      meta: null
+      meta: null,
     }
     this.allowSort = true
     this.restUrl = 'carousel/Admin/Slide/'
@@ -39,10 +39,10 @@ export default class Slide extends Listing {
       width: '0',
       height: '0',
       opacity: '50',
-      type: '0'
+      type: '0',
     }
 
-    const dropdown = key => {
+    const dropdown = (key) => {
       return (
         <div className="dropdown">
           <button
@@ -77,38 +77,38 @@ export default class Slide extends Listing {
         column: 'options',
         callback: (row, key) => {
           return dropdown(key)
-        }
+        },
       },
       {
         column: 'thumbnail',
-        callback: value => {
+        callback: (value) => {
           if (value.thumbnail == '') {
             return <FontAwesomeIcon icon={faVideo} size="lg" />
           } else {
             return <img src={value.thumbnail} />
           }
-        }
+        },
       },
       {
         column: 'queue',
         sort: true,
-        label: 'Order'
+        label: 'Order',
       },
       {
         column: 'title',
         sort: true,
-        label: 'Title'
+        label: 'Title',
       },
       {
         label: 'Dimensions/Ratio',
-        callback: row => {
+        callback: (row) => {
           return (
             <div>
               {row.width}x{row.height}&nbsp;/&nbsp;
               {ratio(row.width, row.height)}
             </div>
           )
-        }
+        },
       },
       {
         column: 'active',
@@ -120,8 +120,8 @@ export default class Slide extends Listing {
               handle={this.toggleActive.bind(this, key)}
             />
           )
-        }
-      }
+        },
+      },
     ]
 
     this.state.resource = this.defaultResource
@@ -156,14 +156,14 @@ export default class Slide extends Listing {
     $.ajax({
       url: `./carousel/Admin/Slide/${this.state.listing[oldIndex].id}/sort`,
       data: {
-        position: this.state.listing[newIndex].id
+        position: this.state.listing[newIndex].id,
       },
       dataType: 'json',
       type: 'patch',
       success: () => {
         this.load()
       },
-      error: data => this.error(data)
+      error: (data) => this.error(data),
     })
   }
 
@@ -174,7 +174,7 @@ export default class Slide extends Listing {
     $.ajax({
       url: `./carousel/Admin/Slide/${resource.id}/active`,
       data: {
-        active: resource.active
+        active: resource.active,
       },
       dataType: 'json',
       type: 'patch',
@@ -182,7 +182,7 @@ export default class Slide extends Listing {
         listing[key] = resource
         this.setState({listing})
       },
-      error: () => {}
+      error: () => {},
     })
   }
 
@@ -254,7 +254,7 @@ export default class Slide extends Listing {
           'success'
         )
       },
-      error: data => {
+      error: (data) => {
         let message = <div>An unknown error occurred</div>
         if (data.responseJSON !== undefined) {
           message = data.responseJSON.exception.message
@@ -262,7 +262,7 @@ export default class Slide extends Listing {
           message = data.exception.message
         }
         this.setMessage(<div>{message}</div>)
-      }
+      },
     })
   }
 
@@ -306,14 +306,14 @@ export default class Slide extends Listing {
       content: <div className="slide-form">{form}</div>,
       width: '80%',
       title: title,
-      close: this.load
+      close: this.load,
     }
   }
 }
 
 Slide.propTypes = {
   carouselId: PropTypes.string,
-  carouselTitle: PropTypes.string
+  carouselTitle: PropTypes.string,
 }
 
 ReactDOM.render(

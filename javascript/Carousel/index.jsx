@@ -1,11 +1,9 @@
 'use strict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Listing from '@essappstate/canopy-listing'
+import Listing from '../canopy-listing/index'
 import BigCheckbox from '@essappstate/canopy-react-bigcheckbox'
 import Form from './Form'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faBars} from '@fortawesome/free-solid-svg-icons'
 
 /* global $ */
 
@@ -23,7 +21,7 @@ export default class Carousel extends Listing {
       intervalTime: '4',
       indicator: '0',
       controls: true,
-      pause: true
+      pause: true,
     }
 
     const dropdown = (key) => {
@@ -41,17 +39,20 @@ export default class Carousel extends Listing {
             <a
               className="dropdown-item pointer"
               href={`./carousel/Admin/Slide/?carouselId=${this.state.listing[key].id}`}>
-              <i className="fas fa-images"></i>&nbsp;Slides</a>
+              <i className="fas fa-images"></i>&nbsp;Slides
+            </a>
             <a
               className="dropdown-item pointer"
               href="#"
               onClick={this.editResource.bind(this, key)}>
-              <i className="fas fa-edit"></i>&nbsp;Edit</a>
+              <i className="fas fa-edit"></i>&nbsp;Edit
+            </a>
             <a
               className="dropdown-item pointer"
               href="#"
               onClick={this.deleteResource.bind(this, key)}>
-              <i className="fas fa-trash"></i>&nbsp;Delete</a>
+              <i className="fas fa-trash"></i>&nbsp;Delete
+            </a>
           </div>
         </div>
       )
@@ -64,25 +65,28 @@ export default class Carousel extends Listing {
           return dropdown(key)
         },
         style: {
-          width: '10%'
-        }
-      }, {
+          width: '10%',
+        },
+      },
+      {
         column: 'title',
-        label: 'Title'
-      }, {
+        label: 'Title',
+      },
+      {
         column: 'frontpage',
         callback: (row, key) => {
           return (
             <BigCheckbox
               checked={row.frontpage === '1'}
-              handle={this.sentToFrontPage.bind(this, key)}/>
+              handle={this.sentToFrontPage.bind(this, key)}
+            />
           )
         },
         label: 'Front page',
         style: {
-          width: '20%'
-        }
-      }
+          width: '20%',
+        },
+      },
     ]
 
     this.state.resource = Object.assign({}, this.defaultResource)
@@ -98,7 +102,7 @@ export default class Carousel extends Listing {
       success: () => {
         this.load()
       },
-      error: (data) => this.error(data)
+      error: (data) => this.error(data),
     })
   }
 
@@ -114,7 +118,8 @@ export default class Carousel extends Listing {
         break
 
       case 'slides':
-        location.href = './carousel/Admin/Slide/?carousel=' + this.state.listing[data.name].id
+        location.href =
+          './carousel/Admin/Slide/?carousel=' + this.state.listing[data.name].id
         break
     }
   }
@@ -125,7 +130,8 @@ export default class Carousel extends Listing {
         close={this.finish}
         update={this.update}
         resource={this.state.resource}
-        save={this.save}/>
+        save={this.save}
+      />
     )
   }
 
@@ -138,9 +144,8 @@ export default class Carousel extends Listing {
       content: <div className="carousel-form">{this.form()}</div>,
       width: '80%',
       title: 'Edit Carousel',
-      close: this.load
+      close: this.load,
     }
   }
-
 }
-ReactDOM.render(<Carousel/>, document.getElementById('Carousel'))
+ReactDOM.render(<Carousel />, document.getElementById('Carousel'))
